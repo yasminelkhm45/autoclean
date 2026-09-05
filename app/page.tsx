@@ -1,6 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/Button";
-import { BrandImage } from "@/components/ui/BrandImage";
 import { Logomark } from "@/components/ui/Logo";
 import { FormulaCards } from "@/components/sections/FormulaCards";
 import { BeforeAfter } from "@/components/sections/BeforeAfter";
@@ -59,35 +59,36 @@ export default function HomePage() {
       {/* 1. Hero : split photo / aplat noir */}
       <section className="bg-noir text-blanc relative overflow-hidden">
         <Logomark className="text-jaune/10 pointer-events-none absolute -top-32 -right-32 h-[34rem] w-[34rem]" />
-        <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-16 text-center sm:px-6 lg:pt-20 lg:pb-20">
-          <p className="eyebrow text-jaune">Atelier à Die, Drôme (26)</p>
-          <h1 className="display display-hero mx-auto mt-4 max-w-4xl text-[length:var(--text-display-hero)]">
-            Nettoyage intérieur de voiture à Die
-          </h1>
-          <p className="text-gris mx-auto mt-6 max-w-2xl text-lg leading-relaxed">
-            Nous redonnons à votre habitacle son état d'origine : sièges
-            shampooinés, odeurs traitées, plastiques ravivés. Vous déposez la
-            voiture, vous la récupérez comme neuve.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <ButtonLink href="/reservation" variant="yellow">
-              Pré-réserver
-            </ButtonLink>
-            <ButtonLink href="/avant-apres" variant="outline-light">
-              Voir les résultats
-            </ButtonLink>
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pt-12 pb-14 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pt-20 lg:pb-20">
+          <div>
+            <p className="eyebrow text-jaune">Atelier à Die, Drôme (26)</p>
+            <h1 className="display display-hero mt-4 text-[length:var(--text-display-hero)]">
+              Nettoyage intérieur de voiture à Die
+            </h1>
+            <p className="text-gris mt-6 max-w-xl text-lg leading-relaxed">
+              Nous redonnons à votre habitacle son état d'origine : sièges
+              shampooinés, odeurs traitées, plastiques ravivés. Vous déposez la
+              voiture, vous la récupérez comme neuve.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <ButtonLink href="/reservation" variant="yellow">
+                Pré-réserver
+              </ButtonLink>
+              <ButtonLink href="/avant-apres" variant="outline-light">
+                Voir les résultats
+              </ButtonLink>
+            </div>
           </div>
-          <div className="mx-auto mt-12 max-w-4xl">
-            <BrandImage
-              src="hero/habitacle-principal.jpg"
-              alt="Intérieur de voiture nettoyé par AutoClean Diois"
-              width={2400}
-              height={1350}
-              sizes="(min-width: 1024px) 60vw, 100vw"
-              priority
-              imgClassName="grayscale"
-            />
-          </div>
+          <Image
+            src="/images/hero/vehicule-atelier-autoclean-diois.jpg"
+            alt="Utilitaire AutoClean Diois floqué aux couleurs de l'atelier de nettoyage automobile de Die"
+            width={1920}
+            height={1080}
+            sizes="(min-width: 1024px) 46vw, 100vw"
+            priority
+            fetchPriority="high"
+            className="h-auto w-full rounded-[var(--radius-card)]"
+          />
         </div>
         {/* Bandeau de réassurance */}
         <div className="border-blanc/15 relative border-t">
@@ -113,8 +114,8 @@ export default function HomePage() {
             </h2>
           </div>
           <div className="mt-10 grid gap-8 md:grid-cols-2">
-            <BeforeAfter slug="sol-plastique" priority />
-            <BeforeAfter slug="sieges-cuir" />
+            <BeforeAfter slug="sol-moquette" sizes="(min-width: 768px) 45vw, 100vw" />
+            <BeforeAfter slug="sieges-cuir" sizes="(min-width: 768px) 45vw, 100vw" />
           </div>
           <div className="mt-8 text-center">
             <ButtonLink href="/avant-apres" variant="outline">

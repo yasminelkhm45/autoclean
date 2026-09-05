@@ -55,3 +55,7 @@ Aucune de ces hypothèses ne bloque la structure du site : tout se corrige dans 
 26. **Icône SVG** : le `favicon.svg` du générateur était un PNG encapsulé dans un SVG (13 ko, aucun gain de netteté). Il a été remplacé par un vrai vecteur construit à partir de votre logomark officiel : éclaboussure jaune sur fond noir, sans le mot-clé, illisible de toute façon à 16 px. Si vous préférez votre visuel exact partout, supprimez `app/icon.svg` et le `favicon.ico` prendra le relais.
 
 27. **Image de partage** : votre carte officielle est utilisée pour l'accueil. Les pages intérieures conservent une carte générée avec leur propre titre, ce qui est plus efficace au partage. Pour utiliser votre carte partout, supprimer les fichiers `opengraph-image.tsx` des sous-dossiers de `app/`.
+
+## Visuel du hero
+
+28. **Le hero de l'accueil affiche l'utilitaire floqué** issu de la charte. Deux points à trancher : c'est une image de présentation de marque, pas une photo de votre véhicule réel, et un utilitaire en pleine rue peut laisser penser à un service qui se déplace, alors que tout le site explique que le travail se fait exclusivement à l'atelier de Die. Si le doute vous gêne, une photo de l'atelier ou d'un habitacle fraîchement nettoyé collerait mieux au discours ; le remplacement se fait en changeant un seul chemin dans `app/page.tsx`.

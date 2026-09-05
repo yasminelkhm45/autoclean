@@ -9,7 +9,10 @@ npm install
 cp .env.example .env.local   # puis renseigner RESEND_API_KEY
 npm run dev                  # http://localhost:3000
 npm run build                # build de production (0 erreur, 0 warning TS)
+npm start                    # sert le build de production, après npm run build
 ```
+
+**Pour juger de la vitesse réelle, utilisez `npm run build` puis `npm start`, jamais `npm run dev`.** En développement, Next compile chaque page au premier accès : compter une à trois secondes la première fois qu'on visite une route, et une quinzaine de secondes au tout premier démarrage. Le même parcours en production répond en quelques millisecondes.
 
 Sans `RESEND_API_KEY`, les demandes sont validées normalement et **journalisées dans la console serveur** au lieu d'être envoyées par email, ce qui est pratique en local.
 
@@ -44,8 +47,7 @@ Déposer le fichier au chemin attendu dans `public/images/` (voir le manifeste c
 
 | Chemin | Ratio | Dimensions mini |
 |---|---|---|
-| `hero/habitacle-principal.jpg` | 16:9 | 2400×1350 |
-| `hero/atelier.jpg` | 4:3 | 1600×1200 |
+| `hero/vehicule-atelier-autoclean-diois.jpg` | 16:9 | 1920×1080 |
 | `avant-apres/{zone}-avant.jpg` / `-apres.jpg` | 16:9 | 1600×900 |
 | `avant-apres/{zone}-avant-vignette.jpg` / `-apres-vignette.jpg` | 16:9 | 480×270 |
 | `formules/essentielle.jpg`, `confort.jpg`, `prestige.jpg` | 3:2 | 1200×800 |
@@ -154,6 +156,8 @@ Les en-têtes sont définis dans `next.config.ts` (Next n'en pose aucun par déf
 | En-tête | Rôle |
 |---|---|
 | `Content-Security-Policy` | Limite les origines autorisées. Tolère `unsafe-inline` sur scripts et styles, que Next injecte en ligne : durcir demanderait un middleware à nonce et ferait perdre le rendu statique. |
+
+⚠️ La CSP est assouplie **en développement uniquement** : `next dev` compile avec le devtool `eval-source-map` et ouvre un websocket pour le rechargement à chaud. Sans `'unsafe-eval'` ni `ws:`, le navigateur bloque tout le JavaScript, React n'hydrate plus et plus aucun clic ne répond. Le basculement se fait sur `process.env.NODE_ENV` dans `next.config.ts`. Si vous ajoutez une origine à la CSP, pensez à vérifier les deux modes.
 | `X-Frame-Options: DENY` + `frame-ancestors 'none'` | Le site ne peut pas être intégré en iframe (clickjacking). |
 | `Strict-Transport-Security` | Force HTTPS pendant deux ans. `preload` suppose un domaine servi exclusivement en HTTPS. |
 | `Referrer-Policy`, `Permissions-Policy`, `X-Content-Type-Options` | Fuite de référent limitée, caméra/micro/géolocalisation désactivés, pas de deviner-le-type. |

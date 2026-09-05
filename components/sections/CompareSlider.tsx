@@ -58,15 +58,19 @@ export function CompareSlider({
         onPointerUp={() => (dragging.current = false)}
         onPointerCancel={() => (dragging.current = false)}
       >
-        {/* Avant (dessous) */}
-        <div aria-hidden="true">{before}</div>
-        {/* Après (dessus, rogné) */}
+        {/*
+          « Après » occupe le fond, « avant » est posé par-dessus et rogné
+          par la droite. Le clip conserve la partie gauche : c'est donc bien
+          l'avant qui s'affiche à gauche, sous son étiquette, et l'après à
+          droite. Inverser les deux calques inverse le sens de lecture.
+        */}
+        <div aria-hidden="true">{after}</div>
         <div
           aria-hidden="true"
           className="absolute inset-0"
           style={{ clipPath: `inset(0 ${100 - value}% 0 0)` }}
         >
-          {after}
+          {before}
         </div>
 
         {/* Étiquettes */}
@@ -85,7 +89,7 @@ export function CompareSlider({
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={value}
-          aria-valuetext={`${value} % de l'image « après » visible`}
+          aria-valuetext={`${value} % de l'image « avant » visible à gauche`}
           aria-describedby={id}
           onKeyDown={onKeyDown}
           className="absolute inset-y-0 w-11 -translate-x-1/2 cursor-ew-resize touch-none"

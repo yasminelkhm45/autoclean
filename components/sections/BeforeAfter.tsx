@@ -10,10 +10,13 @@ export function BeforeAfter({
   slug,
   sizes = "(min-width: 768px) 45vw, 100vw",
   priority = false,
+  withCaption = false,
 }: {
   slug: string;
   sizes?: string;
   priority?: boolean;
+  /** Affiche la phrase décrivant le travail réalisé sur cette zone. */
+  withCaption?: boolean;
 }) {
   const zone = getZoneBySlug(slug);
   if (!zone) return null;
@@ -21,6 +24,7 @@ export function BeforeAfter({
   return (
     <CompareSlider
       label={zone.label}
+      caption={withCaption ? zone.description : undefined}
       before={
         <Image
           src={zoneImagePath(zone.slug, "avant")}

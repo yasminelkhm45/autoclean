@@ -12,6 +12,22 @@ import type { NextConfig } from "next";
  * demanderait un middleware générant un nonce par requête, ce qui rendrait
  * toutes les pages dynamiques et ferait perdre le rendu statique.
  */
+const isDev = process.env.NODE_ENV === "development";
+
+/*
+ * En développement, Next compile les bundles avec le devtool `eval-source-map`
+ * et ouvre un websocket pour le rechargement à chaud. Une CSP sans
+ * 'unsafe-eval' bloque donc l'intégralité du JavaScript : React n'hydrate plus,
+ * aucun clic ne répond, et chaque lien redevient un rechargement complet.
+ * Ces deux assouplissements ne s'appliquent qu'en local, jamais en production.
+ */
+const scriptSrc = isDev
+  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+  : "script-src 'self' 'unsafe-inline'";
+const connectSrc = isDev
+  ? "connect-src 'self' ws: wss:"
+  : "connect-src 'self'";
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
@@ -28,18 +44,18 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline'",
+      scriptSrc,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://*.googleapis.com https://*.gstatic.com https://maps.google.com",
       "font-src 'self'",
       // Carte Google Maps, chargée uniquement après clic de l'utilisateur
       "frame-src https://www.google.com https://maps.google.com",
-      "connect-src 'self'",
+      connectSrc,
       "form-action 'self'",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "object-src 'none'",
-      "upgrade-insecure-requests",
+      ...(isDev ? [] : ["upgrade-insecure-requests"]),
     ].join("; "),
   },
 ];
