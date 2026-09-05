@@ -1,0 +1,63 @@
+import Link from "next/link";
+import { formulas, formatPrice } from "@/content/offre";
+
+export function FormulaCards() {
+  return (
+    <ul className="grid gap-5 md:grid-cols-3">
+      {formulas.map((f) => (
+        <li
+          key={f.id}
+          className={`relative flex flex-col rounded-[var(--radius-card)] p-6 sm:p-7 ${
+            f.recommended
+              ? "bg-noir text-blanc"
+              : "border-gris/70 bg-blanc border"
+          }`}
+        >
+          {f.recommended && (
+            <span className="bg-jaune text-noir absolute -top-3 left-6 rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase">
+              Notre recommandation
+            </span>
+          )}
+          <h3 className="display text-2xl sm:text-3xl">{f.name}</h3>
+          <p className={`mt-2 text-sm ${f.recommended ? "text-gris" : "text-noir/70"}`}>
+            {f.tagline}
+          </p>
+          <p className="mt-5 flex items-baseline gap-2">
+            <span className="display text-4xl">{formatPrice(f.price)}</span>
+            <span className={`text-sm ${f.recommended ? "text-gris" : "text-noir/60"}`}>
+              à partir de · {f.duration}
+            </span>
+          </p>
+          <ul className="mt-5 flex flex-col gap-2.5 text-sm">
+            {f.highlights.map((h) => (
+              <li key={h} className="flex gap-2.5">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="text-jaune mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m4 13 5 5L20 7" />
+                </svg>
+                {h}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-auto flex flex-col gap-2 pt-7">
+            <Link
+              href={`/reservation?formule=${f.id}`}
+              className={`flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-semibold transition-colors ${
+                f.recommended
+                  ? "bg-jaune text-noir hover:bg-blanc"
+                  : "bg-noir text-blanc hover:bg-noir/85"
+              }`}
+            >
+              Pré-réserver la {f.name}
+            </Link>
+            <Link
+              href={`/prestations#${f.id}`}
+              className="flex min-h-11 items-center justify-center text-sm font-medium underline-offset-4 hover:underline"
+            >
+              Voir le détail
+            </Link>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}

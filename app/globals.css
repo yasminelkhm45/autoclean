@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Tokens de la charte AutoClean Diois — source unique des couleurs.
+   Aucune valeur hexadécimale ne doit apparaître dans les composants.
+------------------------------------------------------------------- */
+@theme {
+  --color-jaune: #ecf234;
+  --color-noir: #000000;
+  --color-gris: #c0c4c8;
+  --color-blanc: #ffffff;
+
+  --font-display: var(--font-bricolage), "Arial Black", sans-serif;
+  --font-sans: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --radius-card: 1.25rem; /* 20px — rayons généreux de la charte */
+
+  /* Échelle typographique fluide */
+  --text-display-xl: clamp(2.75rem, 1.4rem + 6.2vw, 6.5rem);
+  --text-display-lg: clamp(2.25rem, 1.3rem + 4vw, 4.5rem);
+  --text-display-md: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
+  --text-display-sm: clamp(1.35rem, 1.1rem + 1.2vw, 1.9rem);
+}
+
+/* Respiration verticale des sections : 96–160px desktop, 64–96px mobile */
+@utility section-pad {
+  padding-block: clamp(4rem, 2.5rem + 6vw, 10rem);
+}
+
+@utility section-pad-sm {
+  padding-block: clamp(3rem, 2rem + 4vw, 6rem);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-blanc);
+    color: var(--color-noir);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-jaune);
+    color: var(--color-noir);
+  }
+
+  /* Focus visible personnalisé : jaune sur fond sombre, noir sur fond clair */
+  :focus-visible {
+    outline: 3px solid var(--color-noir);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  [data-theme="dark"] :focus-visible,
+  .bg-noir :focus-visible {
+    outline-color: var(--color-jaune);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+    text-wrap: balance;
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+}
