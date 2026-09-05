@@ -192,11 +192,18 @@ export function serviceJsonLd({
   };
 }
 
-export function imageObjectJsonLd(images: { url: string; caption: string }[]) {
+export function imageObjectJsonLd(
+  images: { url: string; caption: string; width?: number; height?: number }[]
+) {
   return images.map((img) => ({
     "@context": "https://schema.org",
     "@type": "ImageObject",
     contentUrl: img.url,
+    url: img.url,
     caption: img.caption,
+    ...(img.width && { width: img.width }),
+    ...(img.height && { height: img.height }),
+    creditText: site.name,
+    creator: { "@type": "Organization", name: site.name },
   }));
 }

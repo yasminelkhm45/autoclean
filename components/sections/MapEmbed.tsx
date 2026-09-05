@@ -14,7 +14,7 @@ export function MapEmbed({ query, label }: { query: string; label: string }) {
       <div
         className="border-gris bg-gris/20 flex aspect-video w-full flex-col items-center justify-center gap-4 rounded-[var(--radius-card)] border p-6 text-center"
       >
-        <p className="text-noir/70 max-w-sm text-sm">
+        <p className="text-noir/70 mx-auto max-w-sm text-sm">
           La carte interactive est fournie par Google Maps et n'est chargée qu'à votre
           demande.
         </p>

@@ -70,7 +70,7 @@ export default function PrestationsPage() {
                   f.recommended ? "bg-noir text-blanc" : "border-gris/70 border"
                 }`}
               >
-                <div className={i % 2 === 1 ? "lg:order-2" : ""}>
+                <div className={`text-center ${i % 2 === 1 ? "lg:order-2" : ""}`}>
                   {f.recommended && (
                     <p className="bg-jaune text-noir mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase">
                       Notre recommandation
@@ -82,13 +82,13 @@ export default function PrestationsPage() {
                   <p className={`mt-2 ${f.recommended ? "text-gris" : "text-noir/70"}`}>
                     {f.tagline}
                   </p>
-                  <p className="mt-5 flex items-baseline gap-2">
+                  <p className="mt-5 flex flex-wrap items-baseline justify-center gap-2">
                     <span className="display text-5xl">{formatPrice(f.price)}</span>
                     <span className={`text-sm ${f.recommended ? "text-gris" : "text-noir/60"}`}>
                       à partir de · {f.duration}
                     </span>
                   </p>
-                  <ul className="mt-6 flex flex-col gap-2.5 text-sm sm:text-base">
+                  <ul className="mx-auto mt-6 flex w-fit flex-col gap-2.5 text-left text-sm sm:text-base">
                     {f.inclusions.map((inc) => (
                       <li key={inc.label} className="flex gap-2.5">
                         <svg viewBox="0 0 24 24" aria-hidden="true" className="text-jaune mt-1 h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -136,7 +136,7 @@ export default function PrestationsPage() {
       {/* Tableau comparatif : table dès 768px, cartes empilées en dessous */}
       <section aria-labelledby="comparatif" className="section-pad-sm border-gris/50 border-t">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 id="comparatif" className="display text-[length:var(--text-display-md)]">
+          <h2 id="comparatif" className="display text-center text-[length:var(--text-display-md)]">
             Comparer les trois formules
           </h2>
 
@@ -178,9 +178,9 @@ export default function PrestationsPage() {
               <section
                 key={f.id}
                 aria-label={`Contenu de la formule ${f.name}`}
-                className={`rounded-[var(--radius-card)] p-5 ${f.recommended ? "bg-noir text-blanc" : "border-gris/70 border"}`}
+                className={`rounded-[var(--radius-card)] p-5 text-center ${f.recommended ? "bg-noir text-blanc" : "border-gris/70 border"}`}
               >
-                <h3 className="display flex items-baseline justify-between text-xl">
+                <h3 className="display flex items-baseline justify-center gap-3 text-xl">
                   {f.name}
                   <span className="text-base">{formatPrice(f.price)}</span>
                 </h3>
@@ -205,19 +205,19 @@ export default function PrestationsPage() {
       {/* Options additionnelles */}
       <section aria-labelledby="options" className="section-pad bg-noir text-blanc">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <p className="eyebrow text-jaune">À la carte</p>
-          <h2 id="options" className="display mt-3 text-[length:var(--text-display-md)]">
-            Les options additionnelles
-          </h2>
+          <div className="text-center">
+            <p className="eyebrow text-jaune">À la carte</p>
+            <h2 id="options" className="display mt-3 text-[length:var(--text-display-md)]">
+              Les options additionnelles
+            </h2>
+          </div>
           <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {options.map((o) => (
-              <li key={o.id} className="border-blanc/15 flex flex-col gap-3 rounded-[var(--radius-card)] border p-6">
-                <div className="flex items-center justify-between">
-                  <span className="bg-jaune text-noir flex h-11 w-11 items-center justify-center rounded-full">
-                    <OptionIcon icon={o.icon} />
-                  </span>
-                  <span className="display text-xl">+{formatPrice(o.price)}</span>
-                </div>
+              <li key={o.id} className="border-blanc/15 flex flex-col items-center gap-3 rounded-[var(--radius-card)] border p-6 text-center">
+                <span className="bg-jaune text-noir flex h-11 w-11 items-center justify-center rounded-full">
+                  <OptionIcon icon={o.icon} />
+                </span>
+                <span className="display text-xl">+{formatPrice(o.price)}</span>
                 <h3 className="text-lg font-semibold">{o.label}</h3>
                 <p className="text-gris text-sm leading-relaxed">{o.description}</p>
               </li>
@@ -229,25 +229,25 @@ export default function PrestationsPage() {
       {/* Catégories de véhicules */}
       <section aria-labelledby="vehicules" className="section-pad-sm">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 id="vehicules" className="display text-[length:var(--text-display-md)]">
+          <h2 id="vehicules" className="display text-center text-[length:var(--text-display-md)]">
             Tous les véhicules sont les bienvenus
           </h2>
-          <p className="text-noir/70 mt-4 max-w-2xl">
+          <p className="text-noir/70 mx-auto mt-4 max-w-2xl text-center">
             De la citadine à l'utilitaire, les formules s'appliquent à toutes les
             catégories. Vous précisez la vôtre à la première étape de la
             pré-réservation.
           </p>
           <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {vehicleCategories.map((v) => (
-              <li key={v.id} className="border-gris/70 rounded-[var(--radius-card)] border p-5">
+              <li key={v.id} className="border-gris/70 rounded-[var(--radius-card)] border p-5 text-center">
                 <h3 className="font-semibold">{v.label}</h3>
                 <p className="text-noir/60 mt-1 text-sm">{v.examples.join(", ")}</p>
               </li>
             ))}
           </ul>
-          <ButtonLink href="/reservation" className="mt-10">
-            Pré-réserver ma prestation
-          </ButtonLink>
+          <div className="mt-10 text-center">
+            <ButtonLink href="/reservation">Pré-réserver ma prestation</ButtonLink>
+          </div>
         </div>
       </section>
     </>

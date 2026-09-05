@@ -35,7 +35,7 @@ export function FaqAccordion({
                 aria-expanded={open}
                 aria-controls={panelId}
                 onClick={() => setOpenId(open ? null : item.id)}
-                className="flex min-h-11 w-full items-center justify-between gap-4 py-5 text-left text-base font-semibold sm:text-lg"
+                className="flex min-h-11 w-full items-center justify-center gap-4 py-5 text-center text-base font-semibold sm:text-lg"
               >
                 {item.question}
                 <span
@@ -53,7 +53,7 @@ export function FaqAccordion({
               role="region"
               aria-labelledby={buttonId}
               hidden={!open}
-              className={`pb-6 text-base leading-relaxed ${dark ? "text-gris" : "text-noir/75"}`}
+              className={`mx-auto max-w-2xl pb-6 text-center text-base leading-relaxed ${dark ? "text-gris" : "text-noir/75"}`}
             >
               {item.answer}
             </div>

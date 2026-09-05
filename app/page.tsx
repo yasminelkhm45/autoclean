@@ -113,8 +113,8 @@ export default function HomePage() {
             </h2>
           </div>
           <div className="mt-10 grid gap-8 md:grid-cols-2">
-            <BeforeAfter slug="sieges-tissu" label="Sièges tissu : shampoing par injection-extraction" />
-            <BeforeAfter slug="sol-moquette" label="Sol moquette : extraction en profondeur" />
+            <BeforeAfter slug="sol-plastique" priority />
+            <BeforeAfter slug="sieges-cuir" />
           </div>
           <div className="mt-8 text-center">
             <ButtonLink href="/avant-apres" variant="outline">

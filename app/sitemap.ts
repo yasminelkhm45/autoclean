@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { articles } from "@/content/articles";
+import { beforeAfterZones, zoneImagePath } from "@/content/avant-apres";
 import { formulas } from "@/content/offre";
 import { site } from "@/content/site";
 import { zones } from "@/content/zones";
@@ -26,6 +27,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: r.freq,
       priority: r.priority,
+      // Les photos avant/après ne sont pas toutes dans le DOM (une seule zone
+      // affichée à la fois) : le sitemap image les rend malgré tout indexables.
+      ...(r.path === "/avant-apres" && {
+        images: beforeAfterZones.flatMap((z) => [
+          `${site.url}${zoneImagePath(z.slug, "avant")}`,
+          `${site.url}${zoneImagePath(z.slug, "apres")}`,
+        ]),
+      }),
     })),
     ...formulas.map((f) => ({
       url: `${site.url}/prestations/${f.id}`,

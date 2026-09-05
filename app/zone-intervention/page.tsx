@@ -43,7 +43,7 @@ export default function ZoneInterventionPage() {
       <section className="section-pad-sm">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-2">
           <div>
-            <h2 className="display text-[length:var(--text-display-md)]">
+            <h2 className="display text-center text-[length:var(--text-display-md)]">
               Temps de trajet indicatifs
             </h2>
             <table className="mt-6 hidden w-full text-left sm:table">
@@ -98,22 +98,22 @@ export default function ZoneInterventionPage() {
                 </li>
               ))}
             </ul>
-            <p className="text-noir/60 mt-4 text-sm">
+            <p className="text-noir/60 mt-4 text-center text-sm">
               Chaque commune a sa page, avec le détail du trajet et ce que nous
               observons sur les véhicules du secteur. Vous venez d'ailleurs&nbsp;?
               Vous êtes les bienvenus : appelez-nous, on s'organise.
             </p>
           </div>
           <div>
-            <h2 className="display text-[length:var(--text-display-md)]">L'atelier</h2>
-            <address className="mt-4 not-italic leading-relaxed">
+            <h2 className="display text-center text-[length:var(--text-display-md)]">L'atelier</h2>
+            <address className="mt-4 text-center not-italic leading-relaxed">
               <strong>{site.name}</strong>
               <br />
               {site.address.street}
               <br />
               {site.address.postalCode} {site.address.city}
             </address>
-            <ul className="text-noir/75 mt-3 text-sm leading-relaxed">
+            <ul className="text-noir/75 mt-3 text-center text-sm leading-relaxed">
               {site.openingHoursLabel.map((h) => (
                 <li key={h}>{h}</li>
               ))}

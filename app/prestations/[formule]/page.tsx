@@ -61,7 +61,7 @@ export default async function FormulePage({
         </h1>
         <p className="text-noir/60 mt-2 text-lg">{f.tagline}</p>
 
-        <div className="border-noir/12 mt-6 flex flex-wrap items-center gap-x-8 gap-y-3 rounded-[var(--radius-card)] border p-5">
+        <div className="border-noir/12 mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 rounded-[var(--radius-card)] border p-5">
           <p>
             <span className="display text-4xl">{formatPrice(f.price)}</span>
             <span className="text-noir/55 ml-2 text-sm">tarif de la formule</span>
@@ -78,18 +78,18 @@ export default async function FormulePage({
       </div>
 
       <section aria-labelledby="deroule" className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-        <h2 id="deroule" className="display text-[length:var(--text-display-md)]">
+        <h2 id="deroule" className="display text-center text-[length:var(--text-display-md)]">
           Comment se déroule la prestation
         </h2>
         <ol className="mt-6 flex flex-col gap-6">
           {f.page.process.map((p, i) => (
-            <li key={p.title} className="flex gap-4">
+            <li key={p.title} className="flex flex-col items-center gap-3 text-center">
               <span className="bg-noir text-blanc flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold">
                 {i + 1}
               </span>
               <div>
                 <h3 className="font-semibold">{p.title}</h3>
-                <p className="text-noir/70 mt-1 leading-relaxed">{p.text}</p>
+                <p className="text-noir/70 mx-auto mt-1 max-w-xl leading-relaxed">{p.text}</p>
               </div>
             </li>
           ))}
@@ -98,10 +98,10 @@ export default async function FormulePage({
 
       <section aria-labelledby="inclus" className="bg-noir text-blanc">
         <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:py-16">
-          <h2 id="inclus" className="display text-[length:var(--text-display-md)]">
+          <h2 id="inclus" className="display text-center text-[length:var(--text-display-md)]">
             Ce qui est inclus
           </h2>
-          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+          <ul className="mx-auto mt-6 grid w-fit gap-3 text-left sm:grid-cols-2">
             {f.inclusions.map((inc) => (
               <li key={inc.label} className="flex gap-3">
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="text-jaune mt-1 h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -118,10 +118,10 @@ export default async function FormulePage({
       </section>
 
       <section aria-labelledby="pour-qui" className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-        <h2 id="pour-qui" className="display text-[length:var(--text-display-md)]">
+        <h2 id="pour-qui" className="display text-center text-[length:var(--text-display-md)]">
           À qui elle s'adresse
         </h2>
-        <ul className="mt-5 flex flex-col gap-2.5">
+        <ul className="mx-auto mt-5 flex w-fit flex-col gap-2.5 text-left">
           {f.page.forWho.map((w) => (
             <li key={w} className="text-noir/80 flex gap-3 leading-relaxed">
               <span aria-hidden="true" className="bg-jaune mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" />
@@ -129,20 +129,20 @@ export default async function FormulePage({
             </li>
           ))}
         </ul>
-        <p className="border-noir/15 mt-6 border-l-4 pl-5 leading-relaxed">{f.page.notFor}</p>
+        <p className="bg-noir/5 mx-auto mt-6 max-w-2xl rounded-[var(--radius-card)] p-5 text-center leading-relaxed">{f.page.notFor}</p>
       </section>
 
       <section aria-labelledby="options" className="mx-auto max-w-4xl px-4 pb-12 sm:px-6">
-        <h2 id="options" className="display text-[length:var(--text-display-md)]">
+        <h2 id="options" className="display text-center text-[length:var(--text-display-md)]">
           Options disponibles avec cette formule
         </h2>
-        <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+        <ul className="mx-auto mt-6 grid w-fit gap-3 text-left sm:grid-cols-2">
           {options.map((o) => (
-            <li key={o.id} className="border-noir/12 flex gap-3 rounded-[var(--radius-card)] border p-4">
+            <li key={o.id} className="border-noir/12 flex flex-col items-center gap-2 rounded-[var(--radius-card)] border p-4 text-center">
               <OptionIcon icon={o.icon} className="text-noir/60 mt-0.5 h-5 w-5 shrink-0" />
               <div>
-                <p className="flex items-baseline justify-between gap-3 font-semibold">
-                  {o.label} <span className="shrink-0">+{formatPrice(o.price)}</span>
+                <p className="font-semibold">
+                  {o.label} <span className="whitespace-nowrap">+{formatPrice(o.price)}</span>
                 </p>
                 <p className="text-noir/60 mt-1 text-sm leading-relaxed">{o.description}</p>
               </div>
@@ -152,7 +152,7 @@ export default async function FormulePage({
       </section>
 
       <section aria-labelledby="autres" className="mx-auto max-w-4xl px-4 pb-16 sm:px-6">
-        <h2 id="autres" className="display text-[length:var(--text-display-md)]">
+        <h2 id="autres" className="display text-center text-[length:var(--text-display-md)]">
           Les autres formules
         </h2>
         <ul className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -160,7 +160,7 @@ export default async function FormulePage({
             <li key={o.id}>
               <Link
                 href={`/prestations/${o.id}`}
-                className="border-noir/12 hover:border-noir/45 block h-full rounded-[var(--radius-card)] border p-5 transition-colors"
+                className="border-noir/12 hover:border-noir/45 block h-full rounded-[var(--radius-card)] border p-5 text-center transition-colors"
               >
                 <p className="display text-xl">
                   {o.name}, {formatPrice(o.price)}
@@ -171,7 +171,7 @@ export default async function FormulePage({
             </li>
           ))}
         </ul>
-        <p className="text-noir/60 mt-6">
+        <p className="text-noir/60 mt-6 text-center">
           Vous hésitez ? Le{" "}
           <Link href="/prestations" className="font-medium underline underline-offset-4">
             tableau comparatif des trois formules

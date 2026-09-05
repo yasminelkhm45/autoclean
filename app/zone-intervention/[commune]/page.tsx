@@ -69,7 +69,7 @@ export default async function CommunePage({
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed">{zone.intro}</p>
 
-        <dl className="border-noir/12 mt-6 grid gap-4 rounded-[var(--radius-card)] border p-5 sm:grid-cols-3">
+        <dl className="border-noir/12 mt-6 grid gap-4 rounded-[var(--radius-card)] border p-5 text-center sm:grid-cols-3">
           <div>
             <dt className="text-noir/55 text-sm">Distance de l'atelier</dt>
             <dd className="mt-1 font-semibold">
@@ -88,16 +88,16 @@ export default async function CommunePage({
       </div>
 
       <section aria-labelledby="specificites" className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-        <h2 id="specificites" className="display text-[length:var(--text-display-md)]">
+        <h2 id="specificites" className="display text-center text-[length:var(--text-display-md)]">
           Ce que nous voyons sur les véhicules de {zone.name}
         </h2>
-        <p className="text-noir/80 mt-4 leading-relaxed">{zone.context}</p>
+        <p className="text-noir/80 mx-auto mt-4 max-w-2xl text-center leading-relaxed">{zone.context}</p>
 
-        <h2 className="display mt-10 text-[length:var(--text-display-md)]">
+        <h2 className="display mt-10 text-center text-[length:var(--text-display-md)]">
           Comment s'organiser depuis {zone.name}
         </h2>
-        <p className="text-noir/80 mt-4 leading-relaxed">{zone.practical}</p>
-        <p className="text-noir/80 mt-4 leading-relaxed">
+        <p className="text-noir/80 mx-auto mt-4 max-w-2xl text-center leading-relaxed">{zone.practical}</p>
+        <p className="text-noir/80 mx-auto mt-4 max-w-2xl text-center leading-relaxed">
           Le travail se fait exclusivement à l'atelier, à {site.address.city} :
           l'injecteur-extracteur, la vapeur et l'éclairage de contrôle ne se
           transportent pas. Vous déposez le véhicule au créneau convenu et nous
@@ -107,10 +107,10 @@ export default async function CommunePage({
 
       <section aria-labelledby="formules" className="bg-noir text-blanc">
         <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:py-16">
-          <h2 id="formules" className="display text-[length:var(--text-display-md)]">
+          <h2 id="formules" className="display text-center text-[length:var(--text-display-md)]">
             Nos formules, mêmes tarifs pour tout le Diois
           </h2>
-          <p className="text-gris mt-3">
+          <p className="text-gris mx-auto mt-3 max-w-xl text-center">
             Aucun supplément de distance : le tarif ne dépend que de la formule et
             des options choisies.
           </p>
@@ -119,7 +119,7 @@ export default async function CommunePage({
               <li key={f.id}>
                 <Link
                   href={`/prestations/${f.id}`}
-                  className="border-blanc/20 hover:border-jaune block h-full rounded-[var(--radius-card)] border p-5 transition-colors"
+                  className="border-blanc/20 hover:border-jaune block h-full rounded-[var(--radius-card)] border p-5 text-center transition-colors"
                 >
                   <p className="display text-xl">{f.name}</p>
                   <p className="display text-jaune mt-2 text-3xl">{formatPrice(f.price)}</p>
@@ -129,7 +129,7 @@ export default async function CommunePage({
               </li>
             ))}
           </ul>
-          <div className="mt-8">
+          <div className="mt-8 text-center">
             <ButtonLink href="/reservation" variant="yellow">
               Pré-réserver depuis {zone.name}
             </ButtonLink>
@@ -138,18 +138,18 @@ export default async function CommunePage({
       </section>
 
       <section aria-labelledby="alentours" className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-        <h2 id="alentours" className="display text-[length:var(--text-display-md)]">
+        <h2 id="alentours" className="display text-center text-[length:var(--text-display-md)]">
           Autour de {zone.name}
         </h2>
-        <p className="text-noir/70 mt-4">
+        <p className="text-noir/70 mx-auto mt-4 max-w-2xl text-center">
           Nous recevons également les véhicules de {zone.nearby.slice(0, -1).join(", ")} et{" "}
           {zone.nearby[zone.nearby.length - 1]}.
         </p>
 
-        <h2 className="display mt-10 text-[length:var(--text-display-md)]">
+        <h2 className="display mt-10 text-center text-[length:var(--text-display-md)]">
           Les autres communes couvertes
         </h2>
-        <ul className="mt-5 flex flex-wrap gap-2">
+        <ul className="mt-5 flex flex-wrap justify-center gap-2">
           {others.map((z) => (
             <li key={z.slug}>
               <Link
@@ -161,7 +161,7 @@ export default async function CommunePage({
             </li>
           ))}
         </ul>
-        <p className="text-noir/60 mt-6 text-sm">
+        <p className="text-noir/60 mt-6 text-center text-sm">
           Retour à la{" "}
           <Link href="/zone-intervention" className="font-medium underline underline-offset-4">
             carte de la zone d'intervention

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from "@/components/sections/Header";
@@ -41,6 +41,22 @@ export const metadata: Metadata = {
   },
   description:
     "Nettoyage intérieur de voiture en atelier à Die (Drôme) : aspiration, shampoing des sièges, vapeur. Formules de 70 à 120 €. Pré-réservez en ligne.",
+  applicationName: site.name,
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    siteName: site.name,
+    url: site.url,
+  },
+  twitter: { card: "summary_large_image" },
+};
+
+/* Barre de navigateur assortie à l'en-tête du site sur mobile. */
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

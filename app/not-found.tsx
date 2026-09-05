@@ -5,12 +5,12 @@ export default function NotFound() {
   return (
     <div className="bg-noir text-blanc relative overflow-hidden">
       <Logomark className="text-jaune/10 pointer-events-none absolute -right-24 -top-24 h-96 w-96" />
-      <div className="relative mx-auto max-w-3xl px-4 py-24 sm:px-6">
+      <div className="relative mx-auto max-w-3xl px-4 py-24 text-center sm:px-6">
         <p className="eyebrow text-jaune">Erreur 404</p>
         <h1 className="display mt-4 text-[length:var(--text-display-lg)]">
           Cette page a été aspirée.
         </h1>
-        <p className="text-gris mt-5 max-w-md text-lg">
+        <p className="text-gris mx-auto mt-5 max-w-md text-lg">
           L'adresse demandée n'existe pas ou plus. Le reste du site, lui, est impeccable.
         </p>
         <Link

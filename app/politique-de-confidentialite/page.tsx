@@ -21,7 +21,7 @@ export default function ConfidentialitePage() {
         </h1>
         <div className="mt-8 space-y-8 leading-relaxed">
           <section>
-            <h2 className="text-xl font-semibold">Données collectées</h2>
+            <h2 className="text-center text-xl font-semibold">Données collectées</h2>
             <p className="text-noir/75 mt-2">
               Le formulaire de pré-réservation collecte : nom, prénom, numéro de
               téléphone, email (facultatif), préférence de contact et les informations que
@@ -30,7 +30,7 @@ export default function ConfidentialitePage() {
             </p>
           </section>
           <section>
-            <h2 className="text-xl font-semibold">Finalité et base légale</h2>
+            <h2 className="text-center text-xl font-semibold">Finalité et base légale</h2>
             <p className="text-noir/75 mt-2">
               Ces données servent exclusivement à traiter votre demande : vous rappeler
               pour confirmer un créneau, ou répondre à votre question. La base légale est
@@ -39,7 +39,7 @@ export default function ConfidentialitePage() {
             </p>
           </section>
           <section>
-            <h2 className="text-xl font-semibold">Destinataires et conservation</h2>
+            <h2 className="text-center text-xl font-semibold">Destinataires et conservation</h2>
             <p className="text-noir/75 mt-2">
               Les demandes nous sont transmises par email via le prestataire Resend
               (resend.com). Elles sont conservées au maximum 12 mois après le dernier
@@ -47,7 +47,7 @@ export default function ConfidentialitePage() {
             </p>
           </section>
           <section>
-            <h2 className="text-xl font-semibold">Cookies et mesure d'audience</h2>
+            <h2 className="text-center text-xl font-semibold">Cookies et mesure d'audience</h2>
             <p className="text-noir/75 mt-2">
               Ce site ne dépose aucun cookie publicitaire ni traceur tiers. La mesure
               d'audience éventuelle est réalisée sans cookie et sans données personnelles,
@@ -56,7 +56,7 @@ export default function ConfidentialitePage() {
             </p>
           </section>
           <section>
-            <h2 className="text-xl font-semibold">Vos droits</h2>
+            <h2 className="text-center text-xl font-semibold">Vos droits</h2>
             <p className="text-noir/75 mt-2">
               Vous pouvez demander l'accès, la rectification ou la suppression de vos
               données à tout moment en écrivant à {site.email} ou par téléphone au{" "}

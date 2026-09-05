@@ -66,7 +66,7 @@ export default async function ConfirmationPage({
     <>
       <div className="bg-noir text-blanc relative overflow-hidden">
         <Logomark className="text-jaune/10 pointer-events-none absolute -top-32 -right-24 h-96 w-96" />
-        <div className="relative mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:py-24">
+        <div className="relative mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:py-24">
           <span className="bg-jaune text-noir inline-flex h-12 w-12 items-center justify-center rounded-full">
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <path d="m4 13 5 5L20 7" />
@@ -75,7 +75,7 @@ export default async function ConfirmationPage({
           <h1 className="display mt-6 text-[length:var(--text-display-lg)]">
             Votre demande est bien arrivée
           </h1>
-          <p className="text-gris mt-5 text-lg leading-relaxed">
+          <p className="text-gris mx-auto mt-5 max-w-xl text-lg leading-relaxed">
             Nous vous rappelons <strong className="text-blanc">{site.callbackDelay}</strong> au
             numéro que vous avez indiqué. Aucun paiement ne vous sera demandé avant la
             prestation.
@@ -91,7 +91,7 @@ export default async function ConfirmationPage({
       <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:py-16">
         {vehicle && formula && (
           <section aria-labelledby="recap">
-            <h2 id="recap" className="display text-[length:var(--text-display-sm)]">
+            <h2 id="recap" className="display text-center text-[length:var(--text-display-sm)]">
               Ce que vous avez demandé
             </h2>
             <dl className="border-noir/12 divide-noir/10 mt-5 divide-y rounded-[var(--radius-card)] border">
@@ -127,12 +127,12 @@ export default async function ConfirmationPage({
         )}
 
         <section aria-labelledby="suite" className="mt-12">
-          <h2 id="suite" className="display text-[length:var(--text-display-sm)]">
+          <h2 id="suite" className="display text-center text-[length:var(--text-display-sm)]">
             Ce qui se passe maintenant
           </h2>
           <ol className="mt-5 flex flex-col gap-5">
             {nextSteps.map((s, i) => (
-              <li key={s.title} className="flex gap-4">
+              <li key={s.title} className="flex flex-col items-center gap-3 text-center">
                 <span className="bg-noir text-blanc flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold">
                   {i + 1}
                 </span>
@@ -145,7 +145,7 @@ export default async function ConfirmationPage({
           </ol>
         </section>
 
-        <div className="border-noir/10 mt-12 flex flex-wrap items-center gap-4 border-t pt-8">
+        <div className="border-noir/10 mt-12 flex flex-wrap items-center justify-center gap-4 border-t pt-8">
           <a
             href={site.phoneHref}
             className="bg-noir text-blanc inline-flex min-h-11 items-center rounded-full px-6 py-3 font-semibold"

@@ -31,13 +31,13 @@ export default function ContactPage() {
       <section className="section-pad-sm">
         <div className="mx-auto grid max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-2">
           <div>
-            <h2 className="display text-[length:var(--text-display-sm)]">Écrivez-nous</h2>
+            <h2 className="display text-center text-[length:var(--text-display-sm)]">Écrivez-nous</h2>
             <div className="mt-6">
               <ContactForm />
             </div>
           </div>
           <div className="flex flex-col gap-8">
-            <div>
+            <div className="text-center">
               <h2 className="display text-[length:var(--text-display-sm)]">Ou plus direct</h2>
               <a
                 href={site.phoneHref}
@@ -56,13 +56,13 @@ export default function ContactPage() {
               </p>
             </div>
             <div>
-              <h2 className="display text-[length:var(--text-display-sm)]">L'atelier</h2>
-              <address className="mt-4 not-italic leading-relaxed">
+              <h2 className="display text-center text-[length:var(--text-display-sm)]">L'atelier</h2>
+              <address className="mt-4 text-center not-italic leading-relaxed">
                 {site.address.street}
                 <br />
                 {site.address.postalCode} {site.address.city}
               </address>
-              <ul className="text-noir/75 mt-3 text-sm leading-relaxed">
+              <ul className="text-noir/75 mt-3 text-center text-sm leading-relaxed">
                 {site.openingHoursLabel.map((h) => (
                   <li key={h}>{h}</li>
                 ))}

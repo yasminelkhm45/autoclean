@@ -17,7 +17,7 @@ export default function MentionsLegalesPage() {
         <h1 className="display text-center text-[length:var(--text-display-lg)]">Mentions légales</h1>
         <div className="mt-8 space-y-8 leading-relaxed">
           <section>
-            <h2 className="text-xl font-semibold">Éditeur du site</h2>
+            <h2 className="text-center text-xl font-semibold">Éditeur du site</h2>
             <p className="text-noir/75 mt-2">
               {site.legalName}, {site.address.street}, {site.address.postalCode}{" "}
               {site.address.city}.
@@ -30,14 +30,14 @@ export default function MentionsLegalesPage() {
             </p>
           </section>
           <section>
-            <h2 className="text-xl font-semibold">Hébergement</h2>
+            <h2 className="text-center text-xl font-semibold">Hébergement</h2>
             <p className="text-noir/75 mt-2">
               Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis
               (vercel.com).
             </p>
           </section>
           <section>
-            <h2 className="text-xl font-semibold">Propriété intellectuelle</h2>
+            <h2 className="text-center text-xl font-semibold">Propriété intellectuelle</h2>
             <p className="text-noir/75 mt-2">
               L'ensemble des contenus de ce site (textes, photographies, identité
               visuelle) est la propriété de {site.legalName}. Toute reproduction sans

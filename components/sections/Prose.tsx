@@ -52,7 +52,7 @@ export function Prose({ blocks }: { blocks: Block[] }) {
             );
           case "h3":
             return (
-              <h3 key={i} className="mt-2 text-lg font-semibold">
+              <h3 key={i} className="mt-2 text-center text-lg font-semibold">
                 {b.text}
               </h3>
             );
@@ -64,7 +64,7 @@ export function Prose({ blocks }: { blocks: Block[] }) {
             );
           case "ul":
             return (
-              <ul key={i} className="flex flex-col gap-2.5">
+              <ul key={i} className="mx-auto flex w-fit flex-col gap-2.5 text-left">
                 {b.items.map((it) => (
                   <li key={it} className="text-noir/80 flex gap-3 leading-relaxed">
                     <span aria-hidden="true" className="bg-jaune mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" />
@@ -75,7 +75,7 @@ export function Prose({ blocks }: { blocks: Block[] }) {
             );
           case "ol":
             return (
-              <ol key={i} className="flex flex-col gap-3">
+              <ol key={i} className="mx-auto flex w-fit flex-col gap-3 text-left">
                 {b.items.map((it, n) => (
                   <li key={it} className="text-noir/80 flex gap-3 leading-relaxed">
                     <span className="bg-noir text-blanc mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
@@ -90,7 +90,7 @@ export function Prose({ blocks }: { blocks: Block[] }) {
             return (
               <p
                 key={i}
-                className="border-jaune bg-jaune/10 my-2 border-l-4 py-3 pl-5 font-medium"
+                className="bg-jaune/25 my-2 rounded-[var(--radius-card)] px-5 py-4 text-center font-medium"
               >
                 {inline(b.text)}
               </p>
@@ -99,9 +99,9 @@ export function Prose({ blocks }: { blocks: Block[] }) {
             return (
               <div
                 key={i}
-                className="bg-noir text-blanc mt-6 flex flex-col items-start gap-4 rounded-[var(--radius-card)] p-6"
+                className="bg-noir text-blanc mt-6 flex flex-col items-center gap-4 rounded-[var(--radius-card)] p-6 text-center"
               >
-                <p className="text-gris leading-relaxed">{b.text}</p>
+                <p className="text-gris mx-auto max-w-xl leading-relaxed">{b.text}</p>
                 <Link
                   href={b.href}
                   className="bg-jaune text-noir inline-flex min-h-11 items-center rounded-full px-6 py-3 text-sm font-semibold"

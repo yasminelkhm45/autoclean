@@ -411,7 +411,7 @@ export function Funnel() {
                       onPointerDown={() => (pointerSelect.current = true)}
                       onClick={() => clickFormula(f.id)}
                       className={[
-                        "relative flex cursor-pointer flex-col rounded-[var(--radius-card)] border-2 p-5 transition-colors",
+                        "relative flex cursor-pointer flex-col rounded-[var(--radius-card)] border-2 p-5 text-center transition-colors",
                         checked ? "border-noir bg-noir/5" : "border-noir/45 hover:border-noir",
                       ].join(" ")}
                     >
@@ -435,7 +435,7 @@ export function Funnel() {
                       <p className="display mt-2 text-4xl">{formatPrice(f.price)}</p>
                       <p className="text-noir/55 mt-1 text-sm">Durée estimée : {f.duration}</p>
 
-                      <ul className="border-noir/10 mt-4 flex flex-col gap-2 border-t pt-4 text-sm">
+                      <ul className="border-noir/10 mx-auto mt-4 flex w-fit flex-col gap-2 border-t pt-4 text-left text-sm">
                         {f.inclusions.map((inc) => (
                           <li key={inc.label} className="flex gap-2">
                             <Check className="text-jaune mt-1 h-3.5 w-3.5 shrink-0" />
@@ -540,10 +540,10 @@ export function Funnel() {
               </div>
 
               <div className="border-noir/12 rounded-[var(--radius-card)] border p-5">
-                <h3 className="font-semibold">
+                <h3 className="text-center font-semibold">
                   Ce que comprend la formule {getFormula(selection.formula).name}
                 </h3>
-                <ul className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
+                <ul className="mx-auto mt-3 grid w-fit gap-2 text-left text-sm sm:grid-cols-2">
                   {getFormula(selection.formula).inclusions.map((inc) => (
                     <li key={inc.label} className="flex gap-2">
                       <Check className="text-jaune mt-1 h-3.5 w-3.5 shrink-0" />
@@ -562,7 +562,7 @@ export function Funnel() {
                   },
                   { t: "Paiement sur place", d: `${site.paymentMethods.join(", ")}.` },
                 ].map((b) => (
-                  <div key={b.t} className="border-noir/12 rounded-[var(--radius-card)] border p-4">
+                  <div key={b.t} className="border-noir/12 rounded-[var(--radius-card)] border p-4 text-center">
                     <p className="font-semibold">{b.t}</p>
                     <p className="text-noir/60 mt-1 text-sm leading-relaxed">{b.d}</p>
                   </div>
@@ -570,10 +570,10 @@ export function Funnel() {
               </div>
 
               <div className="bg-noir text-blanc mt-4 rounded-[var(--radius-card)] p-5">
-                <p className="text-gris text-sm">
+                <p className="text-gris text-center text-sm">
                   {site.rating.value}/5 sur Google, {site.clientsCount.toLowerCase()}
                 </p>
-                <div className="mt-4 grid gap-5 sm:grid-cols-2">
+                <div className="mt-4 grid gap-5 text-center sm:grid-cols-2">
                   {reviews.map((r) => (
                     <figure key={r.author}>
                       <blockquote className="text-sm leading-relaxed">{r.text}</blockquote>
@@ -682,7 +682,7 @@ export function Funnel() {
 
           {step === 5 && (
             <div className="border-noir/12 mt-4 rounded-[var(--radius-card)] border p-5">
-              <h2 className="font-semibold">Ce qui se passe ensuite</h2>
+              <h2 className="text-center font-semibold">Ce qui se passe ensuite</h2>
               <ol className="mt-3 flex flex-col gap-3 text-sm">
                 {[
                   "Vous envoyez cette demande.",

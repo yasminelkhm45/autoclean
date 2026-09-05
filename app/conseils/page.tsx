@@ -36,13 +36,13 @@ export default function ConseilsPage() {
         {featured && (
           <Link
             href={`/conseils/${featured.slug}`}
-            className="bg-noir text-blanc group block rounded-[var(--radius-card)] p-6 sm:p-8"
+            className="bg-noir text-blanc group block rounded-[var(--radius-card)] p-6 text-center sm:p-8"
           >
             <p className="text-jaune text-sm font-semibold">{featured.category}</p>
-            <h2 className="display mt-3 max-w-2xl text-[length:var(--text-display-md)] group-hover:underline">
+            <h2 className="display mx-auto mt-3 max-w-2xl text-[length:var(--text-display-md)] group-hover:underline">
               {featured.title}
             </h2>
-            <p className="text-gris mt-4 max-w-2xl leading-relaxed">{featured.excerpt}</p>
+            <p className="text-gris mx-auto mt-4 max-w-2xl leading-relaxed">{featured.excerpt}</p>
             <p className="text-gris mt-5 text-sm">
               {dateFr(featured.publishedAt)}, {featured.readingMinutes} min de lecture
             </p>
@@ -54,7 +54,7 @@ export default function ConseilsPage() {
             <li key={a.slug}>
               <Link
                 href={`/conseils/${a.slug}`}
-                className="border-noir/12 hover:border-noir/45 group flex h-full flex-col rounded-[var(--radius-card)] border p-5 transition-colors"
+                className="border-noir/12 hover:border-noir/45 group flex h-full flex-col rounded-[var(--radius-card)] border p-5 text-center transition-colors"
               >
                 <p className="text-noir/55 text-sm font-semibold">{a.category}</p>
                 <h2 className="mt-2 text-lg font-semibold group-hover:underline">{a.title}</h2>
@@ -67,11 +67,11 @@ export default function ConseilsPage() {
           ))}
         </ul>
 
-        <div className="bg-jaune mt-10 flex flex-col items-start gap-4 rounded-[var(--radius-card)] p-6 sm:p-8">
+        <div className="bg-jaune mt-10 flex flex-col items-center gap-4 rounded-[var(--radius-card)] p-6 text-center sm:p-8">
           <h2 className="display text-[length:var(--text-display-sm)]">
             Votre habitacle mérite mieux qu'un tutoriel
           </h2>
-          <p className="max-w-2xl">
+          <p className="mx-auto max-w-2xl">
             Ces méthodes fonctionnent chez vous. Pour ce qui demande une machine,
             l'atelier est à Die et le devis se fait en ligne en deux minutes.
           </p>

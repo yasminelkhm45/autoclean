@@ -11,10 +11,13 @@ export function CompareSlider({
   before,
   after,
   label,
+  caption,
 }: {
   before: ReactNode;
   after: ReactNode;
   label: string;
+  /** Phrase de contexte affichée sous le comparateur, en plus du libellé. */
+  caption?: string;
 }) {
   const [value, setValue] = useState(50);
   const ref = useRef<HTMLDivElement>(null);
@@ -99,8 +102,13 @@ export function CompareSlider({
           </span>
         </div>
       </div>
-      <figcaption id={id} className="mt-3 text-sm font-medium">
-        {label}
+      <figcaption id={id} className="mt-4 text-center">
+        <span className="font-semibold">{label}</span>
+        {caption && (
+          <span className="text-noir/70 mx-auto mt-1 block max-w-2xl text-sm leading-relaxed">
+            {caption}
+          </span>
+        )}
       </figcaption>
     </figure>
   );

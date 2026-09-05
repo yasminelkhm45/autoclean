@@ -26,7 +26,7 @@ export default function FaqPage() {
 
       <div className="mx-auto max-w-3xl px-4 pt-10 pb-16 sm:px-6">
         <FaqAccordion items={faq} />
-        <div className="bg-jaune mt-14 flex flex-col items-start gap-4 rounded-[var(--radius-card)] p-8">
+        <div className="bg-jaune mt-14 flex flex-col items-center gap-4 rounded-[var(--radius-card)] p-8 text-center">
           <h2 className="display text-[length:var(--text-display-sm)]">
             Une question qui n'est pas ici ?
           </h2>

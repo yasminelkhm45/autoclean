@@ -41,7 +41,7 @@ export function SummaryPanel({
   return (
     <div className="border-noir/12 bg-blanc rounded-[var(--radius-card)] border">
       <div className="border-noir/12 border-b px-5 py-4">
-        <h2 className={compact ? "font-semibold" : "display text-xl"}>Votre prestation</h2>
+        <h2 className={`text-center ${compact ? "font-semibold" : "display text-xl"}`}>Votre prestation</h2>
       </div>
 
       <dl className="divide-noir/10 divide-y text-sm">
@@ -109,7 +109,7 @@ export function SummaryPanel({
         </span>
       </div>
 
-      <p className="text-noir/55 px-5 py-3 text-xs leading-relaxed">
+      <p className="text-noir/55 px-5 py-3 text-center text-xs leading-relaxed">
         Aucun paiement en ligne. Le tarif est reconfirmé par téléphone avant le
         rendez-vous, et le règlement se fait sur place.
       </p>

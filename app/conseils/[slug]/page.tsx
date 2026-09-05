@@ -57,7 +57,7 @@ export default async function ArticlePage({
           <h1 className="display mt-3 text-[length:var(--text-display-lg)]">{article.title}</h1>
         </div>
 
-        <p className="border-noir/15 mt-6 border-l-4 pl-5 text-lg leading-relaxed">
+        <p className="bg-noir/5 mx-auto mt-6 max-w-2xl rounded-[var(--radius-card)] p-5 text-center text-lg leading-relaxed">
           {article.excerpt}
         </p>
 
@@ -71,7 +71,7 @@ export default async function ArticlePage({
         {headings.length > 2 && (
           <nav
             aria-label="Sommaire"
-            className="border-noir/12 mt-8 rounded-[var(--radius-card)] border p-5"
+            className="border-noir/12 mx-auto mt-8 max-w-xl rounded-[var(--radius-card)] border p-5 text-center"
           >
             <h2 className="font-semibold">Au sommaire</h2>
             <ol className="mt-3 flex flex-col gap-2 text-sm">
@@ -101,7 +101,7 @@ export default async function ArticlePage({
                 <li key={r.slug}>
                   <Link
                     href={`/conseils/${r.slug}`}
-                    className="border-noir/12 hover:border-noir/45 block h-full rounded-[var(--radius-card)] border p-5 transition-colors"
+                    className="border-noir/12 hover:border-noir/45 block h-full rounded-[var(--radius-card)] border p-5 text-center transition-colors"
                   >
                     <p className="text-noir/55 text-sm font-semibold">{r.category}</p>
                     <p className="mt-1.5 font-semibold">{r.title}</p>

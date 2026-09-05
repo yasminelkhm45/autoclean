@@ -1,4 +1,4 @@
-# AutoClean Diois — autoclean-diois.fr
+# AutoClean Diois : autoclean-diois.fr
 
 Site vitrine + tunnel de pré-réservation. Next.js 15 (App Router), TypeScript strict, Tailwind CSS 4, validation Zod, emails Resend, déploiement Vercel.
 
@@ -11,7 +11,7 @@ npm run dev                  # http://localhost:3000
 npm run build                # build de production (0 erreur, 0 warning TS)
 ```
 
-Sans `RESEND_API_KEY`, les demandes sont validées normalement et **journalisées dans la console serveur** au lieu d'être envoyées par email — pratique en local.
+Sans `RESEND_API_KEY`, les demandes sont validées normalement et **journalisées dans la console serveur** au lieu d'être envoyées par email, ce qui est pratique en local.
 
 ## Où modifier quoi
 
@@ -46,13 +46,41 @@ Déposer le fichier au chemin attendu dans `public/images/` (voir le manifeste c
 |---|---|---|
 | `hero/habitacle-principal.jpg` | 16:9 | 2400×1350 |
 | `hero/atelier.jpg` | 4:3 | 1600×1200 |
-| `avant-apres/{zone}-avant.jpg` / `-apres.jpg` | 4:3 | 1600×1200 |
+| `avant-apres/{zone}-avant.jpg` / `-apres.jpg` | 16:9 | 1600×900 |
+| `avant-apres/{zone}-avant-vignette.jpg` / `-apres-vignette.jpg` | 16:9 | 480×270 |
 | `formules/essentielle.jpg`, `confort.jpg`, `prestige.jpg` | 3:2 | 1200×800 |
 | `process/etape-1.jpg` … `etape-4.jpg` | 1:1 | 900×900 |
-| `marque/logo-noir.svg`, `logo-blanc.svg`, `logomark.svg` | — | vectoriel |
+| `marque/logo-noir.svg`, `logo-blanc.svg`, `logomark.svg` | : | vectoriel |
 | `og/default.jpg` | 1.91:1 | 1200×630 |
 
-Zones avant/après attendues (`{zone}`) : `sol-moquette`, `sieges-cuir`, `volant`, `sieges-tissu`, `plastiques`, `cadres-de-portes`, `sol-plastique` — cadrage identique avant/après.
+### Icônes et image de partage
+
+Ces fichiers suivent les conventions de nommage de Next : les balises `<link>` sont générées automatiquement, avec une empreinte de cache. Ne pas les renommer.
+
+| Fichier | Rôle |
+|---|---|
+| `app/favicon.ico` | Onglet du navigateur (16, 32 et 48 px dans un seul fichier) |
+| `app/icon.svg` | Icône vectorielle, préférée par les navigateurs modernes |
+| `app/apple-icon.png` | Écran d'accueil iOS, 180×180 |
+| `app/opengraph-image.png` | Carte de partage de l'accueil, 1200×630 |
+| `public/icons/icon-{96,192,512}.png` | Icônes du manifeste, usage standard |
+| `public/icons/icon-maskable-{192,512}.png` | Icônes adaptatives Android, sur fond noir |
+
+Les pages intérieures gardent une image de partage **générée à la volée** (`lib/og.tsx`), avec leur propre titre : une carte qui annonce « Formule Prestige, 120 € » convertit mieux qu'un logo générique. Seul l'accueil utilise la carte de marque fournie.
+
+Le manifeste est écrit en TypeScript dans `app/manifest.ts` : nom, description, couleurs et icônes s'y modifient d'un seul endroit.
+
+### Ajouter une zone avant / après
+
+Tout se pilote depuis `content/avant-apres.ts`. Pour ajouter une paire :
+
+1. Photographier **exactement le même cadrage** avant et après. C'est la seule contrainte non négociable : si l'angle bouge, le curseur fait glisser deux images désalignées et l'effet tombe à plat.
+2. Déposer les quatre fichiers sous `public/images/avant-apres/` : `{slug}-avant.jpg`, `{slug}-apres.jpg` et leurs deux vignettes en 480×270. Les deux grandes images d'une paire doivent avoir **les mêmes dimensions au pixel près**.
+3. Ajouter l'objet correspondant dans `beforeAfterZones` (slug, libellé, description, textes alternatifs, dimensions).
+
+La zone apparaît alors dans la galerie, dans le sélecteur de vignettes, dans le balisage `ImageObject` et dans le sitemap image.
+
+Zones actuellement en ligne (7) : `sol-plastique`, `sol-moquette`, `sieges-cuir`, `sieges-tissu`, `volant`, `plastiques-de-porte`, `cadres-de-portes`.
 
 Les SVG dans `marque/` sont les **exports officiels de la charte** (logomark, lockups noir/blanc/jaune) : ne pas les recolorer ni les déformer.
 
@@ -113,7 +141,7 @@ public/llms.txt         résumé de l'activité pour les moteurs conversationnel
 ## Choix techniques à connaître
 
 - **Fontes** : la licence web de Steg Regular et d'Helvetica Neue n'étant pas disponible, le site self-héberge **Bricolage Grotesque 800** (display) et **Inter** (texte) en woff2, avec métriques de repli générées par `next/font` (CLS nul au swap). Pour passer aux fontes officielles : déposer les woff2 dans `app/fonts/` et ajuster les deux appels `localFont` de `app/layout.tsx`.
-- **Redirections** : `/presta` → `/prestations` et `/pre-reservation` → `/reservation` sont déclarées dans `next.config.ts` (`permanent: true`, servi en 308 par Next — équivalent au 301 pour les moteurs).
+- **Redirections** : `/presta` → `/prestations` et `/pre-reservation` → `/reservation` sont déclarées dans `next.config.ts` (`permanent: true`, servi en 308 par Next, équivalent au 301 pour les moteurs).
 - **Anti-spam** : honeypot + délai minimum de soumission + rate limiting par IP (5 requêtes/heure). Le rate limiting est en mémoire : suffisant sur Vercel pour ce trafic ; pour du multi-région strict, brancher Upstash Ratelimit dans `lib/rate-limit.ts`.
 - **JSON-LD** : `AutoWash` (+ `Service`/`Offer` par formule) sur l'accueil, `FAQPage` sur `/faq` uniquement (pour ne pas dupliquer les mêmes questions dans deux balisages), `BreadcrumbList` sur toutes les pages intérieures, `ImageObject` sur les visuels avant/après. À valider après tout changement dans le [Rich Results Test](https://search.google.com/test/rich-results). Aucun `AggregateRating` auto-hébergé : la fiche Google Business Profile reste le levier avis.
 - **Analytics** : aucun installé par défaut (zéro cookie → zéro bandeau). Recommandé : Vercel Analytics ou Plausible, tous deux sans cookie.

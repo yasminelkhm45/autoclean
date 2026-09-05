@@ -1,50 +1,45 @@
-import { BrandImage } from "@/components/ui/BrandImage";
+import Image from "next/image";
 import { CompareSlider } from "@/components/sections/CompareSlider";
+import { getZoneBySlug, zoneImagePath } from "@/content/avant-apres";
 
-/** Zones traitées, alignées sur le manifeste d'images avant-apres/{zone}-avant|apres.jpg */
-export const beforeAfterZones = [
-  { slug: "sol-moquette", label: "Sol moquette" },
-  { slug: "sieges-cuir", label: "Sièges cuir" },
-  { slug: "volant", label: "Volant" },
-  { slug: "sieges-tissu", label: "Sièges tissu" },
-  { slug: "plastiques", label: "Plastiques" },
-  { slug: "cadres-de-portes", label: "Cadres de portes" },
-  { slug: "sol-plastique", label: "Sol plastique" },
-] as const;
-
+/**
+ * Comparateur unique, rendu côté serveur.
+ * Utilisé sur l'accueil ; la page Avant / Après passe par la galerie.
+ */
 export function BeforeAfter({
   slug,
-  label,
-  sizes = "(min-width: 768px) 50vw, 100vw",
+  sizes = "(min-width: 768px) 45vw, 100vw",
   priority = false,
 }: {
   slug: string;
-  label: string;
   sizes?: string;
   priority?: boolean;
 }) {
+  const zone = getZoneBySlug(slug);
+  if (!zone) return null;
+
   return (
     <CompareSlider
-      label={label}
+      label={zone.label}
       before={
-        <BrandImage
-          src={`avant-apres/${slug}-avant.jpg`}
-          alt=""
-          width={1600}
-          height={1200}
+        <Image
+          src={zoneImagePath(zone.slug, "avant")}
+          alt={zone.altBefore}
+          width={zone.width}
+          height={zone.height}
           sizes={sizes}
           priority={priority}
-          className="rounded-none"
+          className="h-auto w-full"
         />
       }
       after={
-        <BrandImage
-          src={`avant-apres/${slug}-apres.jpg`}
-          alt=""
-          width={1600}
-          height={1200}
+        <Image
+          src={zoneImagePath(zone.slug, "apres")}
+          alt={zone.altAfter}
+          width={zone.width}
+          height={zone.height}
           sizes={sizes}
-          className="rounded-none"
+          className="h-auto w-full"
         />
       }
     />

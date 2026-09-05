@@ -46,7 +46,7 @@ export default function ReservationPage() {
         <Suspense
           fallback={
             <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6" aria-busy="true">
-              <p className="text-noir/60">Chargement du formulaire…</p>
+              <p className="text-noir/60 text-center">Chargement du formulaire…</p>
             </div>
           }
         >
@@ -57,7 +57,7 @@ export default function ReservationPage() {
       <section aria-label="Nos engagements" className="section-pad-sm border-noir/10 border-t">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 sm:grid-cols-3 sm:px-6">
           {promises.map((p) => (
-            <div key={p.title}>
+            <div key={p.title} className="text-center">
               <h2 className="font-semibold">{p.title}</h2>
               <p className="text-noir/60 mt-2 text-sm leading-relaxed">{p.text}</p>
             </div>
