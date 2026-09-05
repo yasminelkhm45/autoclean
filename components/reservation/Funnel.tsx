@@ -1,12 +1,18 @@
 "use client";
 
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { OptionIcon } from "@/components/ui/OptionIcon";
+import { VehicleSilhouette } from "@/components/ui/VehicleSilhouette";
+import { reviews } from "@/content/avis";
 import {
   computeTotal,
   formatPrice,
   formulas,
-  options,
+  getFormula,
+  getOption,
+  getVehicle,
+  options as allOptions,
   vehicleCategories,
   type FormulaId,
   type OptionId,
@@ -14,357 +20,500 @@ import {
 } from "@/content/offre";
 import { site } from "@/content/site";
 import { frPhoneRegex } from "@/lib/validation";
-import { OptionIcon } from "@/components/ui/OptionIcon";
-
-/* ------------------------------------------------------------------ */
-/*  État du tunnel : synchronisé avec l'URL + sessionStorage           */
-/* ------------------------------------------------------------------ */
+import { ContactStep, type ContactErrors } from "./ContactStep";
+import { StepRail } from "./StepRail";
+import { SummaryPanel } from "./SummaryPanel";
+import {
+  emptyContact,
+  formatPhone,
+  formatDateFr,
+  maxReachableStep,
+  parseFormula,
+  parseOptions,
+  parseVehicle,
+  slotLabels,
+  STEPS,
+  type ContactValues,
+  type Selection,
+  type StepNumber,
+} from "./shared";
 
 const STORAGE_KEY = "autoclean-reservation";
-const stepLabels = ["Véhicule", "Formule", "Options", "Récapitulatif", "Coordonnées"] as const;
 
-interface ContactFields {
-  lastName: string;
-  firstName: string;
-  phone: string;
-  email: string;
-  contactPreference: "appel" | "sms" | "";
-  message: string;
-  consent: boolean;
+/* ----------------------------- petits éléments ----------------------------- */
+
+function Check({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m4 13 5 5L20 7" />
+    </svg>
+  );
 }
 
-const emptyContact: ContactFields = {
-  lastName: "",
-  firstName: "",
-  phone: "",
-  email: "",
-  contactPreference: "",
-  message: "",
-  consent: false,
-};
+function SelectedBadge() {
+  return (
+    <span className="bg-jaune text-noir absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full">
+      <Check className="h-4 w-4" />
+      <span className="sr-only">Sélectionné</span>
+    </span>
+  );
+}
 
-const isVehicle = (v: string | null): v is VehicleId =>
-  vehicleCategories.some((x) => x.id === v);
-const isFormula = (v: string | null): v is FormulaId => formulas.some((x) => x.id === v);
-const parseOptions = (v: string | null): OptionId[] =>
-  (v ?? "")
-    .split(",")
-    .filter((id): id is OptionId => options.some((o) => o.id === id));
+function StepHeader({
+  title,
+  intro,
+  headingRef,
+}: {
+  title: string;
+  intro: string;
+  headingRef: React.RefObject<HTMLHeadingElement | null>;
+}) {
+  return (
+    <div className="mb-6">
+      <h2 ref={headingRef} tabIndex={-1} className="display text-[length:var(--text-display-sm)] outline-none">
+        {title}
+      </h2>
+      <p className="text-noir/60 mt-2">{intro}</p>
+    </div>
+  );
+}
+
+/* --------------------------------- tunnel --------------------------------- */
 
 export function Funnel() {
   const router = useRouter();
   const params = useSearchParams();
 
-  const vehicle = isVehicle(params.get("vehicule")) ? (params.get("vehicule") as VehicleId) : null;
-  const formula = isFormula(params.get("formule")) ? (params.get("formule") as FormulaId) : null;
-  const selectedOptions = parseOptions(params.get("options"));
-  const rawStep = Number(params.get("etape") ?? "1");
+  const selection: Selection = useMemo(
+    () => ({
+      vehicle: parseVehicle(params.get("vehicule")),
+      formula: parseFormula(params.get("formule")),
+      options: parseOptions(params.get("options")),
+    }),
+    [params]
+  );
 
-  /* Étape maximale atteignable selon la saisie : progression jamais en avant sur une étape non validée. */
-  const maxStep = !vehicle ? 1 : !formula ? 2 : 5;
-  const step = Math.min(Math.max(1, Number.isFinite(rawStep) ? rawStep : 1), maxStep);
+  const maxReached = maxReachableStep(selection);
+  const requested = Number(params.get("etape") ?? 1);
+  const step = (Math.min(
+    Math.max(Number.isFinite(requested) ? requested : 1, 1),
+    maxReached
+  ) || 1) as StepNumber;
 
-  const [contact, setContact] = useState<ContactFields>(emptyContact);
-  const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
+  const total =
+    selection.vehicle && selection.formula
+      ? computeTotal(selection.formula, selection.vehicle, selection.options)
+      : null;
+
+  /* --------------------------- état du formulaire --------------------------- */
+
+  const [contact, setContact] = useState<ContactValues>(emptyContact);
+  const [errors, setErrors] = useState<ContactErrors>({});
   const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
   const [serverError, setServerError] = useState<string | null>(null);
+  const [restored, setRestored] = useState(false);
+
   const startedAt = useRef(Date.now());
   const honeypotRef = useRef<HTMLInputElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-  const restored = useRef(false);
+  const topRef = useRef<HTMLDivElement>(null);
+  const errorSummaryRef = useRef<HTMLDivElement>(null);
+  const pointerSelect = useRef(false);
+  const firstRender = useRef(true);
 
-  /* Restauration sessionStorage : URL prioritaire, stockage en secours. */
+  /* Reprise d'une saisie interrompue (rafraîchissement, retour arrière). */
   useEffect(() => {
-    if (restored.current) return;
-    restored.current = true;
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const saved = JSON.parse(raw) as Partial<ContactFields> & { query?: string };
-      setContact((c) => ({ ...c, ...saved, consent: false }));
-      if (!params.get("vehicule") && saved.query) {
-        router.replace(`/reservation?${saved.query}`, { scroll: false });
-      }
+      if (raw) setContact({ ...emptyContact, ...(JSON.parse(raw) as Partial<ContactValues>) });
     } catch {
-      /* stockage illisible : on repart de zéro */
+      /* stockage indisponible : on repart d'un formulaire vide */
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setRestored(true);
   }, []);
 
-  /* Sauvegarde continue (hors consentement, redemandé à chaque envoi). */
   useEffect(() => {
-    const { consent: _consent, ...rest } = contact;
+    if (!restored) return;
     try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ ...rest, query: params.toString() }));
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ ...contact, consent: false }));
     } catch {
-      /* stockage plein ou bloqué : non bloquant */
+      /* stockage indisponible : la saisie n'est pas conservée, sans incidence */
     }
-  }, [contact, params]);
+  }, [contact, restored]);
 
-  const setQuery = useCallback(
-    (patch: Record<string, string | null>) => {
-      const next = new URLSearchParams(params.toString());
-      for (const [k, v] of Object.entries(patch)) {
-        if (v === null || v === "") next.delete(k);
-        else next.set(k, v);
-      }
-      router.push(`/reservation?${next.toString()}`, { scroll: false });
+  /* --------------------------------- routage -------------------------------- */
+
+  const go = useCallback(
+    (next: Partial<Selection> & { step?: StepNumber }) => {
+      const merged: Selection = {
+        vehicle: next.vehicle !== undefined ? next.vehicle : selection.vehicle,
+        formula: next.formula !== undefined ? next.formula : selection.formula,
+        options: next.options !== undefined ? next.options : selection.options,
+      };
+      const sp = new URLSearchParams();
+      if (merged.vehicle) sp.set("vehicule", merged.vehicle);
+      if (merged.formula) sp.set("formule", merged.formula);
+      if (merged.options.length) sp.set("options", merged.options.join(","));
+      const target = Math.min(next.step ?? step, maxReachableStep(merged));
+      sp.set("etape", String(target));
+      router.replace(`/reservation?${sp.toString()}`, { scroll: false });
     },
-    [params, router]
+    [router, selection, step]
   );
 
-  const goTo = useCallback(
-    (n: number) => {
-      setQuery({ etape: String(n) });
-      headingRef.current?.focus();
-    },
-    [setQuery]
-  );
-
-  const total = vehicle && formula ? computeTotal(formula, vehicle, selectedOptions) : null;
-
-  /* ---------------------------- validation étape 5 ---------------------------- */
-  const validateContact = (): boolean => {
-    const e: Partial<Record<string, string>> = {};
-    if (contact.lastName.trim().length < 2) e.lastName = "Indiquez votre nom.";
-    if (contact.firstName.trim().length < 2) e.firstName = "Indiquez votre prénom.";
-    if (!frPhoneRegex.test(contact.phone.trim()))
-      e.phone = "Indiquez un numéro français valide, ex. 06 12 34 56 78.";
-    if (contact.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email.trim()))
-      e.email = "Cette adresse email semble invalide.";
-    if (!contact.contactPreference)
-      e.contactPreference = "Choisissez comment vous préférez être recontacté(e).";
-    if (!contact.consent)
-      e.consent = "Votre accord est nécessaire pour que nous puissions vous rappeler.";
-    setErrors(e);
-    if (Object.keys(e).length > 0) {
-      const first = Object.keys(e)[0]!;
-      const el = formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`);
-      el?.focus();
-      return false;
+  /* Au changement d'étape : ramener le tunnel en haut et donner le focus au titre. */
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
     }
-    return true;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    topRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    headingRef.current?.focus({ preventScroll: true });
+  }, [step]);
+
+  /* Sélection à la souris ou au doigt : on enchaîne sur l'étape suivante.
+     Au clavier, les flèches parcourent les choix sans faire avancer le tunnel. */
+  const clickVehicle = (id: VehicleId) => {
+    if (!pointerSelect.current) return;
+    pointerSelect.current = false;
+    go({ vehicle: id, step: 2 });
   };
 
-  const submit = async (ev: React.FormEvent) => {
+  const clickFormula = (id: FormulaId) => {
+    if (!pointerSelect.current) return;
+    pointerSelect.current = false;
+    go({ formula: id, step: 3 });
+  };
+
+  const toggleOption = (id: OptionId) => {
+    const next = selection.options.includes(id)
+      ? selection.options.filter((o) => o !== id)
+      : [...selection.options, id];
+    go({ options: next });
+  };
+
+  /* -------------------------------- validation ------------------------------- */
+
+  const validateField = useCallback(
+    (key: keyof ContactValues, v: ContactValues): string | undefined => {
+      switch (key) {
+        case "firstName":
+          return v.firstName.trim().length < 2 ? "Indiquez votre prénom." : undefined;
+        case "lastName":
+          return v.lastName.trim().length < 2 ? "Indiquez votre nom." : undefined;
+        case "phone":
+          return frPhoneRegex.test(v.phone.trim())
+            ? undefined
+            : "Indiquez un numéro français valide, par exemple 06 12 34 56 78.";
+        case "email":
+          return v.email.trim() === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim())
+            ? undefined
+            : "Cette adresse email semble incomplète.";
+        case "contactPreference":
+          return v.contactPreference === ""
+            ? "Dites-nous si vous préférez un appel ou un SMS."
+            : undefined;
+        case "consent":
+          return v.consent ? undefined : "Cochez cette case pour que nous puissions vous rappeler.";
+        default:
+          return undefined;
+      }
+    },
+    []
+  );
+
+  const setValue = useCallback(
+    <K extends keyof ContactValues>(key: K, value: ContactValues[K]) => {
+      setContact((prev) => {
+        const next = { ...prev, [key]: value };
+        setErrors((e) => (e[key] ? { ...e, [key]: validateField(key, next) } : e));
+        return next;
+      });
+    },
+    [validateField]
+  );
+
+  const onBlurField = useCallback(
+    (key: keyof ContactValues) => {
+      setContact((prev) => {
+        const next = key === "phone" ? { ...prev, phone: formatPhone(prev.phone) } : prev;
+        setErrors((e) => ({ ...e, [key]: validateField(key, next) }));
+        return next;
+      });
+    },
+    [validateField]
+  );
+
+  /* --------------------------------- envoi ---------------------------------- */
+
+  const submit = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    setServerError(null);
-    if (!vehicle || !formula || !validateContact()) return;
+    if (!selection.vehicle || !selection.formula) return;
+
+    const keys: (keyof ContactValues)[] = [
+      "firstName",
+      "lastName",
+      "phone",
+      "email",
+      "contactPreference",
+      "consent",
+    ];
+    const found: ContactErrors = {};
+    for (const k of keys) {
+      const msg = validateField(k, contact);
+      if (msg) found[k] = msg;
+    }
+    setErrors(found);
+    if (Object.keys(found).length > 0) {
+      errorSummaryRef.current?.focus();
+      return;
+    }
+
     setStatus("sending");
+    setServerError(null);
     try {
       const res = await fetch("/api/reservation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          vehicle,
-          formula,
-          options: selectedOptions,
-          lastName: contact.lastName,
-          firstName: contact.firstName,
-          phone: contact.phone,
+          vehicle: selection.vehicle,
+          formula: selection.formula,
+          options: selection.options,
+          firstName: contact.firstName.trim(),
+          lastName: contact.lastName.trim(),
+          phone: contact.phone.trim(),
           email: contact.email.trim(),
           contactPreference: contact.contactPreference,
-          message: contact.message,
+          preferredDate: contact.preferredDate,
+          preferredSlot: contact.preferredSlot,
+          message: contact.message.trim(),
           consent: contact.consent,
           website: honeypotRef.current?.value ?? "",
           startedAt: startedAt.current,
         }),
       });
-      const json = (await res.json()) as {
-        ok: boolean;
-        error?: string;
-        fieldErrors?: Record<string, string>;
-      };
-      if (!json.ok) {
-        if (json.fieldErrors) {
-          setErrors(json.fieldErrors);
-          const first = Object.keys(json.fieldErrors)[0];
-          if (first)
-            formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
-        }
-        setServerError(json.error ?? "Certains champs sont à corriger ci-dessus.");
-        setStatus("error");
-        return;
+      const json = (await res.json()) as { ok: boolean; error?: string; reference?: string };
+      if (!json.ok) throw new Error(json.error);
+
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch {
+        /* rien à nettoyer */
       }
-      sessionStorage.removeItem(STORAGE_KEY);
-      router.push(
-        `/reservation/confirmation?vehicule=${vehicle}&formule=${formula}${
-          selectedOptions.length ? `&options=${selectedOptions.join(",")}` : ""
-        }`
+
+      const sp = new URLSearchParams({
+        vehicule: selection.vehicle,
+        formule: selection.formula,
+      });
+      if (selection.options.length) sp.set("options", selection.options.join(","));
+      if (json.reference) sp.set("ref", json.reference);
+      router.push(`/reservation/confirmation?${sp.toString()}`);
+    } catch (err) {
+      setServerError(
+        err instanceof Error && err.message
+          ? err.message
+          : "L'envoi n'a pas abouti. Réessayez, ou appelez-nous directement."
       );
-    } catch {
-      setServerError("La connexion a échoué. Vérifiez votre réseau puis réessayez.");
       setStatus("error");
+      errorSummaryRef.current?.focus();
     }
   };
 
-  /* ------------------------------------------------------------------ */
+  /* --------------------------------- rendu ---------------------------------- */
 
-  const fieldError = (name: string) =>
-    errors[name] ? (
-      <p id={`err-${name}`} className="mt-1.5 text-sm font-medium text-[#b00020]">
-        {errors[name]}
-      </p>
-    ) : null;
+  const errorList = Object.entries(errors).filter(([, v]) => v) as [string, string][];
+  const canContinue =
+    (step === 1 && !!selection.vehicle) ||
+    (step === 2 && !!selection.formula) ||
+    step === 3 ||
+    step === 4;
 
-  const inputClass = (name: string) =>
-    `border-2 bg-blanc w-full rounded-xl px-4 py-3 text-base ${
-      errors[name] ? "border-[#b00020]" : "border-noir/25 focus:border-noir"
-    }`;
+  const nextLabel =
+    step === 3 ? "Voir le récapitulatif" : step === 4 ? "Passer à mes coordonnées" : "Continuer";
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-8 px-4 pb-28 sm:px-6 lg:grid-cols-[1.7fr_1fr] lg:pb-16">
-      <div>
-        {/* Progression : cliquable en arrière uniquement */}
-        <nav aria-label="Progression de la pré-réservation">
-          <ol className="flex flex-wrap gap-2">
-            {stepLabels.map((label, i) => {
-              const n = i + 1;
-              const current = n === step;
-              const reachable = n < step;
-              return (
-                <li key={label}>
-                  {reachable ? (
-                    <button
-                      type="button"
-                      onClick={() => goTo(n)}
-                      className="border-noir bg-blanc min-h-11 rounded-full border px-4 py-2 text-sm font-medium hover:bg-noir hover:text-blanc"
+    <div ref={topRef} className="mx-auto max-w-6xl scroll-mt-24 px-4 pb-32 sm:px-6 lg:pb-16">
+      <StepRail current={step} maxReached={maxReached} onGoTo={(s) => go({ step: s })} />
+
+      <div className="mt-8 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <div>
+          {/* Étape 1 : véhicule */}
+          {step === 1 && (
+            <section>
+              <StepHeader
+                title="Quel véhicule allons-nous nettoyer ?"
+                intro="La catégorie nous sert à prévoir le temps de travail et le matériel."
+                headingRef={headingRef}
+              />
+              <div
+                role="radiogroup"
+                aria-label="Catégorie de véhicule"
+                className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+              >
+                {vehicleCategories.map((v) => {
+                  const checked = selection.vehicle === v.id;
+                  return (
+                    <label
+                      key={v.id}
+                      onPointerDown={() => (pointerSelect.current = true)}
+                      onClick={() => clickVehicle(v.id)}
+                      className={[
+                        "relative flex cursor-pointer flex-col items-center gap-3 rounded-[var(--radius-card)] border-2 p-5 text-center transition-colors",
+                        checked ? "border-noir bg-noir/5" : "border-noir/15 hover:border-noir/45",
+                      ].join(" ")}
                     >
-                      {n}. {label}
-                    </button>
-                  ) : (
-                    <span
-                      aria-current={current ? "step" : undefined}
-                      className={`inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-medium ${
-                        current ? "bg-noir text-blanc" : "border-gris text-noir/50 border"
-                      }`}
+                      <input
+                        type="radio"
+                        name="vehicule"
+                        value={v.id}
+                        checked={checked}
+                        onChange={() => go({ vehicle: v.id })}
+                        className="sr-only"
+                      />
+                      {checked && <SelectedBadge />}
+                      <VehicleSilhouette type={v.silhouette} className="text-noir h-14 w-auto" />
+                      <span className="font-semibold">{v.label}</span>
+                      <span className="text-noir/50 text-xs leading-relaxed">
+                        {v.examples.slice(0, 3).join(", ")}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+              <p className="text-noir/55 mt-5 text-sm">
+                Votre véhicule ne rentre dans aucune case ? Choisissez le plus proche,
+                nous ajusterons au téléphone.
+              </p>
+            </section>
+          )}
+
+          {/* Étape 2 : formule */}
+          {step === 2 && (
+            <section>
+              <StepHeader
+                title="Quelle formule pour votre véhicule ?"
+                intro="Les trois formules sont cumulatives : chacune reprend la précédente."
+                headingRef={headingRef}
+              />
+              <div
+                role="radiogroup"
+                aria-label="Formule de nettoyage"
+                className="grid gap-4 lg:grid-cols-3"
+              >
+                {formulas.map((f) => {
+                  const checked = selection.formula === f.id;
+                  return (
+                    <label
+                      key={f.id}
+                      onPointerDown={() => (pointerSelect.current = true)}
+                      onClick={() => clickFormula(f.id)}
+                      className={[
+                        "relative flex cursor-pointer flex-col rounded-[var(--radius-card)] border-2 p-5 transition-colors",
+                        checked ? "border-noir bg-noir/5" : "border-noir/15 hover:border-noir/45",
+                      ].join(" ")}
                     >
-                      {n}. {label}
-                    </span>
-                  )}
-                </li>
-              );
-            })}
-          </ol>
-        </nav>
-
-        <h2 ref={headingRef} tabIndex={-1} className="display mt-8 text-[length:var(--text-display-md)] outline-none">
-          {step === 1 && "Quel véhicule nous confiez-vous ?"}
-          {step === 2 && "Choisissez votre formule"}
-          {step === 3 && "Des options à ajouter ?"}
-          {step === 4 && "Votre récapitulatif"}
-          {step === 5 && "Vos coordonnées"}
-        </h2>
-
-        {/* Étape 1 : Catégorie */}
-        {step === 1 && (
-          <fieldset className="mt-8 border-0 p-0">
-            <legend className="sr-only">Catégorie de véhicule</legend>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {vehicleCategories.map((v) => (
-                <label
-                  key={v.id}
-                  className={`cursor-pointer rounded-[var(--radius-card)] border-2 p-5 transition-colors ${
-                    vehicle === v.id ? "border-noir bg-noir text-blanc" : "border-noir/20 hover:border-noir"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="vehicule"
-                    value={v.id}
-                    checked={vehicle === v.id}
-                    onChange={() => setQuery({ vehicule: v.id, etape: "2" })}
-                    className="sr-only"
-                  />
-                  <span className="block font-semibold">{v.label}</span>
-                  <span className={`mt-1 block text-sm ${vehicle === v.id ? "text-gris" : "text-noir/60"}`}>
-                    {v.examples}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-        )}
-
-        {/* Étape 2 : Formule */}
-        {step === 2 && (
-          <fieldset className="mt-8 border-0 p-0">
-            <legend className="sr-only">Formule</legend>
-            <div className="grid gap-3">
-              {formulas.map((f) => (
-                <label
-                  key={f.id}
-                  className={`cursor-pointer rounded-[var(--radius-card)] border-2 p-5 transition-colors ${
-                    formula === f.id ? "border-noir bg-noir text-blanc" : "border-noir/20 hover:border-noir"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="formule"
-                    value={f.id}
-                    checked={formula === f.id}
-                    onChange={() => setQuery({ formule: f.id, etape: "3" })}
-                    className="sr-only"
-                  />
-                  <span className="flex flex-wrap items-baseline justify-between gap-2">
-                    <span className="display text-xl">
-                      {f.name}
-                      {f.recommended && (
-                        <span className="bg-jaune text-noir ml-3 rounded-full px-2.5 py-0.5 align-middle text-xs font-bold tracking-wide uppercase">
-                          Recommandée
+                      <input
+                        type="radio"
+                        name="formule"
+                        value={f.id}
+                        checked={checked}
+                        onChange={() => go({ formula: f.id })}
+                        className="sr-only"
+                      />
+                      {f.badge && (
+                        <span className="bg-jaune text-noir absolute -top-3 left-5 rounded-full px-3 py-1 text-xs font-semibold">
+                          {f.badge}
                         </span>
                       )}
-                    </span>
-                    <span className="font-semibold">
-                      {formatPrice(f.price)} · {f.duration}
-                    </span>
-                  </span>
-                  <span className={`mt-2 block text-sm ${formula === f.id ? "text-gris" : "text-noir/60"}`}>
-                    {f.tagline}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-        )}
+                      {checked && <SelectedBadge />}
 
-        {/* Étape 3 : Options */}
-        {step === 3 && (
-          <>
-            <fieldset className="mt-8 border-0 p-0">
-              <legend className="text-noir/70 mb-4 text-sm">
-                Facultatif : sélectionnez celles qui concernent votre véhicule.
-              </legend>
+                      <h3 className="display text-2xl">{f.name}</h3>
+                      <p className="text-noir/60 mt-1 min-h-[2.75rem] text-sm">{f.tagline}</p>
+                      <p className="display mt-2 text-4xl">{formatPrice(f.price)}</p>
+                      <p className="text-noir/55 mt-1 text-sm">Durée estimée : {f.duration}</p>
+
+                      <ul className="border-noir/10 mt-4 flex flex-col gap-2 border-t pt-4 text-sm">
+                        {f.inclusions.map((inc) => (
+                          <li key={inc.label} className="flex gap-2">
+                            <Check className="text-jaune mt-1 h-3.5 w-3.5 shrink-0" />
+                            <span>
+                              {inc.label}
+                              {inc.detail && (
+                                <span className="text-noir/50 block text-xs">{inc.detail}</span>
+                              )}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      {f.note && (
+                        <p className="text-noir/60 border-noir/10 mt-4 border-t pt-4 text-sm italic">
+                          {f.note}
+                        </p>
+                      )}
+
+                      <span
+                        className={[
+                          "mt-5 flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-semibold transition-colors",
+                          checked ? "bg-noir text-blanc" : "border-noir border-2",
+                        ].join(" ")}
+                      >
+                        {checked ? "Formule sélectionnée" : "Choisir cette formule"}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* Étape 3 : options */}
+          {step === 3 && (
+            <section>
+              <StepHeader
+                title="Des options à ajouter ?"
+                intro="Tout est facultatif. Vous pourrez encore en ajouter au téléphone."
+                headingRef={headingRef}
+              />
               <div className="grid gap-3 sm:grid-cols-2">
-                {options.map((o) => {
-                  const checked = selectedOptions.includes(o.id);
+                {allOptions.map((o) => {
+                  const checked = selection.options.includes(o.id);
                   return (
                     <label
                       key={o.id}
-                      className={`flex cursor-pointer gap-4 rounded-[var(--radius-card)] border-2 p-4 transition-colors ${
-                        checked ? "border-noir bg-noir text-blanc" : "border-noir/20 hover:border-noir"
-                      }`}
+                      className={[
+                        "flex cursor-pointer gap-3 rounded-[var(--radius-card)] border-2 p-4 transition-colors",
+                        checked ? "border-noir bg-noir/5" : "border-noir/15 hover:border-noir/45",
+                      ].join(" ")}
                     >
                       <input
                         type="checkbox"
-                        name="options"
-                        value={o.id}
                         checked={checked}
-                        onChange={() => {
-                          const next = checked
-                            ? selectedOptions.filter((id) => id !== o.id)
-                            : [...selectedOptions, o.id];
-                          setQuery({ options: next.join(",") });
-                        }}
-                        className="mt-1 h-5 w-5 shrink-0 accent-jaune"
+                        onChange={() => toggleOption(o.id)}
+                        className="sr-only"
                       />
-                      <span>
-                        <span className="flex items-center gap-2 font-semibold">
-                          <OptionIcon icon={o.icon} className="h-5 w-5" />
-                          {o.label} · +{formatPrice(o.price)}
+                      <span
+                        aria-hidden="true"
+                        className={[
+                          "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors",
+                          checked ? "border-noir bg-noir text-jaune" : "border-noir/30",
+                        ].join(" ")}
+                      >
+                        {checked && <Check className="h-3.5 w-3.5" />}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="flex items-baseline justify-between gap-3">
+                          <span className="font-semibold">{o.label}</span>
+                          <span className="shrink-0 font-semibold">+{formatPrice(o.price)}</span>
                         </span>
-                        <span className={`mt-1 block text-sm ${checked ? "text-gris" : "text-noir/60"}`}>
+                        {o.badge && (
+                          <span className="bg-jaune text-noir mt-1.5 inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold">
+                            {o.badge}
+                          </span>
+                        )}
+                        <span className="text-noir/60 mt-1.5 flex gap-2 text-sm leading-relaxed">
+                          <OptionIcon icon={o.icon} className="text-noir/45 mt-0.5 h-4 w-4 shrink-0" />
                           {o.description}
                         </span>
                       </span>
@@ -372,302 +521,233 @@ export function Funnel() {
                   );
                 })}
               </div>
-            </fieldset>
-            <button
-              type="button"
-              onClick={() => goTo(4)}
-              className="bg-noir text-blanc mt-8 min-h-11 rounded-full px-7 py-3 font-semibold"
-            >
-              Voir le récapitulatif
-            </button>
-          </>
-        )}
+            </section>
+          )}
 
-        {/* Étape 4 : Récapitulatif */}
-        {step === 4 && vehicle && formula && (
-          <>
-            <dl className="border-noir/15 mt-8 divide-y rounded-[var(--radius-card)] border">
-              <div className="divide-noir/15 flex justify-between gap-4 p-5">
-                <dt className="text-noir/60">Véhicule</dt>
-                <dd className="text-right font-semibold">
-                  {vehicleCategories.find((v) => v.id === vehicle)?.label}
-                </dd>
-              </div>
-              <div className="border-noir/15 flex justify-between gap-4 border-t p-5">
-                <dt className="text-noir/60">Formule</dt>
-                <dd className="text-right font-semibold">
-                  {formulas.find((f) => f.id === formula)?.name} ({formatPrice(formulas.find((f) => f.id === formula)!.price)})
-                </dd>
-              </div>
-              <div className="border-noir/15 flex justify-between gap-4 border-t p-5">
-                <dt className="text-noir/60">Options</dt>
-                <dd className="text-right font-semibold">
-                  {selectedOptions.length
-                    ? selectedOptions
-                        .map((id) => {
-                          const o = options.find((x) => x.id === id)!;
-                          return `${o.label} (+${formatPrice(o.price)})`;
-                        })
-                        .join(", ")
-                    : "Aucune"}
-                </dd>
-              </div>
-              <div className="border-noir/15 bg-jaune flex justify-between gap-4 rounded-b-[var(--radius-card)] border-t p-5">
-                <dt className="font-semibold">Total estimé</dt>
-                <dd className="display text-2xl">{total !== null && formatPrice(total)}</dd>
-              </div>
-            </dl>
-            <p className="text-noir/60 mt-4 text-sm">
-              Ce total est confirmé avec vous par téléphone avant le rendez-vous. Aucun
-              paiement en ligne.
-            </p>
-            <button
-              type="button"
-              onClick={() => goTo(5)}
-              className="bg-noir text-blanc mt-8 min-h-11 rounded-full px-7 py-3 font-semibold"
-            >
-              Continuer vers mes coordonnées
-            </button>
-          </>
-        )}
+          {/* Étape 4 : récapitulatif */}
+          {step === 4 && selection.vehicle && selection.formula && (
+            <section>
+              <StepHeader
+                title="Voilà votre demande"
+                intro="Vérifiez, corrigez si besoin : rien n'est encore envoyé."
+                headingRef={headingRef}
+              />
 
-        {/* Étape 5 : Coordonnées */}
-        {step === 5 && (
-          <form ref={formRef} onSubmit={submit} noValidate className="mt-8 grid gap-5">
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label htmlFor="res-nom" className="mb-1.5 block font-medium">
-                  Nom
-                </label>
-                <input
-                  id="res-nom"
-                  name="lastName"
-                  autoComplete="family-name"
-                  required
-                  value={contact.lastName}
-                  onChange={(e) => setContact({ ...contact, lastName: e.target.value })}
-                  aria-invalid={!!errors.lastName}
-                  aria-describedby={errors.lastName ? "err-lastName" : undefined}
-                  className={inputClass("lastName")}
-                />
-                {fieldError("lastName")}
+              <div className="mb-6 lg:hidden">
+                <SummaryPanel selection={selection} onEdit={(s) => go({ step: s })} />
               </div>
-              <div>
-                <label htmlFor="res-prenom" className="mb-1.5 block font-medium">
-                  Prénom
-                </label>
-                <input
-                  id="res-prenom"
-                  name="firstName"
-                  autoComplete="given-name"
-                  required
-                  value={contact.firstName}
-                  onChange={(e) => setContact({ ...contact, firstName: e.target.value })}
-                  aria-invalid={!!errors.firstName}
-                  aria-describedby={errors.firstName ? "err-firstName" : undefined}
-                  className={inputClass("firstName")}
-                />
-                {fieldError("firstName")}
+
+              <div className="border-noir/12 rounded-[var(--radius-card)] border p-5">
+                <h3 className="font-semibold">
+                  Ce que comprend la formule {getFormula(selection.formula).name}
+                </h3>
+                <ul className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
+                  {getFormula(selection.formula).inclusions.map((inc) => (
+                    <li key={inc.label} className="flex gap-2">
+                      <Check className="text-jaune mt-1 h-3.5 w-3.5 shrink-0" />
+                      <span>{inc.label}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-            <div>
-              <label htmlFor="res-tel" className="mb-1.5 block font-medium">
-                Téléphone
-              </label>
-              <input
-                id="res-tel"
-                name="phone"
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel"
-                required
-                placeholder="06 12 34 56 78"
-                value={contact.phone}
-                onChange={(e) => setContact({ ...contact, phone: e.target.value })}
-                aria-invalid={!!errors.phone}
-                aria-describedby={errors.phone ? "err-phone" : undefined}
-                className={inputClass("phone")}
-              />
-              {fieldError("phone")}
-            </div>
-            <div>
-              <label htmlFor="res-email" className="mb-1.5 block font-medium">
-                Email <span className="text-noir/50 font-normal">(facultatif, pour la confirmation écrite)</span>
-              </label>
-              <input
-                id="res-email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={contact.email}
-                onChange={(e) => setContact({ ...contact, email: e.target.value })}
-                aria-invalid={!!errors.email}
-                aria-describedby={errors.email ? "err-email" : undefined}
-                className={inputClass("email")}
-              />
-              {fieldError("email")}
-            </div>
-            <fieldset className="border-0 p-0">
-              <legend className="mb-2 font-medium">Comment préférez-vous être recontacté(e) ?</legend>
-              <div className="flex gap-3" role="radiogroup" aria-describedby={errors.contactPreference ? "err-contactPreference" : undefined}>
-                {(
-                  [
-                    ["appel", "Par téléphone"],
-                    ["sms", "Par SMS"],
-                  ] as const
-                ).map(([value, label]) => (
-                  <label
-                    key={value}
-                    className={`min-h-11 cursor-pointer rounded-full border-2 px-5 py-2.5 font-medium ${
-                      contact.contactPreference === value
-                        ? "border-noir bg-noir text-blanc"
-                        : "border-noir/25"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="contactPreference"
-                      value={value}
-                      checked={contact.contactPreference === value}
-                      onChange={() => setContact({ ...contact, contactPreference: value })}
-                      className="sr-only"
-                    />
-                    {label}
-                  </label>
+
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                {[
+                  { t: "Produits professionnels", d: "Un produit par matériau, à la bonne dilution." },
+                  {
+                    t: "Créneau réservé",
+                    d: `Le véhicule reste à l'atelier ${getFormula(selection.formula).duration}.`,
+                  },
+                  { t: "Paiement sur place", d: `${site.paymentMethods.join(", ")}.` },
+                ].map((b) => (
+                  <div key={b.t} className="border-noir/12 rounded-[var(--radius-card)] border p-4">
+                    <p className="font-semibold">{b.t}</p>
+                    <p className="text-noir/60 mt-1 text-sm leading-relaxed">{b.d}</p>
+                  </div>
                 ))}
               </div>
-              {fieldError("contactPreference")}
-            </fieldset>
-            <div>
-              <label htmlFor="res-message" className="mb-1.5 block font-medium">
-                Informations complémentaires{" "}
-                <span className="text-noir/50 font-normal">(facultatif)</span>
-              </label>
-              <textarea
-                id="res-message"
-                name="message"
-                rows={4}
-                value={contact.message}
-                onChange={(e) => setContact({ ...contact, message: e.target.value })}
-                placeholder="État du véhicule, contrainte de date, besoin urgent…"
-                className={inputClass("message")}
+
+              <div className="bg-noir text-blanc mt-4 rounded-[var(--radius-card)] p-5">
+                <p className="text-gris text-sm">
+                  {site.rating.value}/5 sur Google, {site.clientsCount.toLowerCase()}
+                </p>
+                <div className="mt-4 grid gap-5 sm:grid-cols-2">
+                  {reviews.map((r) => (
+                    <figure key={r.author}>
+                      <blockquote className="text-sm leading-relaxed">{r.text}</blockquote>
+                      <figcaption className="text-gris mt-2 text-sm">
+                        {r.author}, avis {r.source}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Étape 5 : coordonnées */}
+          {step === 5 && selection.vehicle && selection.formula && (
+            <section>
+              <StepHeader
+                title="Vos coordonnées"
+                intro={`Dernière étape. Nous vous rappelons ${site.callbackDelay} pour confirmer le créneau.`}
+                headingRef={headingRef}
               />
-            </div>
 
-            {/* Honeypot : invisible pour les humains, rempli par les robots */}
-            <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
-              <label htmlFor="res-website">Ne pas remplir ce champ</label>
-              <input id="res-website" ref={honeypotRef} name="website" type="text" tabIndex={-1} autoComplete="off" />
-            </div>
+              <div ref={errorSummaryRef} tabIndex={-1} aria-live="assertive" className="outline-none">
+                {(errorList.length > 0 || serverError) && (
+                  <div className="mb-6 rounded-[var(--radius-card)] border-2 border-[#b00020] p-4">
+                    <p className="font-semibold text-[#b00020]">
+                      {serverError ?? "Il manque encore quelques informations."}
+                    </p>
+                    {errorList.length > 0 && (
+                      <ul className="mt-2 list-disc pl-5 text-sm text-[#b00020]">
+                        {errorList.map(([k, v]) => (
+                          <li key={k}>{v}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
+              </div>
 
-            <div>
-              <label className="flex cursor-pointer items-start gap-3">
-                <input
-                  type="checkbox"
-                  name="consent"
-                  checked={contact.consent}
-                  onChange={(e) => setContact({ ...contact, consent: e.target.checked })}
-                  aria-invalid={!!errors.consent}
-                  aria-describedby={errors.consent ? "err-consent" : undefined}
-                  className="mt-0.5 h-5 w-5 shrink-0 accent-noir"
+              <form onSubmit={submit} noValidate className="relative">
+                <ContactStep
+                  values={contact}
+                  setValue={setValue}
+                  errors={errors}
+                  onBlurField={onBlurField}
+                  honeypotRef={honeypotRef}
                 />
-                <span className="text-sm leading-relaxed">
-                  J'accepte que mes coordonnées soient utilisées uniquement pour traiter ma
-                  demande de pré-réservation, conformément à la{" "}
-                  <a href="/politique-de-confidentialite" className="underline underline-offset-4">
-                    politique de confidentialité
-                  </a>
-                  .
-                </span>
-              </label>
-              {fieldError("consent")}
+
+                <div className="mt-8 flex flex-wrap items-center gap-4">
+                  <button
+                    type="submit"
+                    disabled={status === "sending"}
+                    className="bg-noir text-blanc hover:bg-noir/85 inline-flex min-h-12 items-center rounded-full px-8 py-3.5 text-base font-semibold disabled:opacity-60"
+                  >
+                    {status === "sending" ? "Envoi en cours…" : "Envoyer ma pré-réservation"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => go({ step: 4 })}
+                    className="text-noir/60 hover:text-noir min-h-11 text-sm underline underline-offset-4"
+                  >
+                    Revenir au récapitulatif
+                  </button>
+                </div>
+                <p className="text-noir/55 mt-3 text-sm">
+                  Envoyer cette demande ne vous engage à rien et ne déclenche aucun paiement.
+                </p>
+              </form>
+            </section>
+          )}
+
+          {/* Navigation de bas de page (grand écran : la barre fixe s'en charge sur mobile) */}
+          {step < 5 && (
+            <div className="mt-8 hidden items-center justify-between gap-4 lg:flex">
+              {step > 1 ? (
+                <button
+                  type="button"
+                  onClick={() => go({ step: (step - 1) as StepNumber })}
+                  className="border-noir/20 hover:border-noir inline-flex min-h-11 items-center rounded-full border-2 px-6 py-3 text-sm font-semibold"
+                >
+                  Retour
+                </button>
+              ) : (
+                <span />
+              )}
+              <div className="flex items-center gap-4">
+                {step === 3 && selection.options.length === 0 && (
+                  <span className="text-noir/55 text-sm">Aucune option sélectionnée</span>
+                )}
+                <button
+                  type="button"
+                  disabled={!canContinue}
+                  onClick={() => go({ step: (step + 1) as StepNumber })}
+                  className="bg-noir text-blanc hover:bg-noir/85 inline-flex min-h-11 items-center rounded-full px-7 py-3 text-sm font-semibold disabled:opacity-40"
+                >
+                  {nextLabel}
+                </button>
+              </div>
             </div>
+          )}
+        </div>
 
-            {serverError && (
-              <p role="alert" className="rounded-xl border-2 border-[#b00020] p-4 text-sm font-medium text-[#b00020]">
-                {serverError}
-              </p>
-            )}
+        {/* Colonne latérale : récapitulatif permanent */}
+        <aside className="hidden lg:sticky lg:top-24 lg:block">
+          <SummaryPanel selection={selection} onEdit={(s) => go({ step: s })} />
 
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="bg-noir text-blanc min-h-12 rounded-full px-8 py-3.5 text-base font-semibold disabled:opacity-50"
-            >
-              {status === "sending" ? "Envoi en cours…" : "Envoyer ma pré-réservation"}
-            </button>
-          </form>
-        )}
+          {step === 5 && (
+            <div className="border-noir/12 mt-4 rounded-[var(--radius-card)] border p-5">
+              <h2 className="font-semibold">Ce qui se passe ensuite</h2>
+              <ol className="mt-3 flex flex-col gap-3 text-sm">
+                {[
+                  "Vous envoyez cette demande.",
+                  `Nous vous rappelons ${site.callbackDelay}.`,
+                  "Le créneau et le tarif sont confirmés ensemble.",
+                ].map((t, i) => (
+                  <li key={t} className="flex gap-3">
+                    <span className="bg-noir text-blanc flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
+                      {i + 1}
+                    </span>
+                    <span className="text-noir/70">{t}</span>
+                  </li>
+                ))}
+              </ol>
+              {(contact.preferredDate || contact.preferredSlot) && (
+                <p className="text-noir/60 border-noir/10 mt-4 border-t pt-4 text-sm">
+                  Souhait indiqué :{" "}
+                  {contact.preferredDate ? formatDateFr(contact.preferredDate) : "date libre"}
+                  {contact.preferredSlot && `, ${slotLabels[contact.preferredSlot].toLowerCase()}`}.
+                </p>
+              )}
+            </div>
+          )}
+        </aside>
       </div>
 
-      {/* Récapitulatif sticky (desktop, dès l'étape 2) */}
-      {step >= 2 && vehicle && (
-        <aside className="hidden lg:block" aria-label="Récapitulatif du prix">
-          <div className="bg-noir text-blanc sticky top-24 rounded-[var(--radius-card)] p-7">
-            <h3 className="display text-xl">Votre estimation</h3>
-            <dl className="mt-5 flex flex-col gap-3 text-sm">
-              <div className="flex justify-between gap-4">
-                <dt className="text-gris">Véhicule</dt>
-                <dd className="text-right">{vehicleCategories.find((v) => v.id === vehicle)?.label}</dd>
-              </div>
-              {formula && (
-                <div className="flex justify-between gap-4">
-                  <dt className="text-gris">Formule</dt>
-                  <dd className="text-right">
-                    {formulas.find((f) => f.id === formula)?.name} ({formatPrice(formulas.find((f) => f.id === formula)!.price)})
-                  </dd>
-                </div>
-              )}
-              {selectedOptions.map((id) => {
-                const o = options.find((x) => x.id === id)!;
-                return (
-                  <div key={id} className="flex justify-between gap-4">
-                    <dt className="text-gris">{o.label}</dt>
-                    <dd>+{formatPrice(o.price)}</dd>
-                  </div>
-                );
-              })}
-            </dl>
-            <p
-              className="border-blanc/20 mt-5 flex items-baseline justify-between border-t pt-5"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              <span className="font-medium">Total estimé</span>
-              <span className="display text-jaune text-3xl">
-                {total !== null ? formatPrice(total) : "…"}
-              </span>
-            </p>
-            <p className="text-gris mt-3 text-xs leading-relaxed">
-              Sans paiement en ligne. Le tarif est confirmé par téléphone avant le
-              rendez-vous.
-            </p>
-          </div>
-        </aside>
-      )}
-
-      {/* Barre de total fixe (mobile) */}
-      {step >= 2 && total !== null && step < 5 && (
-        <div className="border-noir/15 bg-blanc fixed inset-x-0 bottom-0 z-30 border-t p-3 lg:hidden">
-          <div
-            className="mx-auto flex max-w-md items-center justify-between gap-4"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            <span className="text-sm font-medium">
-              Total estimé&nbsp;:{" "}
-              <span className="display text-xl">{formatPrice(total)}</span>
-            </span>
+      {/* Barre fixe mobile : le total reste sous les yeux du début à la fin */}
+      {step < 5 && (
+        <div className="border-noir/10 bg-blanc/95 fixed inset-x-0 bottom-0 z-30 border-t backdrop-blur-sm lg:hidden">
+          <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
+            {step > 1 && (
+              <button
+                type="button"
+                onClick={() => go({ step: (step - 1) as StepNumber })}
+                aria-label="Étape précédente"
+                className="border-noir/20 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 5 8 12l7 7" />
+                </svg>
+              </button>
+            )}
+            <div className="min-w-0 flex-1">
+              <p className="text-noir/55 text-xs">Total estimé</p>
+              <p className="display text-xl">{total !== null ? formatPrice(total) : "…"}</p>
+            </div>
             <button
               type="button"
-              onClick={() => goTo(Math.min(step + 1, 5))}
-              className="bg-noir text-blanc min-h-11 rounded-full px-6 py-2.5 text-sm font-semibold"
+              disabled={!canContinue}
+              onClick={() => go({ step: (step + 1) as StepNumber })}
+              className="bg-noir text-blanc inline-flex min-h-12 shrink-0 items-center rounded-full px-6 text-sm font-semibold disabled:opacity-40"
             >
-              Continuer
+              {nextLabel}
             </button>
           </div>
         </div>
       )}
+
+      {/* Annonce du parcours aux lecteurs d'écran */}
+      <p className="sr-only" aria-live="polite">
+        Étape {step} sur {STEPS.length} : {STEPS[step - 1]!.label}
+        {total !== null ? `. Total estimé ${total} euros.` : ""}
+        {selection.vehicle ? ` Véhicule : ${getVehicle(selection.vehicle).label}.` : ""}
+        {selection.options.length > 0
+          ? ` Options : ${selection.options.map((o) => getOption(o).label).join(", ")}.`
+          : ""}
+      </p>
     </div>
   );
 }

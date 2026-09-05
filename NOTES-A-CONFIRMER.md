@@ -15,8 +15,12 @@ Aucune de ces hypothèses ne bloque la structure du site : tout se corrige dans 
 8. **Communes couvertes et temps de trajet** (`content/zones.ts`) — liste reprise du brief (Die, Châtillon-en-Diois, Luc-en-Diois, Saillans, Aouste-sur-Sye, Crest, Livron) avec temps estimés depuis Die. À valider/ajuster.
 9. **Nombre d'avis Google** — hypothèse `count: 12` dans `site.rating` (affiché nulle part pour l'instant, utilisé nulle part en JSON-LD). Le « plus de 50 clients satisfaits » et la note 5/5 viennent de l'ancien site : à re-vérifier à la date de mise en ligne.
 10. **Délai de rappel annoncé** — « sous 24 h ouvrées » (`site.callbackDelay`). Affiché sur l'accueil, le tunnel, la confirmation et les emails : à valider car c'est un engagement.
-11. **Durées estimées des formules** (≈ 2 h / 3 h / 4 h) et **détail des inclusions** — reformulés à partir de la matière première du brief : à faire relire au client.
+11. **Durées et inclusions des formules** — désormais reprises de votre maquette (2 h à 3 h, 3 h à 4 h 30, 4 h 30 à 6 h). À relire une dernière fois dans `content/offre.ts`.
+11 bis. **« Élimine 99,99 % des bactéries »** (formule Prestige) — cette allégation figurait sur votre maquette. Elle doit pouvoir être justifiée (fiche technique de l'appareil vapeur ou du produit) : la DGCCRF considère ce type de chiffre comme une allégation vérifiable. Si le justificatif n'existe pas, remplacer par « désinfection vapeur en profondeur » dans `content/offre.ts`.
+11 ter. **Modèles cités par catégorie de véhicule** (Peugeot 208, Audi A4, VW Tiguan…) — repères visuels uniquement, aucune marque n'est partenaire. Modifiables dans `content/offre.ts`.
 12. **Champ email facultatif à l'étape 5** — ajouté pour pouvoir envoyer l'email de confirmation client demandé dans le brief (le tunnel d'origine ne collectait que le téléphone). À valider ; supprimable sans casse.
+12 bis. **Date et moment de la journée souhaités** — champs facultatifs ajoutés à l'étape 5. Ils ne réservent rien : ils remontent simplement dans l'email pour que le rappel téléphonique parte avec une proposition. Si vous préférez ne rien demander, supprimer le bloc correspondant dans `components/reservation/ContactStep.tsx`.
+12 ter. **Numéro de référence** (format `AC-JJMM-XXXX`) — généré à l'envoi, affiché sur la page de confirmation et repris dans l'objet des deux emails. Pratique pour retrouver une demande au téléphone ; il n'est stocké nulle part, il vit dans l'email.
 
 ## Technique
 13. **Fontes** : Steg Regular et Helvetica Neue sans licence web disponible → substituts self-hostés **Bricolage Grotesque 800** (display) et **Inter** (texte), comme prévu par le brief. Si les licences sont achetées, remplacer les fichiers dans `app/fonts/`.

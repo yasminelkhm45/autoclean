@@ -14,16 +14,19 @@ export const metadata = pageMetadata({
 
 /** Lignes du tableau comparatif, dérivées des inclusions. */
 const comparisonRows: { label: string; values: [boolean, boolean, boolean] }[] = [
-  { label: "Aspiration complète (coffre inclus)", values: [true, true, true] },
-  { label: "Plastiques nettoyés et protégés", values: [true, true, true] },
-  { label: "Vitres intérieures", values: [true, true, true] },
-  { label: "Seuils et cadres de portes", values: [true, true, true] },
-  { label: "Shampoing sièges tissu (injection-extraction)", values: [false, true, true] },
-  { label: "Shampoing moquettes et tapis", values: [false, true, true] },
-  { label: "Traitement des taches courantes", values: [false, true, true] },
-  { label: "Nettoyage vapeur de l'habitacle", values: [false, false, true] },
-  { label: "Finitions au pinceau, poste par poste", values: [false, false, true] },
-  { label: "Traitement anti-odeurs", values: [false, false, true] },
+  { label: "Aspiration de tout l'habitacle", values: [true, true, true] },
+  { label: "Moquettes et coffre nettoyés en profondeur", values: [true, true, true] },
+  { label: "Shampoing des tapis", values: [true, true, true] },
+  { label: "Plastiques nettoyés et désinfectés", values: [true, true, true] },
+  { label: "Cadres de portes et vitres intérieures", values: [true, true, true] },
+  { label: "Protection anti-UV des plastiques", values: [false, true, true] },
+  { label: "Shampoing et désinfection des sièges", values: [false, true, true] },
+  { label: "Rails de sièges", values: [false, true, true] },
+  { label: "Senteur d'habitacle", values: [false, true, true] },
+  { label: "Shampoing des moquettes", values: [false, false, true] },
+  { label: "Désinfection vapeur de l'habitacle", values: [false, false, true] },
+  { label: "Boîte à gants et compartiment de roue de secours", values: [false, false, true] },
+  { label: "Zones cachées sous la banquette arrière", values: [false, false, true] },
 ];
 
 function CheckOrDash({ included }: { included: boolean }) {
@@ -86,11 +89,16 @@ export default function PrestationsPage() {
                   </p>
                   <ul className="mt-6 flex flex-col gap-2.5 text-sm sm:text-base">
                     {f.inclusions.map((inc) => (
-                      <li key={inc} className="flex gap-2.5">
+                      <li key={inc.label} className="flex gap-2.5">
                         <svg viewBox="0 0 24 24" aria-hidden="true" className="text-jaune mt-1 h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                           <path d="m4 13 5 5L20 7" />
                         </svg>
-                        {inc}
+                        <span>
+                          {inc.label}
+                          {inc.detail && (
+                            <span className="text-noir/55 block text-sm">{inc.detail}</span>
+                          )}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -224,7 +232,7 @@ export default function PrestationsPage() {
             {vehicleCategories.map((v) => (
               <li key={v.id} className="border-gris/70 rounded-[var(--radius-card)] border p-5">
                 <h3 className="font-semibold">{v.label}</h3>
-                <p className="text-noir/60 mt-1 text-sm">{v.examples}</p>
+                <p className="text-noir/60 mt-1 text-sm">{v.examples.join(", ")}</p>
               </li>
             ))}
           </ul>

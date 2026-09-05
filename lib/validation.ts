@@ -37,6 +37,13 @@ export const reservationSchema = z.object({
   contactPreference: z.enum(["appel", "sms"], {
     message: "Choisissez comment vous préférez être recontacté(e).",
   }),
+  /* Souhait de créneau : purement indicatif, jamais bloquant. */
+  preferredDate: z
+    .union([z.literal(""), z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date invalide.")])
+    .optional(),
+  preferredSlot: z
+    .union([z.literal(""), z.enum(["matin", "apres-midi", "indifferent"])])
+    .optional(),
   message: z.string().trim().max(2000, "Message trop long (2000 caractères max).").optional(),
   consent: z.literal(true, {
     message: "Votre accord est nécessaire pour que nous puissions vous rappeler.",
