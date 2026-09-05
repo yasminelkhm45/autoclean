@@ -12,7 +12,9 @@ Aucune de ces hypothèses ne bloque la structure du site : tout se corrige dans 
 7. **Raison sociale, forme juridique, SIRET, responsable de publication** — requis pour les mentions légales.
 
 ## Contenus
-8. **Communes couvertes et temps de trajet** (`content/zones.ts`) — liste reprise du brief (Die, Châtillon-en-Diois, Luc-en-Diois, Saillans, Aouste-sur-Sye, Crest, Livron) avec temps estimés depuis Die. À valider/ajuster.
+8. **Communes, distances et temps de trajet** (`content/zones.ts`) : chaque commune a désormais sa page, avec une distance en kilomètres et un temps de trajet affichés noir sur blanc. Ces valeurs sont estimées depuis Die et doivent être vérifiées une par une, car elles apparaissent aussi dans les descriptions Google.
+8 bis. **Contenu des pages de commune** : les paragraphes décrivant ce que vous constatez sur les véhicules de chaque secteur (boue des cols à Châtillon, humidité de rivière à Saillans, véhicules de société à Crest) sont des hypothèses plausibles rédigées à partir de la géographie locale. Ce sont elles qui rendent ces pages légitimes aux yeux de Google : relisez-les et corrigez ce qui ne correspond pas à votre réalité de terrain.
+8 ter. **Articles de conseils** (`content/articles.ts`) : six articles rédigés à partir de connaissances générales du métier. Ils n'avancent aucun chiffre sur votre entreprise, mais ils parlent en votre nom. À relire avant mise en ligne, en particulier les fourchettes de prix du marché citées dans l'article sur les tarifs.
 9. **Nombre d'avis Google** — hypothèse `count: 12` dans `site.rating` (affiché nulle part pour l'instant, utilisé nulle part en JSON-LD). Le « plus de 50 clients satisfaits » et la note 5/5 viennent de l'ancien site : à re-vérifier à la date de mise en ligne.
 10. **Délai de rappel annoncé** — « sous 24 h ouvrées » (`site.callbackDelay`). Affiché sur l'accueil, le tunnel, la confirmation et les emails : à valider car c'est un engagement.
 11. **Durées et inclusions des formules** — désormais reprises de votre maquette (2 h à 3 h, 3 h à 4 h 30, 4 h 30 à 6 h). À relire une dernière fois dans `content/offre.ts`.

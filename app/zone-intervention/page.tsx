@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Breadcrumbs } from "@/components/sections/Breadcrumbs";
 import { MapEmbed } from "@/components/sections/MapEmbed";
 import { ButtonLink } from "@/components/ui/Button";
@@ -6,7 +7,7 @@ import { zones } from "@/content/zones";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Zone d'intervention : Die et communes du Diois",
+  title: "Zone d'intervention : Die et le Diois",
   description:
     "Atelier de nettoyage automobile à Die (26150). Clients de Châtillon-en-Diois, Saillans, Crest et de toute la vallée de la Drôme : temps de trajet indicatifs.",
   path: "/zone-intervention",
@@ -20,7 +21,7 @@ export default function ZoneInterventionPage() {
       <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
         <p className="eyebrow">Où nous trouver</p>
         <h1 className="display mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
-          Nettoyage automobile à Die et dans le Diois
+          Nettoyage de voiture à Die et dans le Diois
         </h1>
         <div className="text-noir/75 mt-6 max-w-2xl space-y-4 text-lg leading-relaxed">
           <p>
@@ -47,26 +48,39 @@ export default function ZoneInterventionPage() {
             </h2>
             <table className="mt-6 w-full text-left">
               <caption className="sr-only">
-                Temps de trajet en voiture jusqu'à l'atelier de Die
+                Communes couvertes, distance et temps de trajet jusqu'à l'atelier de Die
               </caption>
               <thead>
                 <tr className="border-noir border-b-2">
                   <th scope="col" className="py-3 pr-4 font-semibold">Commune</th>
-                  <th scope="col" className="py-3 font-semibold">Trajet jusqu'à l'atelier</th>
+                  <th scope="col" className="py-3 pr-4 font-semibold">Distance</th>
+                  <th scope="col" className="py-3 font-semibold">Trajet</th>
                 </tr>
               </thead>
               <tbody>
                 {zones.map((z) => (
-                  <tr key={z.name} className="border-gris/60 border-b">
-                    <th scope="row" className="py-3 pr-4 font-normal">{z.name}</th>
+                  <tr key={z.slug} className="border-gris/60 border-b">
+                    <th scope="row" className="py-3 pr-4 font-normal">
+                      <Link
+                        href={`/zone-intervention/${z.slug}`}
+                        className="font-medium underline-offset-4 hover:underline"
+                      >
+                        {z.name}
+                      </Link>
+                      <span className="text-noir/50 block text-sm">{z.postalCode}</span>
+                    </th>
+                    <td className="py-3 pr-4">
+                      {z.distanceKm === 0 ? "Sur place" : `${z.distanceKm} km`}
+                    </td>
                     <td className="py-3">{z.travelTime}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
             <p className="text-noir/60 mt-4 text-sm">
-              Vous venez d'ailleurs&nbsp;? Vous êtes les bienvenus : appelez-nous, on
-              s'organise.
+              Chaque commune a sa page, avec le détail du trajet et ce que nous
+              observons sur les véhicules du secteur. Vous venez d'ailleurs&nbsp;?
+              Vous êtes les bienvenus : appelez-nous, on s'organise.
             </p>
           </div>
           <div>

@@ -29,8 +29,23 @@ Pré-réservation en ligne sur https://autoclean-diois.fr/reservation (sans paie
 rappel téléphonique sous 24 h ouvrées pour confirmer le créneau. Paiement à l'atelier : carte bancaire, espèces, virement.
 
 ## Pages principales
-- https://autoclean-diois.fr/prestations : formules, options, tarifs détaillés
+- https://autoclean-diois.fr/prestations : les trois formules, options et tableau comparatif
+- https://autoclean-diois.fr/prestations/essentielle : formule Essentielle, 70 €, 2 h à 3 h
+- https://autoclean-diois.fr/prestations/confort : formule Confort, 90 €, 3 h à 4 h 30
+- https://autoclean-diois.fr/prestations/prestige : formule Prestige, 120 €, 4 h 30 à 6 h
+- https://autoclean-diois.fr/reservation : pré-réservation en ligne, sans paiement
 - https://autoclean-diois.fr/avant-apres : photos avant/après par zone traitée
-- https://autoclean-diois.fr/reservation : pré-réservation en ligne
+- https://autoclean-diois.fr/zone-intervention : communes couvertes, distances et temps de trajet
 - https://autoclean-diois.fr/faq : durée, produits, odeurs, taches, paiement
-- https://autoclean-diois.fr/zone-intervention : communes couvertes et temps de trajet
+
+## Pages par commune
+Die, Châtillon-en-Diois, Luc-en-Diois, Saillans, Aouste-sur-Sye, Crest, Livron-sur-Drôme :
+https://autoclean-diois.fr/zone-intervention/[nom-de-la-commune]
+
+## Conseils d'entretien (articles)
+- /conseils/prix-nettoyage-interieur-voiture : combien coûte un nettoyage intérieur
+- /conseils/enlever-tache-siege-voiture : enlever une tache selon la nature et le matériau
+- /conseils/odeur-tabac-voiture : éliminer une odeur de tabac, les quatre supports à traiter
+- /conseils/poils-animaux-voiture : retirer les poils d'animaux incrustés
+- /conseils/nettoyer-voiture-avant-vente : préparer un véhicule avant revente
+- /conseils/vapeur-ou-shampoing : injection-extraction et vapeur, quelle méthode par matériau

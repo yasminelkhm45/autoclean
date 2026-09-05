@@ -27,6 +27,15 @@ export interface Formula {
   inclusions: { label: string; detail?: string }[];
   /** Étiquette courte affichée sur la carte. Une seule formule doit en porter une. */
   badge?: string;
+  /** Contenu de la page dédiée /prestations/[id]. */
+  page: {
+    metaTitle: string;
+    metaDescription: string;
+    intro: string;
+    forWho: string[];
+    notFor: string;
+    process: { title: string; text: string }[];
+  };
   recommended?: boolean;
   image: string;
 }
@@ -72,6 +81,38 @@ export const formulas: Formula[] = [
       { label: "Nettoyage et désinfection des plastiques" },
       { label: "Cadres de portes et vitres intérieures" },
     ],
+    page: {
+      metaTitle: "Formule Essentielle, 70 € : l'entretien",
+      metaDescription:
+        "Aspiration complète, plastiques désinfectés, vitres intérieures et tapis shampooinés. 2 à 3 heures de travail, 70 € à Die dans la Drôme.",
+      intro:
+        "L'Essentielle est l'entretien de fond d'un habitacle déjà suivi. Elle remet à zéro tout ce qui se voit et se touche au quotidien, sans passer par le shampoing des sièges. C'est la formule qui convient à un véhicule nettoyé une à deux fois par an.",
+      forWho: [
+        "Un véhicule entretenu régulièrement, sans tache ni odeur installée",
+        "Un entretien de saison, typiquement au printemps après les mois de pluie",
+        "Un budget maîtrisé, avec la possibilité d'ajouter une option ciblée",
+      ],
+      notFor:
+        "Si les sièges portent des taches ou si une odeur s'est installée, l'Essentielle n'ira pas assez loin : il faut l'extraction de la formule Confort.",
+      process: [
+        {
+          title: "Aspiration intégrale",
+          text: "Sièges, moquettes, tapis, coffre, rails et interstices. C'est la base de tout : aucune méthode ne fonctionne sur un habitacle encore chargé de particules.",
+        },
+        {
+          title: "Plastiques et surfaces",
+          text: "Nettoyage puis désinfection de la planche de bord, de la console, des contre-portes et des commandes, avec un produit qui ne laisse pas de film gras.",
+        },
+        {
+          title: "Vitres et cadres de portes",
+          text: "Les vitres se nettoient côté intérieur, là où se dépose le film qui gêne la visibilité de nuit. Les cadres et seuils, souvent oubliés, sont traités à part.",
+        },
+        {
+          title: "Shampoing des tapis",
+          text: "Les tapis sortent du véhicule et sont lavés séparément, puis séchés avant d'être remis en place.",
+        },
+      ],
+    },
     image: "formules/essentielle.jpg",
   },
   {
@@ -94,6 +135,38 @@ export const formulas: Formula[] = [
     ],
     badge: "Le plus demandé",
     recommended: true,
+    page: {
+      metaTitle: "Formule Confort, 90 € : sièges lavés",
+      metaDescription:
+        "Shampoing et désinfection des sièges, protection anti-UV des plastiques, rails et senteur. 3 h à 4 h 30 de travail, 90 € à Die dans la Drôme.",
+      intro:
+        "La Confort est le premier niveau où l'habitacle change vraiment d'aspect, parce qu'on retire la saleté au lieu de la déplacer. C'est notre formule la plus demandée, et celle que nous recommandons dans le doute.",
+      forWho: [
+        "Des sièges tissu marqués, ternis ou tachés",
+        "Un véhicule familial, avec les traces habituelles de la vie à bord",
+        "Un habitacle qui n'a pas été nettoyé en profondeur depuis plus d'un an",
+      ],
+      notFor:
+        "Pour une préparation avant vente, une odeur de tabac installée ou un ciel de toit marqué, la formule Prestige reste plus adaptée.",
+      process: [
+        {
+          title: "Tout le contenu de l'Essentielle",
+          text: "Aspiration intégrale, plastiques, vitres et cadres de portes sont traités d'abord, dans le même ordre.",
+        },
+        {
+          title: "Shampoing des sièges par injection-extraction",
+          text: "Une solution chaude est injectée dans la fibre puis ré-aspirée immédiatement, chargée de ce qu'elle a décollé. La saleté sort du véhicule au lieu d'être étalée.",
+        },
+        {
+          title: "Protection des plastiques",
+          text: "Application d'un traitement anti-UV qui limite le blanchissement de la planche de bord, principal signe de vieillissement visuel d'un habitacle.",
+        },
+        {
+          title: "Rails de sièges et finitions",
+          text: "Les rails concentrent poussière, miettes et gravier. Ils sont dégagés, puis l'habitacle reçoit la senteur de votre choix.",
+        },
+      ],
+    },
     image: "formules/confort.jpg",
   },
   {
@@ -119,6 +192,38 @@ export const formulas: Formula[] = [
       { label: "Nettoyage approfondi du compartiment de roue de secours" },
       { label: "Zones difficiles d'accès sous la banquette arrière" },
     ],
+    page: {
+      metaTitle: "Formule Prestige, 120 € : rénovation",
+      metaDescription:
+        "Désinfection vapeur, moquettes shampooinées, zones cachées et traitement des odeurs. 4 h 30 à 6 h de travail, 120 € à Die dans la Drôme.",
+      intro:
+        "La Prestige est une remise en état, pas un entretien. Elle traite ce que les autres formules laissent de côté : les moquettes en profondeur, les zones inaccessibles, et tout ce qui tient de l'odeur plutôt que de la saleté visible.",
+      forWho: [
+        "Préparer un véhicule avant une vente entre particuliers",
+        "Repartir sur une base saine après l'achat d'une occasion",
+        "Un habitacle marqué par le tabac, un animal ou plusieurs années sans entretien",
+      ],
+      notFor:
+        "Sur un véhicule déjà suivi, la Prestige est surdimensionnée : la Confort donnera un résultat très proche pour trente euros de moins.",
+      process: [
+        {
+          title: "Tout le contenu de la Confort",
+          text: "L'aspiration, les plastiques, les vitres et le shampoing des sièges sont réalisés en amont.",
+        },
+        {
+          title: "Shampoing des moquettes",
+          text: "Les moquettes fixes reçoivent le même traitement d'injection-extraction que les sièges. C'est l'étape qui change la couleur d'un plancher encrassé.",
+        },
+        {
+          title: "Désinfection vapeur",
+          text: "La vapeur assainit avec très peu d'eau et atteint ce qu'aucune brosse n'atteint : contours de commandes, grilles d'aération, coutures, rails.",
+        },
+        {
+          title: "Zones cachées et détail",
+          text: "Boîte à gants, compartiment de roue de secours, dessous de banquette arrière. Ce sont les endroits qu'un acheteur ouvre et que personne ne nettoie.",
+        },
+      ],
+    },
     image: "formules/prestige.jpg",
   },
 ];

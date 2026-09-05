@@ -62,8 +62,8 @@ export default function HomePage() {
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pt-14 pb-16 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:pt-24 lg:pb-24">
           <div>
             <p className="eyebrow text-jaune">Atelier à Die, Drôme (26)</p>
-            <h1 className="display mt-4 text-[length:var(--text-display-xl)]">
-              Nettoyage automobile intérieur à Die et dans le Diois
+            <h1 className="display display-hero mt-4 text-[length:var(--text-display-hero)]">
+              Nettoyage intérieur de voiture à Die
             </h1>
             <p className="text-gris mt-6 max-w-xl text-lg leading-relaxed">
               Nous redonnons à votre habitacle son état d'origine : sièges

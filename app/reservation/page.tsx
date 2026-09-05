@@ -1,10 +1,11 @@
 import { Suspense } from "react";
+import { BreadcrumbJsonLd } from "@/components/sections/Breadcrumbs";
 import { Funnel } from "@/components/reservation/Funnel";
 import { site } from "@/content/site";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Pré-réserver un nettoyage intérieur en ligne",
+  title: "Pré-réserver un nettoyage en ligne",
   description:
     "Pré-réservez votre nettoyage intérieur en 5 étapes : véhicule, formule, options, récapitulatif. Sans paiement en ligne, rappel sous 24 h ouvrées.",
   path: "/reservation",
@@ -28,6 +29,7 @@ const promises = [
 export default function ReservationPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: "Pré-réservation", href: "/reservation" }]} />
       <div className="bg-noir text-blanc">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16">
           <h1 className="display max-w-3xl text-[length:var(--text-display-lg)]">

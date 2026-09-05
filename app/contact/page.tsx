@@ -5,7 +5,7 @@ import { site } from "@/content/site";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Contact : atelier de nettoyage automobile à Die",
+  title: "Contact et accès à l'atelier de Die",
   description:
     "Une question sur nos prestations ? Appelez-nous, écrivez-nous ou passez à l'atelier à Die (26150). Horaires, adresse et plan d'accès.",
   path: "/contact",

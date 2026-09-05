@@ -4,7 +4,8 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Mentions légales",
-  description: "Mentions légales du site autoclean-diois.fr : éditeur, hébergeur, propriété intellectuelle.",
+  description:
+    "Mentions légales du site autoclean-diois.fr : identité de l'éditeur, coordonnées de l'atelier de Die, hébergeur du site et propriété intellectuelle.",
   path: "/mentions-legales",
 });
 

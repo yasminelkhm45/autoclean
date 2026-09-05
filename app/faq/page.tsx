@@ -5,7 +5,7 @@ import { faq } from "@/content/faq";
 import { pageMetadata, JsonLd, faqJsonLd } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "FAQ nettoyage intérieur : durée, produits, odeurs",
+  title: "FAQ nettoyage intérieur de voiture",
   description:
     "Durée des prestations, produits utilisés, odeurs de tabac ou d'animaux, taches anciennes, paiement : toutes les réponses de l'atelier AutoClean Diois.",
   path: "/faq",
@@ -20,7 +20,7 @@ export default function FaqPage() {
       <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
         <p className="eyebrow">Questions fréquentes</p>
         <h1 className="display mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
-          Tout ce qu'on nous demande avant de confier ses clés
+          Vos questions sur le nettoyage intérieur
         </h1>
       </div>
 

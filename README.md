@@ -22,7 +22,8 @@ Tout le contenu éditable est centralisé et typé dans `content/` :
 | `content/offre.ts` | Formules, prix, durées, inclusions, options, catégories de véhicules |
 | `content/faq.ts` | Questions/réponses (le drapeau `home: true` = FAQ courte de l'accueil) |
 | `content/avis.ts` | Avis clients (réels uniquement) |
-| `content/zones.ts` | Communes couvertes et temps de trajet |
+| `content/zones.ts` | Communes couvertes : distance, itinéraire et contenu de leur page |
+| `content/articles.ts` | Articles de la rubrique Conseils |
 | `content/site.ts` | Coordonnées, horaires, téléphone, Instagram, délai de rappel |
 
 ### Comment fonctionne le tunnel
@@ -31,7 +32,7 @@ L'état vit dans l'URL (`/reservation?vehicule=suv&formule=confort&options=…&e
 Les liens de type `/reservation?formule=confort` (depuis la page Prestations) présélectionnent la formule et démarrent quand même à l'étape « Véhicule ».
 
 ### Modifier un prix
-Dans `content/offre.ts`, changer la valeur `price` de la formule ou de l'option. Le nouveau prix est automatiquement répercuté sur la page Prestations, les cartes de l'accueil, le tunnel (total en temps réel), le récapitulatif, les emails et le JSON-LD.
+Dans `content/offre.ts`, changer la valeur `price` de la formule ou de l'option. Chaque formule porte aussi un objet `page` : c'est le contenu de sa page dédiée (`/prestations/essentielle`, etc.). Le nouveau prix est automatiquement répercuté sur la page Prestations, les cartes de l'accueil, le tunnel (total en temps réel), le récapitulatif, les emails et le JSON-LD.
 
 Le champ `priceModifier` des catégories de véhicules (0 € par défaut) permet, si besoin un jour, de majorer une catégorie (ex. utilitaire +10 €) : il est déjà pris en compte dans le calcul du total.
 
@@ -56,9 +57,40 @@ Zones avant/après attendues (`{zone}`) : `sol-moquette`, `sieges-cuir`, `volant
 Les SVG dans `marque/` sont les **exports officiels de la charte** (logomark, lockups noir/blanc/jaune) : ne pas les recolorer ni les déformer.
 
 ### Ajouter une commune
-Dans `content/zones.ts`, ajouter `{ name: "Nom", travelTime: "≈ XX min" }`. La commune apparaît sur la page Zone d'intervention **et** dans l'`areaServed` du JSON-LD.
+Dans `content/zones.ts`, ajouter un objet complet (nom, slug, code postal, distance, itinéraire, et les trois paragraphes `intro`, `context`, `practical`). La commune apparaît alors automatiquement : sur la page Zone d'intervention, dans le pied de page, dans le sitemap, dans l'`areaServed` du JSON-LD, et elle obtient sa propre page `/zone-intervention/[slug]` avec son image de partage.
 
-## Architecture
+⚠️ Les paragraphes doivent être réellement différents d'une commune à l'autre. Sept pages qui ne changeraient que le nom de la ville seraient des pages satellites : Google les déclasse, et elles n'apprennent rien au lecteur.
+
+### Ajouter un article
+Dans `content/articles.ts`, copier un objet et changer le `slug` (il devient l'URL). Le contenu s'écrit en blocs typés : `p`, `h2`, `h3`, `ul`, `ol`, `key` (encadré jaune) et `cta`. Un lien interne s'écrit `[texte](/chemin)` directement dans un paragraphe ou une puce. L'article apparaît aussitôt sur `/conseils`, dans le sitemap et reçoit son balisage `Article`.
+
+Le champ `related` accepte des slugs d'autres articles : c'est ce qui alimente le bloc « À lire aussi » en bas de page.
+
+## Architecture des URL
+
+```
+/                              accueil
+/prestations                   les trois formules, tableau comparatif
+  /prestations/essentielle     une page par formule
+  /prestations/confort
+  /prestations/prestige
+/reservation                   tunnel de pré-réservation
+  /reservation/confirmation    noindex
+/avant-apres                   comparateurs photo
+/zone-intervention             carte et tableau des communes
+  /zone-intervention/die       une page par commune (7)
+  /zone-intervention/crest     ...
+/conseils                      rubrique éditoriale
+  /conseils/[slug]             six articles
+/faq                           questions fréquentes, balisage FAQPage
+/contact
+/mentions-legales
+/politique-de-confidentialite
+```
+
+Le maillage suit ces silos : les articles renvoient vers les formules, les pages de commune vers les formules et vers les communes voisines, les pages de formule entre elles et vers le tableau comparatif. Le pied de page reprend les trois silos en colonnes, ce qui met chaque page à un clic de n'importe quelle autre.
+
+## Organisation des fichiers
 
 ```
 app/                    pages (App Router), sitemap.ts, robots.ts, images OG dynamiques

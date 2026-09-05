@@ -15,11 +15,14 @@
 
   --radius-card: 1.25rem; /* 20px — rayons généreux de la charte */
 
-  /* Échelle typographique fluide */
-  --text-display-xl: clamp(2.75rem, 1.4rem + 6.2vw, 6.5rem);
-  --text-display-lg: clamp(2.25rem, 1.3rem + 4vw, 4.5rem);
-  --text-display-md: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
-  --text-display-sm: clamp(1.35rem, 1.1rem + 1.2vw, 1.9rem);
+  /* Échelle typographique fluide.
+     Les titres restent lisibles d'un coup d'œil sans écraser la page :
+     le pic est réservé au hero de l'accueil. */
+  --text-display-hero: clamp(2.4rem, 1.6rem + 3.4vw, 4.25rem);
+  --text-display-xl: clamp(1.95rem, 1.45rem + 2.1vw, 3.05rem);
+  --text-display-lg: clamp(1.75rem, 1.35rem + 1.7vw, 2.6rem);
+  --text-display-md: clamp(1.5rem, 1.25rem + 1.1vw, 2.05rem);
+  --text-display-sm: clamp(1.2rem, 1.08rem + 0.55vw, 1.5rem);
 }
 
 /* Respiration verticale des sections : 96–160px desktop, 64–96px mobile */
@@ -78,9 +81,15 @@
   .display {
     font-family: var(--font-display);
     font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 0.95;
+    letter-spacing: -0.015em;
+    line-height: 1.06;
     text-wrap: balance;
+  }
+
+  /* Réservé au hero de l'accueil, seul endroit où le titre porte la page. */
+  .display-hero {
+    letter-spacing: -0.025em;
+    line-height: 0.98;
   }
 
   .eyebrow {

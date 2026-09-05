@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Breadcrumbs } from "@/components/sections/Breadcrumbs";
 import { BrandImage } from "@/components/ui/BrandImage";
 import { ButtonLink } from "@/components/ui/Button";
@@ -6,7 +7,7 @@ import { formulas, options, vehicleCategories, formatPrice } from "@/content/off
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Prestations et tarifs : nettoyage intérieur voiture",
+  title: "Tarifs du nettoyage intérieur voiture",
   description:
     "Trois formules de nettoyage intérieur à Die : Essentielle 70 €, Confort 90 €, Prestige 120 €. Options cuir, poils d'animaux, ciel de toit. Tarifs affichés.",
   path: "/prestations",
@@ -47,7 +48,7 @@ export default function PrestationsPage() {
       <div className="mx-auto max-w-6xl px-4 pt-8 pb-4 sm:px-6">
         <p className="eyebrow">Prestations & tarifs</p>
         <h1 className="display mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
-          Nos prestations de nettoyage automobile intérieur
+          Nos formules de nettoyage intérieur
         </h1>
         <p className="text-noir/70 mt-5 max-w-2xl text-lg">
           Trois formules, des prix affichés, et des options à la carte. Le tarif
@@ -102,6 +103,14 @@ export default function PrestationsPage() {
                       </li>
                     ))}
                   </ul>
+                  <p className="mt-6">
+                    <Link
+                      href={`/prestations/${f.id}`}
+                      className="font-medium underline underline-offset-4"
+                    >
+                      Tout savoir sur la formule {f.name}
+                    </Link>
+                  </p>
                   <ButtonLink
                     href={`/reservation?formule=${f.id}`}
                     variant={f.recommended ? "yellow" : "primary"}

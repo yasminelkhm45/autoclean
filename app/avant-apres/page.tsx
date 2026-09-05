@@ -5,7 +5,7 @@ import { site } from "@/content/site";
 import { pageMetadata, JsonLd, imageObjectJsonLd } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Avant / Après : résultats de nettoyage intérieur",
+  title: "Avant / après : nos résultats en photos",
   description:
     "Sièges, moquettes, volant, plastiques : comparez l'avant et l'après de nos nettoyages intérieurs réalisés en atelier à Die. Faites glisser le curseur.",
   path: "/avant-apres",

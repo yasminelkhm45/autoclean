@@ -2,22 +2,32 @@ import Link from "next/link";
 import { site } from "@/content/site";
 import { JsonLd } from "@/lib/seo";
 
-export function Breadcrumbs({ items }: { items: { name: string; href: string }[] }) {
+type Crumb = { name: string; href: string };
+
+/** BreadcrumbList seul, pour les pages où le fil d'Ariane visible n'a pas sa place. */
+export function BreadcrumbJsonLd({ items }: { items: Crumb[] }) {
+  const all = [{ name: "Accueil", href: "/" }, ...items];
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: all.map((item, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: item.name,
+          item: `${site.url}${item.href === "/" ? "" : item.href}`,
+        })),
+      }}
+    />
+  );
+}
+
+export function Breadcrumbs({ items }: { items: Crumb[] }) {
   const all = [{ name: "Accueil", href: "/" }, ...items];
   return (
     <>
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: all.map((item, i) => ({
-            "@type": "ListItem",
-            position: i + 1,
-            name: item.name,
-            item: `${site.url}${item.href === "/" ? "" : item.href}`,
-          })),
-        }}
-      />
+      <BreadcrumbJsonLd items={items} />
       <nav aria-label="Fil d'Ariane" className="mx-auto max-w-6xl px-4 pt-6 sm:px-6">
         <ol className="text-noir/60 flex flex-wrap items-center gap-1.5 text-sm">
           {all.map((item, i) => {

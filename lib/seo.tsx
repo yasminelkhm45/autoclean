@@ -112,6 +112,86 @@ export function faqJsonLd(items: FaqItem[]) {
   };
 }
 
+/** Article de conseils : type Article, suffisant et stable côté Google. */
+export function articleJsonLd(a: {
+  slug: string;
+  title: string;
+  metaDescription: string;
+  publishedAt: string;
+  updatedAt: string;
+}) {
+  const url = `${site.url}/conseils/${a.slug}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": `${url}#article`,
+    headline: a.title,
+    description: a.metaDescription,
+    datePublished: a.publishedAt,
+    dateModified: a.updatedAt,
+    inLanguage: "fr-FR",
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    author: { "@type": "Organization", name: site.name, url: site.url },
+    publisher: {
+      "@type": "Organization",
+      name: site.name,
+      url: site.url,
+      logo: {
+        "@type": "ImageObject",
+        url: `${site.url}/images/marque/logo-noir.svg`,
+      },
+    },
+  };
+}
+
+/** Service détaillé : utilisé sur les pages de formule et de commune. */
+export function serviceJsonLd({
+  name,
+  description,
+  url,
+  price,
+  areaServed,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  price?: number;
+  areaServed: string[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${url}#service`,
+    name,
+    description,
+    serviceType: "Nettoyage automobile intérieur",
+    url,
+    provider: {
+      "@type": "AutoWash",
+      "@id": `${site.url}/#atelier`,
+      name: site.name,
+      telephone: site.phone,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: site.address.street,
+        postalCode: site.address.postalCode,
+        addressLocality: site.address.city,
+        addressCountry: site.address.country,
+      },
+    },
+    areaServed: areaServed.map((n) => ({ "@type": "City", name: n })),
+    ...(price !== undefined && {
+      offers: {
+        "@type": "Offer",
+        price,
+        priceCurrency: "EUR",
+        availability: "https://schema.org/InStock",
+        url: `${site.url}/reservation`,
+      },
+    }),
+  };
+}
+
 export function imageObjectJsonLd(images: { url: string; caption: string }[]) {
   return images.map((img) => ({
     "@context": "https://schema.org",

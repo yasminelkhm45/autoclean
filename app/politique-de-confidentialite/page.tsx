@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Politique de confidentialité",
   description:
-    "Données collectées par autoclean-diois.fr, finalités, durées de conservation et droits RGPD. Site sans cookies publicitaires.",
+    "Quelles données autoclean-diois.fr collecte via ses formulaires, pourquoi, combien de temps, et comment exercer vos droits. Aucun cookie publicitaire.",
   path: "/politique-de-confidentialite",
 });
 

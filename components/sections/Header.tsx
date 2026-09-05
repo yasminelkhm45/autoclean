@@ -10,6 +10,7 @@ const nav = [
   { href: "/prestations", label: "Prestations" },
   { href: "/avant-apres", label: "Avant / Après" },
   { href: "/zone-intervention", label: "Zone d'intervention" },
+  { href: "/conseils", label: "Conseils" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
 ];
