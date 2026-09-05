@@ -5,7 +5,7 @@
    Aucune valeur hexadécimale ne doit apparaître dans les composants.
 ------------------------------------------------------------------- */
 @theme {
-  --color-jaune: #ecf234;
+  --color-jaune: #ffff00;
   --color-noir: #000000;
   --color-gris: #c0c4c8;
   --color-blanc: #ffffff;

@@ -149,6 +149,12 @@ public/llms.txt         résumé de l'activité pour les moteurs conversationnel
 - **Analytics** : aucun installé par défaut (zéro cookie → zéro bandeau). Recommandé : Vercel Analytics ou Plausible, tous deux sans cookie.
 - **Carte** : l'iframe Google Maps n'est chargée qu'après clic explicite (aucune requête tierce par défaut).
 
+## Couleurs
+
+Le jaune de la charte est `#FFFF00`, défini dans le jeton `--color-jaune` de `app/globals.css`. Aucun composant n'écrit la valeur en dur : ils utilisent tous la classe `jaune`. Seule exception assumée, `lib/og.tsx` redéfinit la couleur, parce que les images de partage sont rendues hors CSS.
+
+Combinaisons autorisées : noir sur jaune, jaune sur noir, blanc sur noir, noir sur blanc. Le jaune en texte sur fond blanc est proscrit, son contraste est de 1,07 pour 1.
+
 ## Sécurité
 
 Les en-têtes sont définis dans `next.config.ts` (Next n'en pose aucun par défaut) :

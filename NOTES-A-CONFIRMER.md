@@ -59,3 +59,11 @@ Aucune de ces hypothèses ne bloque la structure du site : tout se corrige dans 
 ## Visuel du hero
 
 28. **Le hero de l'accueil affiche l'utilitaire floqué** issu de la charte. Deux points à trancher : c'est une image de présentation de marque, pas une photo de votre véhicule réel, et un utilitaire en pleine rue peut laisser penser à un service qui se déplace, alors que tout le site explique que le travail se fait exclusivement à l'atelier de Die. Si le doute vous gêne, une photo de l'atelier ou d'un habitacle fraîchement nettoyé collerait mieux au discours ; le remplacement se fait en changeant un seul chemin dans `app/page.tsx`.
+
+## Jaune de la charte
+
+29. **Le jaune officiel est `#FFFF00`.** Il est défini une seule fois, dans le jeton `--color-jaune` de `app/globals.css`. Tout le site s'y réfère par la classe `jaune` : un futur changement de teinte se fait donc à cet endroit unique, sauf pour les images de partage générées (`lib/og.tsx`), qui redéfinissent la couleur parce qu'elles sont rendues hors CSS.
+
+30. **Visuel du véhicule recoloré** : le flocage de l'utilitaire était dans l'ancien jaune. Comme il s'agit d'une photo avec des reflets et de l'ombre, les pixels jaunes ont été basculés vers le jaune pur en conservant les écarts de luminosité, plutôt qu'aplatis en une couleur unique. Le résultat est propre, mais si vous récupérez un jour le fichier source de ce visuel avec le bon jaune, il vaudra toujours mieux que ma retouche.
+
+31. **Contraste** : le nouveau jaune améliore le rapport avec le noir, qui passe de 17,3 à 19,6 pour 1. Il reste évidemment inutilisable en texte sur blanc (1,07 pour 1), ce que la charte interdisait déjà.

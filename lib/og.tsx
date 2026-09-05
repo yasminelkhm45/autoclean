@@ -5,7 +5,7 @@ export const ogSize = { width: 1200, height: 630 };
 export const ogContentType = "image/png";
 
 /* Couleurs de la charte, dupliquées ici car l'OG est rendue hors CSS. */
-const JAUNE = "#ECF234";
+const JAUNE = "#FFFF00";
 const NOIR = "#000000";
 const BLANC = "#FFFFFF";
 const GRIS = "#C0C4C8";
