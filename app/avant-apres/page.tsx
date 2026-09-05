@@ -30,9 +30,9 @@ export default function AvantApresPage() {
       />
       <Breadcrumbs items={[{ name: "Avant / Après", href: "/avant-apres" }]} />
 
-      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pt-8 text-center sm:px-6">
         <p className="eyebrow">Résultats réels</p>
-        <h1 className="display mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
+        <h1 className="display mx-auto mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
           Avant / après&nbsp;: jugez sur pièces
         </h1>
         <p className="text-noir/70 mt-5 max-w-2xl text-lg">

@@ -63,11 +63,11 @@ export default async function CommunePage({
         ]}
       />
 
-      <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
+      <div className="mx-auto max-w-4xl px-4 pt-8 text-center sm:px-6">
         <h1 className="display text-[length:var(--text-display-xl)]">
           Nettoyage intérieur de voiture à {zone.name}
         </h1>
-        <p className="mt-5 text-lg leading-relaxed">{zone.intro}</p>
+        <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed">{zone.intro}</p>
 
         <dl className="border-noir/12 mt-6 grid gap-4 rounded-[var(--radius-card)] border p-5 sm:grid-cols-3">
           <div>
@@ -154,7 +154,7 @@ export default async function CommunePage({
             <li key={z.slug}>
               <Link
                 href={`/zone-intervention/${z.slug}`}
-                className="border-noir/20 hover:border-noir inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-sm transition-colors"
+                className="border-noir/45 hover:border-noir inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-sm transition-colors"
               >
                 {z.name}
               </Link>

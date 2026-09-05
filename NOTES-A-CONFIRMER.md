@@ -29,3 +29,9 @@ Aucune de ces hypothèses ne bloque la structure du site : tout se corrige dans 
 14. ~~Logos SVG~~ — **fait** : les exports officiels de la charte (logomark + lockups noir/blanc/jaune) sont en place dans `public/images/marque/` et dans le composant `Logo`.
 15. **FAQPage JSON-LD** : posé sur `/faq` uniquement. La FAQ courte de l'accueil réutilise les mêmes questions ; les baliser deux fois créerait le doublon que le brief interdit, et Google n'affiche de toute façon plus les résultats enrichis FAQ pour ce type de site.
 16. **Expéditeur email** : configurer un domaine vérifié dans Resend (`RESERVATION_FROM_EMAIL`), sinon les envois partent de `onboarding@resend.dev`.
+
+## Points techniques laissés ouverts
+
+17. **Next 16** : le projet est sur la dernière version corrigée de la branche 15 (15.5.25). Le passage à Next 16 soldera l'alerte `postcss` restante, mais c'est une version majeure : à faire sur une branche, avec un `npm run build` et un parcours complet du tunnel avant de fusionner.
+18. **HSTS avec `preload`** : l'en-tête annonce que le domaine ne sera servi qu'en HTTPS pendant deux ans. C'est le bon réglage pour un site sur Vercel, mais l'inscription effective à la liste de préchargement des navigateurs se fait séparément sur hstspreload.org, et se révoque lentement. Ne l'y inscrivez qu'une fois le domaine définitivement en place.
+19. **Scripts tiers** : la CSP bloquera tout script externe non déclaré. Si vous ajoutez Vercel Analytics, Plausible ou un widget d'avis Google, il faudra ajouter son domaine dans `script-src` et `connect-src` de `next.config.ts`.

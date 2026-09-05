@@ -14,7 +14,7 @@ function EditButton({ onClick, label }: { onClick: () => void; label: string }) 
     <button
       type="button"
       onClick={onClick}
-      className="text-noir/55 hover:text-noir shrink-0 text-sm underline underline-offset-4"
+      className="text-noir/55 hover:text-noir -my-1 shrink-0 py-1.5 text-sm underline underline-offset-4"
     >
       Modifier<span className="sr-only"> {label}</span>
     </button>

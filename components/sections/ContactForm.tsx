@@ -67,11 +67,11 @@ export function ContactForm() {
 
   const errClass = (name: string) =>
     `border-2 bg-blanc w-full rounded-xl px-4 py-3 text-base ${
-      errors[name] ? "border-[#b00020]" : "border-noir/25 focus:border-noir"
+      errors[name] ? "border-[#b00020]" : "border-noir/45 focus:border-noir"
     }`;
 
   return (
-    <form ref={formRef} onSubmit={submit} noValidate className="grid gap-5">
+    <form ref={formRef} onSubmit={submit} noValidate className="relative grid gap-5">
       <div>
         <label htmlFor="contact-nom" className="mb-1.5 block font-medium">
           Nom

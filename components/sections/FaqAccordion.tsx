@@ -42,7 +42,7 @@ export function FaqAccordion({
                   aria-hidden="true"
                   className={`bg-jaune text-noir flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-transform duration-200 ${open ? "rotate-45" : ""}`}
                 >
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
                     <path d="M12 5v14M5 12h14" />
                   </svg>
                 </span>

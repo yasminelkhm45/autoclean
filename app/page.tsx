@@ -59,39 +59,39 @@ export default function HomePage() {
       {/* 1. Hero : split photo / aplat noir */}
       <section className="bg-noir text-blanc relative overflow-hidden">
         <Logomark className="text-jaune/10 pointer-events-none absolute -top-32 -right-32 h-[34rem] w-[34rem]" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pt-14 pb-16 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:pt-24 lg:pb-24">
-          <div>
-            <p className="eyebrow text-jaune">Atelier à Die, Drôme (26)</p>
-            <h1 className="display display-hero mt-4 text-[length:var(--text-display-hero)]">
-              Nettoyage intérieur de voiture à Die
-            </h1>
-            <p className="text-gris mt-6 max-w-xl text-lg leading-relaxed">
-              Nous redonnons à votre habitacle son état d'origine : sièges
-              shampooinés, odeurs traitées, plastiques ravivés. Vous déposez la
-              voiture, vous la récupérez comme neuve.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href="/reservation" variant="yellow">
-                Pré-réserver
-              </ButtonLink>
-              <ButtonLink href="/avant-apres" variant="outline-light">
-                Voir les résultats
-              </ButtonLink>
-            </div>
+        <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-16 text-center sm:px-6 lg:pt-20 lg:pb-20">
+          <p className="eyebrow text-jaune">Atelier à Die, Drôme (26)</p>
+          <h1 className="display display-hero mx-auto mt-4 max-w-4xl text-[length:var(--text-display-hero)]">
+            Nettoyage intérieur de voiture à Die
+          </h1>
+          <p className="text-gris mx-auto mt-6 max-w-2xl text-lg leading-relaxed">
+            Nous redonnons à votre habitacle son état d'origine : sièges
+            shampooinés, odeurs traitées, plastiques ravivés. Vous déposez la
+            voiture, vous la récupérez comme neuve.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <ButtonLink href="/reservation" variant="yellow">
+              Pré-réserver
+            </ButtonLink>
+            <ButtonLink href="/avant-apres" variant="outline-light">
+              Voir les résultats
+            </ButtonLink>
           </div>
-          <BrandImage
-            src="hero/habitacle-principal.jpg"
-            alt="Intérieur de voiture nettoyé par AutoClean Diois"
-            width={2400}
-            height={1350}
-            sizes="(min-width: 1024px) 45vw, 100vw"
-            priority
-            imgClassName="grayscale"
-          />
+          <div className="mx-auto mt-12 max-w-4xl">
+            <BrandImage
+              src="hero/habitacle-principal.jpg"
+              alt="Intérieur de voiture nettoyé par AutoClean Diois"
+              width={2400}
+              height={1350}
+              sizes="(min-width: 1024px) 60vw, 100vw"
+              priority
+              imgClassName="grayscale"
+            />
+          </div>
         </div>
         {/* Bandeau de réassurance */}
         <div className="border-blanc/15 relative border-t">
-          <ul className="mx-auto flex max-w-6xl flex-wrap justify-center gap-x-10 gap-y-2 px-4 py-5 text-center text-sm font-medium sm:px-6 lg:justify-between">
+          <ul className="mx-auto flex max-w-6xl flex-wrap justify-center gap-x-10 gap-y-2 px-4 py-5 text-center text-sm font-medium sm:px-6">
             <li>{site.clientsCount}</li>
             <li>
               Note {site.rating.value}/5 sur Google
@@ -105,16 +105,18 @@ export default function HomePage() {
       {/* 2. Preuve immédiate : avant / après */}
       <section className="section-pad bg-blanc">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <p className="eyebrow">La preuve d'abord</p>
-          <h2 className="display mt-3 max-w-2xl text-[length:var(--text-display-lg)]">
-            Faites glisser. <span className="bg-jaune px-2">C'est le même</span>{" "}
-            habitacle.
-          </h2>
+          <div className="text-center">
+            <p className="eyebrow">La preuve d'abord</p>
+            <h2 className="display mx-auto mt-3 max-w-2xl text-[length:var(--text-display-lg)]">
+              Faites glisser. <span className="bg-jaune px-2">C'est le même</span>{" "}
+              habitacle.
+            </h2>
+          </div>
           <div className="mt-10 grid gap-8 md:grid-cols-2">
             <BeforeAfter slug="sieges-tissu" label="Sièges tissu : shampoing par injection-extraction" />
             <BeforeAfter slug="sol-moquette" label="Sol moquette : extraction en profondeur" />
           </div>
-          <div className="mt-8">
+          <div className="mt-8 text-center">
             <ButtonLink href="/avant-apres" variant="outline">
               Toutes les zones traitées
             </ButtonLink>
@@ -125,15 +127,17 @@ export default function HomePage() {
       {/* 3. Formules */}
       <section className="section-pad border-gris/50 border-t">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="text-center">
           <p className="eyebrow">Nos formules</p>
           <h2 className="display mt-3 text-[length:var(--text-display-lg)]">
             Trois niveaux, un seul standard&nbsp;: propre.
           </h2>
-          <p className="text-noir/70 mt-4 max-w-2xl">
+          <p className="text-noir/70 mx-auto mt-4 max-w-2xl">
             Le prix dépend de la formule et des options, jamais de surprise à
             l'arrivée. Le tarif est confirmé avec vous par téléphone avant le
             rendez-vous.
           </p>
+          </div>
           <div className="mt-10">
             <FormulaCards />
           </div>
@@ -144,18 +148,20 @@ export default function HomePage() {
       <section className="section-pad bg-noir text-blanc relative overflow-hidden">
         <Logomark className="text-jaune/10 pointer-events-none absolute -bottom-40 -left-40 h-[30rem] w-[30rem]" />
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-          <p className="eyebrow text-jaune">Comment ça se passe</p>
-          <h2 className="display mt-3 text-[length:var(--text-display-lg)]">
-            Quatre étapes, zéro friction.
-          </h2>
+          <div className="text-center">
+            <p className="eyebrow text-jaune">Comment ça se passe</p>
+            <h2 className="display mt-3 text-[length:var(--text-display-lg)]">
+              Quatre étapes, zéro friction.
+            </h2>
+          </div>
           <ol className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((step, i) => (
-              <li key={step.title} className="border-blanc/20 border-t pt-5">
+              <li key={step.title} className="border-blanc/20 border-t pt-5 text-center">
                 <span className="display text-jaune text-xl" aria-hidden="true">
                   {i + 1}
                 </span>
                 <h3 className="mt-2 text-lg font-semibold">{step.title}</h3>
-                <p className="text-gris mt-2 text-sm leading-relaxed">{step.text}</p>
+                <p className="text-gris mx-auto mt-2 max-w-xs text-sm leading-relaxed">{step.text}</p>
               </li>
             ))}
           </ol>
@@ -165,14 +171,16 @@ export default function HomePage() {
       {/* 5. Pourquoi nous */}
       <section className="section-pad">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <p className="eyebrow">Pourquoi nous</p>
-          <h2 className="display mt-3 max-w-3xl text-[length:var(--text-display-lg)]">
-            Ce qui fait la différence entre laver et{" "}
-            <span className="bg-jaune px-2">remettre à neuf</span>
-          </h2>
+          <div className="text-center">
+            <p className="eyebrow">Pourquoi nous</p>
+            <h2 className="display mx-auto mt-3 max-w-3xl text-[length:var(--text-display-lg)]">
+              Ce qui fait la différence entre laver et{" "}
+              <span className="bg-jaune px-2">remettre à neuf</span>
+            </h2>
+          </div>
           <div className="mt-12 grid gap-10 md:grid-cols-3">
             {pillars.map((p) => (
-              <article key={p.title} className="border-noir border-t-2 pt-5">
+              <article key={p.title} className="border-noir border-t-2 pt-5 text-center">
                 <h3 className="text-xl font-semibold">{p.title}</h3>
                 <p className="text-noir/70 mt-3 leading-relaxed">{p.text}</p>
               </article>
@@ -184,10 +192,12 @@ export default function HomePage() {
       {/* 6. Avis clients */}
       <section className="section-pad bg-noir text-blanc">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <p className="eyebrow text-jaune">Ils nous ont confié leurs clés</p>
-          <h2 className="display mt-3 text-[length:var(--text-display-lg)]">
-            Des clients qui reviennent, et qui le disent.
-          </h2>
+          <div className="text-center">
+            <p className="eyebrow text-jaune">Ils nous ont confié leurs clés</p>
+            <h2 className="display mt-3 text-[length:var(--text-display-lg)]">
+              Des clients qui reviennent, et qui le disent.
+            </h2>
+          </div>
           <div className="mt-10">
             <Reviews />
           </div>
@@ -196,23 +206,27 @@ export default function HomePage() {
 
       {/* 7. FAQ courte */}
       <section className="section-pad">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_1.6fr]">
-          <div>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="text-center">
             <p className="eyebrow">Questions fréquentes</p>
             <h2 className="display mt-3 text-[length:var(--text-display-md)]">
               Avant de nous confier vos clés
             </h2>
-            <Link href="/faq" className="mt-5 inline-block font-medium underline underline-offset-4">
-              Toutes les questions →
-            </Link>
           </div>
-          <FaqAccordion items={homeFaq} headingLevel="h3" />
+          <div className="mx-auto mt-10 max-w-3xl">
+            <FaqAccordion items={homeFaq} headingLevel="h3" />
+          </div>
+          <p className="mt-8 text-center">
+            <Link href="/faq" className="inline-block py-1 font-medium underline underline-offset-4">
+              Toutes les questions
+            </Link>
+          </p>
         </div>
       </section>
 
       {/* 8. CTA final */}
       <section className="bg-jaune section-pad-sm">
-        <div className="mx-auto flex max-w-6xl flex-col items-start gap-7 px-4 sm:px-6">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-7 px-4 text-center sm:px-6">
           <h2 className="display max-w-3xl text-[length:var(--text-display-lg)]">
             Votre voiture mérite mieux qu'un coup d'aspirateur.
           </h2>

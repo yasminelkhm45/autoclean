@@ -119,6 +119,28 @@ public/llms.txt         résumé de l'activité pour les moteurs conversationnel
 - **Analytics** : aucun installé par défaut (zéro cookie → zéro bandeau). Recommandé : Vercel Analytics ou Plausible, tous deux sans cookie.
 - **Carte** : l'iframe Google Maps n'est chargée qu'après clic explicite (aucune requête tierce par défaut).
 
+## Sécurité
+
+Les en-têtes sont définis dans `next.config.ts` (Next n'en pose aucun par défaut) :
+
+| En-tête | Rôle |
+|---|---|
+| `Content-Security-Policy` | Limite les origines autorisées. Tolère `unsafe-inline` sur scripts et styles, que Next injecte en ligne : durcir demanderait un middleware à nonce et ferait perdre le rendu statique. |
+| `X-Frame-Options: DENY` + `frame-ancestors 'none'` | Le site ne peut pas être intégré en iframe (clickjacking). |
+| `Strict-Transport-Security` | Force HTTPS pendant deux ans. `preload` suppose un domaine servi exclusivement en HTTPS. |
+| `Referrer-Policy`, `Permissions-Policy`, `X-Content-Type-Options` | Fuite de référent limitée, caméra/micro/géolocalisation désactivés, pas de deviner-le-type. |
+
+Si vous ajoutez un jour un script tiers (analytics, widget d'avis), il faudra l'autoriser explicitement dans `script-src`, sinon le navigateur le bloquera silencieusement.
+
+Autres garde-fous déjà en place :
+
+- **Le prix est recalculé côté serveur** à partir de `content/offre.ts`. Un client qui manipulerait le total dans la requête n'obtiendrait rien.
+- **Zod rejette tout champ hors schéma** : ajouter `"isAdmin": true` ou `"price": 0` à la requête est sans effet.
+- **Les emails partent en text/plain** : du HTML saisi par un visiteur s'affiche littéralement. Les sujets passent par `sanitizeHeader()`, qui retire sauts de ligne et caractères de contrôle.
+- **Le rate limiting est en mémoire** (5 requêtes par heure et par IP). Suffisant sur ce trafic ; pour du multi-région strict, brancher Upstash dans `lib/rate-limit.ts`.
+
+Lancez `npm audit` avant chaque mise en production. Une alerte `postcss` subsiste : elle est transitive dans Next, concerne la génération des CSS au moment du build et non le site en ligne, et se résoudra avec Next 16.
+
 ## Déploiement (Vercel)
 
 1. Importer le dépôt dans Vercel.

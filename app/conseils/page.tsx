@@ -21,11 +21,11 @@ export default function ConseilsPage() {
     <>
       <Breadcrumbs items={[{ name: "Conseils", href: "/conseils" }]} />
 
-      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
-        <h1 className="display max-w-3xl text-[length:var(--text-display-xl)]">
+      <div className="mx-auto max-w-6xl px-4 pt-8 text-center sm:px-6">
+        <h1 className="display mx-auto max-w-3xl text-[length:var(--text-display-xl)]">
           Conseils d'entretien intérieur
         </h1>
-        <p className="text-noir/70 mt-4 max-w-2xl text-lg">
+        <p className="text-noir/70 mx-auto mt-4 max-w-2xl text-lg">
           Ce que nous constatons à l'atelier, mis par écrit : les méthodes qui
           fonctionnent, celles qui font perdre du temps, et ce qui relève
           vraiment du professionnel.
@@ -59,7 +59,7 @@ export default function ConseilsPage() {
                 <p className="text-noir/55 text-sm font-semibold">{a.category}</p>
                 <h2 className="mt-2 text-lg font-semibold group-hover:underline">{a.title}</h2>
                 <p className="text-noir/65 mt-3 text-sm leading-relaxed">{a.excerpt}</p>
-                <p className="text-noir/50 mt-auto pt-4 text-sm">
+                <p className="text-noir/60 mt-auto pt-4 text-sm">
                   {a.readingMinutes} min de lecture
                 </p>
               </Link>

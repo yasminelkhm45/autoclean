@@ -36,7 +36,7 @@ function CheckOrDash({ included }: { included: boolean }) {
       <path d="m4 13 5 5L20 7" />
     </svg>
   ) : (
-    <span aria-hidden="true" className="text-noir/30">·</span>
+    <span aria-hidden="true" className="text-noir/55">·</span>
   );
 }
 
@@ -45,12 +45,12 @@ export default function PrestationsPage() {
     <>
       <Breadcrumbs items={[{ name: "Prestations", href: "/prestations" }]} />
 
-      <div className="mx-auto max-w-6xl px-4 pt-8 pb-4 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pt-8 pb-4 text-center sm:px-6">
         <p className="eyebrow">Prestations & tarifs</p>
-        <h1 className="display mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
+        <h1 className="display mx-auto mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
           Nos formules de nettoyage intérieur
         </h1>
-        <p className="text-noir/70 mt-5 max-w-2xl text-lg">
+        <p className="text-noir/70 mx-auto mt-5 max-w-2xl text-lg">
           Trois formules, des prix affichés, et des options à la carte. Le tarif
           exact est confirmé par téléphone avant votre rendez-vous : jamais de
           supplément découvert à l'arrivée.

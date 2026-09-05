@@ -17,9 +17,9 @@ export default function FaqPage() {
       <JsonLd data={faqJsonLd(faq)} />
       <Breadcrumbs items={[{ name: "FAQ", href: "/faq" }]} />
 
-      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pt-8 text-center sm:px-6">
         <p className="eyebrow">Questions fréquentes</p>
-        <h1 className="display mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
+        <h1 className="display mx-auto mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
           Vos questions sur le nettoyage intérieur
         </h1>
       </div>

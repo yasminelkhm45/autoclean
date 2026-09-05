@@ -16,12 +16,12 @@ export default function ContactPage() {
     <>
       <Breadcrumbs items={[{ name: "Contact", href: "/contact" }]} />
 
-      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pt-8 text-center sm:px-6">
         <p className="eyebrow">Contact</p>
-        <h1 className="display mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
+        <h1 className="display mx-auto mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
           Une question ? Parlons-en.
         </h1>
-        <p className="text-noir/70 mt-5 max-w-2xl text-lg">
+        <p className="text-noir/70 mx-auto mt-5 max-w-2xl text-lg">
           Ce formulaire sert aux questions. Pour réserver une prestation, passez
           plutôt par la <a href="/reservation" className="underline underline-offset-4">pré-réservation en ligne</a> :
           c'est plus rapide pour vous comme pour nous.

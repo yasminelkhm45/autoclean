@@ -40,7 +40,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
                     {item.name}
                   </span>
                 ) : (
-                  <Link href={item.href} className="underline-offset-4 hover:underline">
+                  <Link href={item.href} className="inline-block py-1 underline-offset-4 hover:underline">
                     {item.name}
                   </Link>
                 )}

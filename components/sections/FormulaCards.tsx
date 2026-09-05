@@ -7,14 +7,14 @@ export function FormulaCards() {
       {formulas.map((f) => (
         <li
           key={f.id}
-          className={`relative flex flex-col rounded-[var(--radius-card)] p-6 sm:p-7 ${
+          className={`relative flex flex-col rounded-[var(--radius-card)] p-6 text-center sm:p-7 ${
             f.recommended
               ? "bg-noir text-blanc"
               : "border-gris/70 bg-blanc border"
           }`}
         >
           {f.recommended && (
-            <span className="bg-jaune text-noir absolute -top-3 left-6 rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase">
+            <span className="bg-jaune text-noir absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-bold tracking-wide whitespace-nowrap uppercase">
               Notre recommandation
             </span>
           )}
@@ -22,13 +22,13 @@ export function FormulaCards() {
           <p className={`mt-2 text-sm ${f.recommended ? "text-gris" : "text-noir/70"}`}>
             {f.tagline}
           </p>
-          <p className="mt-5 flex items-baseline gap-2">
+          <p className="mt-5 flex flex-wrap items-baseline justify-center gap-2">
             <span className="display text-4xl">{formatPrice(f.price)}</span>
             <span className={`text-sm ${f.recommended ? "text-gris" : "text-noir/60"}`}>
               à partir de · {f.duration}
             </span>
           </p>
-          <ul className="mt-5 flex flex-col gap-2.5 text-sm">
+          <ul className="mx-auto mt-5 flex w-fit flex-col gap-2.5 text-left text-sm">
             {f.highlights.map((h) => (
               <li key={h} className="flex gap-2.5">
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="text-jaune mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">

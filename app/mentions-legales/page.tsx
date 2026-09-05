@@ -14,7 +14,7 @@ export default function MentionsLegalesPage() {
     <>
       <Breadcrumbs items={[{ name: "Mentions légales", href: "/mentions-legales" }]} />
       <div className="mx-auto max-w-3xl px-4 pt-8 pb-16 sm:px-6">
-        <h1 className="display text-[length:var(--text-display-lg)]">Mentions légales</h1>
+        <h1 className="display text-center text-[length:var(--text-display-lg)]">Mentions légales</h1>
         <div className="mt-8 space-y-8 leading-relaxed">
           <section>
             <h2 className="text-xl font-semibold">Éditeur du site</h2>

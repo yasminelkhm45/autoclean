@@ -55,7 +55,7 @@ export default async function FormulePage({
         ]}
       />
 
-      <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
+      <div className="mx-auto max-w-4xl px-4 pt-8 text-center sm:px-6">
         <h1 className="display text-[length:var(--text-display-xl)]">
           Formule {f.name}
         </h1>
@@ -74,7 +74,7 @@ export default async function FormulePage({
           </ButtonLink>
         </div>
 
-        <p className="mt-8 text-lg leading-relaxed">{f.page.intro}</p>
+        <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed">{f.page.intro}</p>
       </div>
 
       <section aria-labelledby="deroule" className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
@@ -139,7 +139,7 @@ export default async function FormulePage({
         <ul className="mt-6 grid gap-3 sm:grid-cols-2">
           {options.map((o) => (
             <li key={o.id} className="border-noir/12 flex gap-3 rounded-[var(--radius-card)] border p-4">
-              <OptionIcon icon={o.icon} className="text-noir/50 mt-0.5 h-5 w-5 shrink-0" />
+              <OptionIcon icon={o.icon} className="text-noir/60 mt-0.5 h-5 w-5 shrink-0" />
               <div>
                 <p className="flex items-baseline justify-between gap-3 font-semibold">
                   {o.label} <span className="shrink-0">+{formatPrice(o.price)}</span>
@@ -166,7 +166,7 @@ export default async function FormulePage({
                   {o.name}, {formatPrice(o.price)}
                 </p>
                 <p className="text-noir/65 mt-2 text-sm leading-relaxed">{o.tagline}</p>
-                <p className="text-noir/50 mt-3 text-sm">Durée : {o.duration}</p>
+                <p className="text-noir/60 mt-3 text-sm">Durée : {o.duration}</p>
               </Link>
             </li>
           ))}

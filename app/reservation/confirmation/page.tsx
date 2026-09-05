@@ -109,8 +109,8 @@ export default async function ConfirmationPage({
                 </dd>
               </div>
               <div className="flex justify-between gap-4 p-5">
-                <dt className="text-noir/60">Options</dt>
-                <dd className="text-right font-semibold">
+                <dt className="text-noir/60 shrink-0">Options</dt>
+                <dd className="min-w-0 text-right font-semibold">
                   {chosen.length
                     ? chosen.map((o) => `${o.label} (+${formatPrice(o.price)})`).join(", ")
                     : "Aucune"}

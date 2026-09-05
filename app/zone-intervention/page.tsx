@@ -18,12 +18,12 @@ export default function ZoneInterventionPage() {
     <>
       <Breadcrumbs items={[{ name: "Zone d'intervention", href: "/zone-intervention" }]} />
 
-      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pt-8 text-center sm:px-6">
         <p className="eyebrow">Où nous trouver</p>
-        <h1 className="display mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
+        <h1 className="display mx-auto mt-3 max-w-3xl text-[length:var(--text-display-xl)]">
           Nettoyage de voiture à Die et dans le Diois
         </h1>
-        <div className="text-noir/75 mt-6 max-w-2xl space-y-4 text-lg leading-relaxed">
+        <div className="text-noir/75 mx-auto mt-6 max-w-2xl space-y-4 text-lg leading-relaxed">
           <p>
             Notre atelier se trouve à Die ({site.address.postalCode}), au cœur de la
             vallée de la Drôme. Le travail se fait exclusivement en atelier&nbsp;: c'est ce
@@ -46,7 +46,7 @@ export default function ZoneInterventionPage() {
             <h2 className="display text-[length:var(--text-display-md)]">
               Temps de trajet indicatifs
             </h2>
-            <table className="mt-6 w-full text-left">
+            <table className="mt-6 hidden w-full text-left sm:table">
               <caption className="sr-only">
                 Communes couvertes, distance et temps de trajet jusqu'à l'atelier de Die
               </caption>
@@ -67,7 +67,7 @@ export default function ZoneInterventionPage() {
                       >
                         {z.name}
                       </Link>
-                      <span className="text-noir/50 block text-sm">{z.postalCode}</span>
+                      <span className="text-noir/60 block text-sm">{z.postalCode}</span>
                     </th>
                     <td className="py-3 pr-4">
                       {z.distanceKm === 0 ? "Sur place" : `${z.distanceKm} km`}
@@ -77,6 +77,27 @@ export default function ZoneInterventionPage() {
                 ))}
               </tbody>
             </table>
+
+            {/* Sous 640px, trois colonnes deviennent illisibles : on empile. */}
+            <ul className="divide-noir/10 mt-6 divide-y sm:hidden">
+              {zones.map((z) => (
+                <li key={z.slug} className="py-3">
+                  <Link
+                    href={`/zone-intervention/${z.slug}`}
+                    className="flex min-h-11 items-center justify-between gap-3"
+                  >
+                    <span>
+                      <span className="font-medium underline-offset-4">{z.name}</span>
+                      <span className="text-noir/60 block text-sm">{z.postalCode}</span>
+                    </span>
+                    <span className="text-noir/70 shrink-0 text-right text-sm">
+                      {z.distanceKm === 0 ? "Sur place" : `${z.distanceKm} km`}
+                      <span className="text-noir/60 block">{z.travelTime}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
             <p className="text-noir/60 mt-4 text-sm">
               Chaque commune a sa page, avec le détail du trajet et ce que nous
               observons sur les véhicules du secteur. Vous venez d'ailleurs&nbsp;?

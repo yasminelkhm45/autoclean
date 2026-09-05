@@ -16,7 +16,7 @@ export default function ConfidentialitePage() {
         items={[{ name: "Politique de confidentialité", href: "/politique-de-confidentialite" }]}
       />
       <div className="mx-auto max-w-3xl px-4 pt-8 pb-16 sm:px-6">
-        <h1 className="display text-[length:var(--text-display-lg)]">
+        <h1 className="display text-center text-[length:var(--text-display-lg)]">
           Politique de confidentialité
         </h1>
         <div className="mt-8 space-y-8 leading-relaxed">

@@ -31,11 +31,11 @@ export default function ReservationPage() {
     <>
       <BreadcrumbJsonLd items={[{ name: "Pré-réservation", href: "/reservation" }]} />
       <div className="bg-noir text-blanc">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16">
-          <h1 className="display max-w-3xl text-[length:var(--text-display-lg)]">
+        <div className="mx-auto max-w-6xl px-4 py-12 text-center sm:px-6 lg:py-16">
+          <h1 className="display mx-auto max-w-3xl text-[length:var(--text-display-lg)]">
             Pré-réservez votre nettoyage
           </h1>
-          <p className="text-gris mt-4 max-w-xl text-lg">
+          <p className="text-gris mx-auto mt-4 max-w-xl text-lg">
             Cinq étapes, deux minutes. Le total se met à jour au fur et à mesure,
             et rien n'est envoyé avant votre validation.
           </p>

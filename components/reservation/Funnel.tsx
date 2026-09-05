@@ -69,11 +69,11 @@ function StepHeader({
   headingRef: React.RefObject<HTMLHeadingElement | null>;
 }) {
   return (
-    <div className="mb-6">
+    <div className="mb-6 text-center">
       <h2 ref={headingRef} tabIndex={-1} className="display text-[length:var(--text-display-sm)] outline-none">
         {title}
       </h2>
-      <p className="text-noir/60 mt-2">{intro}</p>
+      <p className="text-noir/60 mx-auto mt-2 max-w-xl">{intro}</p>
     </div>
   );
 }
@@ -331,6 +331,8 @@ export function Funnel() {
 
   const nextLabel =
     step === 3 ? "Voir le récapitulatif" : step === 4 ? "Passer à mes coordonnées" : "Continuer";
+  /* Sur la barre fixe mobile, la place manque : un seul mot suffit. */
+  const nextLabelCourt = step === 4 ? "Mes coordonnées" : "Continuer";
 
   return (
     <div ref={topRef} className="mx-auto max-w-6xl scroll-mt-24 px-4 pb-32 sm:px-6 lg:pb-16">
@@ -360,7 +362,7 @@ export function Funnel() {
                       onClick={() => clickVehicle(v.id)}
                       className={[
                         "relative flex cursor-pointer flex-col items-center gap-3 rounded-[var(--radius-card)] border-2 p-5 text-center transition-colors",
-                        checked ? "border-noir bg-noir/5" : "border-noir/15 hover:border-noir/45",
+                        checked ? "border-noir bg-noir/5" : "border-noir/45 hover:border-noir",
                       ].join(" ")}
                     >
                       <input
@@ -374,7 +376,7 @@ export function Funnel() {
                       {checked && <SelectedBadge />}
                       <VehicleSilhouette type={v.silhouette} className="text-noir h-14 w-auto" />
                       <span className="font-semibold">{v.label}</span>
-                      <span className="text-noir/50 text-xs leading-relaxed">
+                      <span className="text-noir/60 text-xs leading-relaxed">
                         {v.examples.slice(0, 3).join(", ")}
                       </span>
                     </label>
@@ -410,7 +412,7 @@ export function Funnel() {
                       onClick={() => clickFormula(f.id)}
                       className={[
                         "relative flex cursor-pointer flex-col rounded-[var(--radius-card)] border-2 p-5 transition-colors",
-                        checked ? "border-noir bg-noir/5" : "border-noir/15 hover:border-noir/45",
+                        checked ? "border-noir bg-noir/5" : "border-noir/45 hover:border-noir",
                       ].join(" ")}
                     >
                       <input
@@ -440,7 +442,7 @@ export function Funnel() {
                             <span>
                               {inc.label}
                               {inc.detail && (
-                                <span className="text-noir/50 block text-xs">{inc.detail}</span>
+                                <span className="text-noir/60 block text-xs">{inc.detail}</span>
                               )}
                             </span>
                           </li>
@@ -484,7 +486,7 @@ export function Funnel() {
                       key={o.id}
                       className={[
                         "flex cursor-pointer gap-3 rounded-[var(--radius-card)] border-2 p-4 transition-colors",
-                        checked ? "border-noir bg-noir/5" : "border-noir/15 hover:border-noir/45",
+                        checked ? "border-noir bg-noir/5" : "border-noir/45 hover:border-noir",
                       ].join(" ")}
                     >
                       <input
@@ -497,7 +499,7 @@ export function Funnel() {
                         aria-hidden="true"
                         className={[
                           "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors",
-                          checked ? "border-noir bg-noir text-jaune" : "border-noir/30",
+                          checked ? "border-noir bg-noir text-jaune" : "border-noir/45",
                         ].join(" ")}
                       >
                         {checked && <Check className="h-3.5 w-3.5" />}
@@ -513,7 +515,7 @@ export function Funnel() {
                           </span>
                         )}
                         <span className="text-noir/60 mt-1.5 flex gap-2 text-sm leading-relaxed">
-                          <OptionIcon icon={o.icon} className="text-noir/45 mt-0.5 h-4 w-4 shrink-0" />
+                          <OptionIcon icon={o.icon} className="text-noir/60 mt-0.5 h-4 w-4 shrink-0" />
                           {o.description}
                         </span>
                       </span>
@@ -650,7 +652,7 @@ export function Funnel() {
                 <button
                   type="button"
                   onClick={() => go({ step: (step - 1) as StepNumber })}
-                  className="border-noir/20 hover:border-noir inline-flex min-h-11 items-center rounded-full border-2 px-6 py-3 text-sm font-semibold"
+                  className="border-noir/45 hover:border-noir inline-flex min-h-11 items-center rounded-full border-2 px-6 py-3 text-sm font-semibold"
                 >
                   Retour
                 </button>
@@ -716,7 +718,7 @@ export function Funnel() {
                 type="button"
                 onClick={() => go({ step: (step - 1) as StepNumber })}
                 aria-label="Étape précédente"
-                className="border-noir/20 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2"
+                className="border-noir/45 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2"
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M15 5 8 12l7 7" />
@@ -731,9 +733,9 @@ export function Funnel() {
               type="button"
               disabled={!canContinue}
               onClick={() => go({ step: (step + 1) as StepNumber })}
-              className="bg-noir text-blanc inline-flex min-h-12 shrink-0 items-center rounded-full px-6 text-sm font-semibold disabled:opacity-40"
+              className="bg-noir text-blanc inline-flex min-h-12 shrink-0 items-center rounded-full px-5 text-sm font-semibold disabled:opacity-40"
             >
-              {nextLabel}
+              {nextLabelCourt}
             </button>
           </div>
         </div>

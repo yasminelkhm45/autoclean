@@ -45,7 +45,7 @@ export function Prose({ blocks }: { blocks: Block[] }) {
               <h2
                 key={i}
                 id={slugifyHeading(b.text)}
-                className="display mt-6 scroll-mt-24 text-[length:var(--text-display-sm)]"
+                className="display mt-6 scroll-mt-24 text-center text-[length:var(--text-display-sm)]"
               >
                 {b.text}
               </h2>

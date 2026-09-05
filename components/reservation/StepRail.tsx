@@ -38,7 +38,7 @@ export function StepRail({
   return (
     <div className="bg-noir text-blanc rounded-[var(--radius-card)] px-4 py-4 sm:px-6">
       {/* Mobile : une seule étape nommée + jauge */}
-      <div className="sm:hidden">
+      <div className="md:hidden">
         <div className="flex items-baseline justify-between gap-3">
           <p className="font-semibold">{currentStep.label}</p>
           <p className="text-gris text-sm">Étape {current} sur {STEPS.length}</p>
@@ -51,8 +51,8 @@ export function StepRail({
         </div>
       </div>
 
-      {/* À partir de 640px : les cinq étapes */}
-      <ol className="hidden items-center sm:flex">
+      {/* À partir de 768px : les cinq étapes nommées */}
+      <ol className="hidden items-center md:flex">
         {STEPS.map((s, i) => {
           const done = s.n < current;
           const isCurrent = s.n === current;
@@ -66,7 +66,7 @@ export function StepRail({
                   ? "bg-jaune text-noir"
                   : done
                     ? "bg-blanc text-noir"
-                    : "border-blanc/30 text-gris border",
+                    : "border-blanc/45 text-gris border",
               ].join(" ")}
             >
               {done ? <Check className="h-4 w-4" /> : s.n}

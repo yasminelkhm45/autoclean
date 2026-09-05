@@ -24,7 +24,7 @@ export function Footer() {
             <br />
             {site.address.postalCode} {site.address.city}
             <br />
-            <a href={site.phoneHref} className="text-blanc mt-2 inline-block underline-offset-4 hover:underline">
+            <a href={site.phoneHref} className="text-blanc mt-2 inline-block py-1 underline-offset-4 hover:underline">
               {site.phone}
             </a>
             <br />
@@ -32,7 +32,7 @@ export function Footer() {
               href={site.instagram}
               rel="noopener noreferrer"
               target="_blank"
-              className="text-blanc underline-offset-4 hover:underline"
+              className="text-blanc inline-block py-1 underline-offset-4 hover:underline"
             >
               Instagram {site.instagramHandle}
             </a>
@@ -50,7 +50,7 @@ export function Footer() {
                 ["/reservation", "Pré-réserver"],
               ].map(([href, label]) => (
                 <li key={href}>
-                  <Link href={href!} className="underline-offset-4 hover:underline">
+                  <Link href={href!} className="inline-block py-1.5 underline-offset-4 hover:underline">
                     {label}
                   </Link>
                 </li>
@@ -64,7 +64,7 @@ export function Footer() {
                 <li key={z.slug}>
                   <Link
                     href={`/zone-intervention/${z.slug}`}
-                    className="underline-offset-4 hover:underline"
+                    className="inline-block py-1.5 underline-offset-4 hover:underline"
                   >
                     {z.name}
                   </Link>
@@ -84,7 +84,7 @@ export function Footer() {
                 ["/politique-de-confidentialite", "Confidentialité"],
               ].map(([href, label]) => (
                 <li key={href}>
-                  <Link href={href!} className="underline-offset-4 hover:underline">
+                  <Link href={href!} className="inline-block py-1.5 underline-offset-4 hover:underline">
                     {label}
                   </Link>
                 </li>

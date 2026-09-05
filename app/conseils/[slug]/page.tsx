@@ -52,14 +52,16 @@ export default async function ArticlePage({
       />
 
       <article className="mx-auto max-w-3xl px-4 pt-8 pb-16 sm:px-6">
-        <p className="text-noir/55 text-sm font-semibold">{article.category}</p>
-        <h1 className="display mt-3 text-[length:var(--text-display-lg)]">{article.title}</h1>
+        <div className="text-center">
+          <p className="text-noir/55 text-sm font-semibold">{article.category}</p>
+          <h1 className="display mt-3 text-[length:var(--text-display-lg)]">{article.title}</h1>
+        </div>
 
         <p className="border-noir/15 mt-6 border-l-4 pl-5 text-lg leading-relaxed">
           {article.excerpt}
         </p>
 
-        <p className="text-noir/50 mt-5 text-sm">
+        <p className="text-noir/60 mt-5 text-center text-sm">
           Publié le {dateFr(article.publishedAt)}
           {article.updatedAt !== article.publishedAt &&
             `, mis à jour le ${dateFr(article.updatedAt)}`}
@@ -77,7 +79,7 @@ export default async function ArticlePage({
                 <li key={h.text}>
                   <a
                     href={`#${slugifyHeading(h.text)}`}
-                    className="text-noir/70 hover:text-noir underline-offset-4 hover:underline"
+                    className="text-noir/70 hover:text-noir inline-block py-1 underline-offset-4 hover:underline"
                   >
                     {h.text}
                   </a>
@@ -93,7 +95,7 @@ export default async function ArticlePage({
 
         {related.length > 0 && (
           <aside className="border-noir/10 mt-14 border-t pt-8">
-            <h2 className="display text-[length:var(--text-display-sm)]">À lire aussi</h2>
+            <h2 className="display text-center text-[length:var(--text-display-sm)]">À lire aussi</h2>
             <ul className="mt-5 grid gap-4 sm:grid-cols-2">
               {related.map((r) => (
                 <li key={r.slug}>

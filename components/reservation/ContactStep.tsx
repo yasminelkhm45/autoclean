@@ -6,7 +6,7 @@ import { slotLabels, todayIso, type ContactValues } from "./shared";
 export type ContactErrors = Partial<Record<keyof ContactValues, string>>;
 
 const fieldBase =
-  "bg-blanc w-full rounded-xl border-2 px-4 py-3 text-base transition-colors placeholder:text-noir/35";
+  "bg-blanc w-full rounded-xl border-2 px-4 py-3 text-base transition-colors placeholder:text-noir/55";
 
 function Field({
   id,
@@ -27,7 +27,7 @@ function Field({
     <div>
       <label htmlFor={id} className="flex flex-wrap items-baseline gap-x-2 font-medium">
         {label}
-        {optional && <span className="text-noir/50 text-sm font-normal">facultatif</span>}
+        {optional && <span className="text-noir/60 text-sm font-normal">facultatif</span>}
       </label>
       {hint && (
         <p id={`${id}-hint`} className="text-noir/55 mt-0.5 text-sm">
@@ -82,7 +82,7 @@ function ChoiceGroup<T extends string>({
               key={c.value}
               className={[
                 "flex min-h-12 cursor-pointer items-center justify-center rounded-xl border-2 px-3 py-2.5 text-center text-sm font-medium transition-colors",
-                checked ? "border-noir bg-noir text-blanc" : "border-noir/20 hover:border-noir/50",
+                checked ? "border-noir bg-noir text-blanc" : "border-noir/45 hover:border-noir",
               ].join(" ")}
             >
               <input
@@ -122,7 +122,7 @@ export function ContactStep({
   honeypotRef: RefObject<HTMLInputElement | null>;
 }) {
   const border = (k: keyof ContactValues) =>
-    errors[k] ? "border-[#b00020]" : "border-noir/20 focus:border-noir";
+    errors[k] ? "border-[#b00020]" : "border-noir/45 focus:border-noir";
 
   return (
     <div className="flex flex-col gap-6">
@@ -273,7 +273,7 @@ export function ContactStep({
           htmlFor="consent"
           className={[
             "flex cursor-pointer items-start gap-3 rounded-xl border-2 p-4 transition-colors",
-            errors.consent ? "border-[#b00020]" : "border-noir/20 hover:border-noir/50",
+            errors.consent ? "border-[#b00020]" : "border-noir/45 hover:border-noir",
           ].join(" ")}
         >
           <input
