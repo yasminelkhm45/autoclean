@@ -50,7 +50,13 @@ export function Header() {
           Aller au contenu
         </a>
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <Link href="/" aria-label="AutoClean Diois, accueil" className="text-lg sm:text-2xl">
+          <Link
+            href="/"
+            aria-label="AutoClean Diois, accueil"
+            /* Le lockup porte plus de blanc en haut qu'en bas : deux pixels
+               vers le bas rétablissent l'équilibre optique dans la barre. */
+            className="translate-y-[2px] text-xl sm:text-2xl"
+          >
             <Logo />
           </Link>
 
@@ -78,14 +84,14 @@ export function Header() {
           <button
             ref={burgerRef}
             type="button"
-            className="border-noir/45 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border lg:hidden"
+            className="-mr-1.5 flex h-11 w-11 shrink-0 items-center justify-center lg:hidden"
             aria-expanded={open}
             aria-controls="menu-mobile"
             onClick={() => setOpen((v) => !v)}
           >
             <span className="sr-only">Ouvrir le menu</span>
-            <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" />
+            <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" aria-hidden="true">
+              <path d="M3.5 7h17M3.5 12h17M3.5 17h17" />
             </svg>
           </button>
         </div>
@@ -109,7 +115,7 @@ export function Header() {
             <Link
               href="/"
               aria-label="AutoClean Diois, accueil"
-              className="text-lg sm:text-2xl"
+              className="translate-y-[2px] text-xl sm:text-2xl"
               onClick={() => setOpen(false)}
             >
               <Logo tone="blanc" />
@@ -121,10 +127,10 @@ export function Header() {
                 setOpen(false);
                 burgerRef.current?.focus();
               }}
-              className="border-blanc/45 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border"
+              className="-mr-1.5 flex h-11 w-11 shrink-0 items-center justify-center"
             >
               <span className="sr-only">Fermer le menu</span>
-              <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" aria-hidden="true">
                 <path d="M5 5l14 14M19 5 5 19" />
               </svg>
             </button>

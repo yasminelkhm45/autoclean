@@ -62,7 +62,15 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={`${bricolage.variable} ${inter.variable}`}>
-      <body>
+      {/*
+        suppressHydrationWarning : de nombreuses extensions de navigateur
+        (gestionnaires de mots de passe, pipettes à couleurs, bloqueurs)
+        ajoutent leurs propres attributs sur <body> avant que React n'hydrate.
+        React signale alors une différence entre le HTML du serveur et celui du
+        client, alors que le code n'y est pour rien. La consigne ne couvre que
+        les attributs de cette balise, pas son contenu.
+      */}
+      <body suppressHydrationWarning>
         <Header />
         <main id="contenu">{children}</main>
         <Footer />
