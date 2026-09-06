@@ -417,7 +417,7 @@ export function Funnel() {
               <div
                 role="radiogroup"
                 aria-label="Formule de nettoyage"
-                className="grid items-stretch gap-4 lg:grid-cols-3"
+                className="grid gap-4 lg:grid-cols-3 lg:items-start"
               >
                 {formulas.map((f) => {
                   const checked = selection.formula === f.id;
@@ -470,15 +470,20 @@ export function Funnel() {
                       </ul>
 
                       {f.note && (
-                        <p className="text-noir/70 border-noir/10 mt-4 mb-5 border-t pt-4 text-sm italic">
+                        <p className="text-noir/70 border-noir/10 mt-4 border-t pt-4 text-sm italic">
                           {f.note}
                         </p>
                       )}
-                      {!f.note && <span className="mb-5" />}
 
+                      {/*
+                        Le bouton suit immédiatement le contenu : caler les trois
+                        cartes sur la hauteur de la plus longue creusait un vide
+                        sous les listes courtes. Les formules étant cumulatives,
+                        des hauteurs croissantes traduisent ce qu'elles contiennent.
+                      */}
                       <span
                         className={[
-                          "mt-auto flex min-h-11 items-center justify-center rounded-full px-5 pt-2.5 text-sm font-semibold transition-colors",
+                          "mt-6 flex min-h-11 items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-colors",
                           checked ? "bg-noir text-blanc" : "border-noir border-2",
                         ].join(" ")}
                       >
