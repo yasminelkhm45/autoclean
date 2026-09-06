@@ -67,3 +67,7 @@ Aucune de ces hypothèses ne bloque la structure du site : tout se corrige dans 
 30. **Visuel du véhicule recoloré** : le flocage de l'utilitaire était dans l'ancien jaune. Comme il s'agit d'une photo avec des reflets et de l'ombre, les pixels jaunes ont été basculés vers le jaune pur en conservant les écarts de luminosité, plutôt qu'aplatis en une couleur unique. Le résultat est propre, mais si vous récupérez un jour le fichier source de ce visuel avec le bon jaune, il vaudra toujours mieux que ma retouche.
 
 31. **Contraste** : le nouveau jaune améliore le rapport avec le noir, qui passe de 17,3 à 19,6 pour 1. Il reste évidemment inutilisable en texte sur blanc (1,07 pour 1), ce que la charte interdisait déjà.
+
+## Illustrations de véhicules
+
+32. **Les cinq illustrations sont des images générées**, pas des photos de véhicules réels. Les couleurs reprennent celles de votre ancien site (bleu pour la citadine, rouge pour la berline, jaune pour le SUV, orange pour le monospace, vert pour l'utilitaire). Elles servent de repère visuel : le texte sous chaque carte reste ce qui fait foi, et les images portent un texte alternatif vide, puisqu'elles n'ajoutent aucune information au libellé.

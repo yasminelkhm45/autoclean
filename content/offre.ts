@@ -56,8 +56,8 @@ export interface VehicleCategory {
   label: string;
   /** Modèles repères, pour que le client se reconnaisse sans hésiter. */
   examples: string[];
-  /** Silhouette dessinée par components/ui/VehicleSilhouette.tsx */
-  silhouette: VehicleId;
+  /** Illustration dans public/images/vehicules/, même gabarit pour les cinq. */
+  image: string;
   /** Modificateur de prix en EUR appliqué à la formule (0 par défaut). */
   priceModifier: number;
 }
@@ -287,40 +287,43 @@ export const options: Option[] = [
   },
 ];
 
+/** Dimensions communes aux cinq illustrations de véhicules. */
+export const vehicleImageSize = { width: 640, height: 248 } as const;
+
 export const vehicleCategories: VehicleCategory[] = [
   {
     id: "citadine",
     label: "Citadine",
     examples: ["Peugeot 208", "Renault Clio", "Citroën C3", "VW Polo", "Toyota Yaris"],
-    silhouette: "citadine",
+    image: "/images/vehicules/citadine.png",
     priceModifier: 0,
   },
   {
     id: "berline-break",
     label: "Berline / Break",
     examples: ["Peugeot 508", "Audi A4", "BMW Série 3", "VW Golf", "Škoda Octavia"],
-    silhouette: "berline-break",
+    image: "/images/vehicules/berline-break.png",
     priceModifier: 0,
   },
   {
     id: "suv",
     label: "SUV / 4x4",
     examples: ["Peugeot 3008", "VW Tiguan", "BMW X3", "Audi Q5", "Renault Austral"],
-    silhouette: "suv",
+    image: "/images/vehicules/suv.png",
     priceModifier: 0,
   },
   {
     id: "monospace-familial",
     label: "Monospace & familial",
     examples: ["Peugeot 5008", "Renault Espace", "Citroën Berlingo", "Kangoo 5 places"],
-    silhouette: "monospace-familial",
+    image: "/images/vehicules/monospace-familial.png",
     priceModifier: 0,
   },
   {
     id: "utilitaire",
     label: "Utilitaire professionnel",
     examples: ["Fourgons", "Véhicules d'artisan", "Bennes", "Cabines approfondies"],
-    silhouette: "utilitaire",
+    image: "/images/vehicules/utilitaire.png",
     priceModifier: 0,
   },
 ];

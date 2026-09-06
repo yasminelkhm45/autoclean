@@ -1,9 +1,16 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/sections/Breadcrumbs";
 import { BrandImage } from "@/components/ui/BrandImage";
 import { ButtonLink } from "@/components/ui/Button";
 import { OptionIcon } from "@/components/ui/OptionIcon";
-import { formulas, options, vehicleCategories, formatPrice } from "@/content/offre";
+import {
+  formulas,
+  options,
+  vehicleCategories,
+  vehicleImageSize,
+  formatPrice,
+} from "@/content/offre";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -237,10 +244,23 @@ export default function PrestationsPage() {
             catégories. Vous précisez la vôtre à la première étape de la
             pré-réservation.
           </p>
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Cinq cartes sur trois colonnes : en flex, la rangée incomplète
+              se centre au lieu de rester calée à gauche. */}
+          <ul className="mt-8 flex flex-wrap justify-center gap-4">
             {vehicleCategories.map((v) => (
-              <li key={v.id} className="border-gris/70 rounded-[var(--radius-card)] border p-5 text-center">
-                <h3 className="font-semibold">{v.label}</h3>
+              <li
+                key={v.id}
+                className="border-gris/70 w-full rounded-[var(--radius-card)] border p-5 text-center sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.6667rem)]"
+              >
+                <Image
+                  src={v.image}
+                  alt=""
+                  width={vehicleImageSize.width}
+                  height={vehicleImageSize.height}
+                  sizes="260px"
+                  className="mx-auto h-auto w-full max-w-[15rem]"
+                />
+                <h3 className="mt-3 font-semibold">{v.label}</h3>
                 <p className="text-noir/60 mt-1 text-sm">{v.examples.join(", ")}</p>
               </li>
             ))}

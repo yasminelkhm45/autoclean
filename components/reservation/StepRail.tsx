@@ -52,7 +52,7 @@ export function StepRail({
       </div>
 
       {/* À partir de 768px : les cinq étapes nommées */}
-      <ol className="hidden items-center md:flex">
+      <ol className="hidden items-center justify-center md:flex">
         {STEPS.map((s, i) => {
           const done = s.n < current;
           const isCurrent = s.n === current;
@@ -85,7 +85,7 @@ export function StepRail({
           );
 
           return (
-            <li key={s.key} className="flex flex-1 items-center gap-3 last:flex-none">
+            <li key={s.key} className="flex items-center gap-3">
               {reachable ? (
                 <button
                   type="button"
@@ -107,7 +107,7 @@ export function StepRail({
               {i < STEPS.length - 1 && (
                 <span
                   aria-hidden="true"
-                  className={`h-px flex-1 ${done ? "bg-jaune" : "bg-blanc/25"}`}
+                  className={`h-px w-6 shrink-0 lg:w-12 ${done ? "bg-jaune" : "bg-blanc/25"}`}
                 />
               )}
             </li>

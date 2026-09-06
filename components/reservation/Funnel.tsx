@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { OptionIcon } from "@/components/ui/OptionIcon";
-import { VehicleSilhouette } from "@/components/ui/VehicleSilhouette";
+import Image from "next/image";
 import { reviews } from "@/content/avis";
 import {
   computeTotal,
@@ -14,6 +14,7 @@ import {
   getVehicle,
   options as allOptions,
   vehicleCategories,
+  vehicleImageSize,
   type FormulaId,
   type OptionId,
   type VehicleId,
@@ -351,7 +352,7 @@ export function Funnel() {
               <div
                 role="radiogroup"
                 aria-label="Catégorie de véhicule"
-                className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+                className="flex flex-wrap justify-center gap-3"
               >
                 {vehicleCategories.map((v) => {
                   const checked = selection.vehicle === v.id;
@@ -361,7 +362,8 @@ export function Funnel() {
                       onPointerDown={() => (pointerSelect.current = true)}
                       onClick={() => clickVehicle(v.id)}
                       className={[
-                        "relative flex cursor-pointer flex-col items-center gap-3 rounded-[var(--radius-card)] border-2 p-5 text-center transition-colors",
+                        "relative flex w-full cursor-pointer flex-col items-center gap-3 rounded-[var(--radius-card)] border-2 p-5 text-center transition-colors",
+                        "sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]",
                         checked ? "border-noir bg-noir/5" : "border-noir/45 hover:border-noir",
                       ].join(" ")}
                     >
@@ -374,7 +376,14 @@ export function Funnel() {
                         className="sr-only"
                       />
                       {checked && <SelectedBadge />}
-                      <VehicleSilhouette type={v.silhouette} className="text-noir h-14 w-auto" />
+                      <Image
+                        src={v.image}
+                        alt=""
+                        width={vehicleImageSize.width}
+                        height={vehicleImageSize.height}
+                        sizes="220px"
+                        className="h-auto w-full max-w-[13rem]"
+                      />
                       <span className="font-semibold">{v.label}</span>
                       <span className="text-noir/60 text-xs leading-relaxed">
                         {v.examples.slice(0, 3).join(", ")}

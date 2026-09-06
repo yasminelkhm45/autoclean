@@ -54,6 +54,7 @@ Déposer le fichier au chemin attendu dans `public/images/` (voir le manifeste c
 | `process/etape-1.jpg` … `etape-4.jpg` | 1:1 | 900×900 |
 | `marque/logo-noir.svg`, `logo-blanc.svg`, `logomark.svg` | : | vectoriel |
 | `og/default.jpg` | 1.91:1 | 1200×630 |
+| `vehicules/{slug}.png` | 640×248 | illustration détourée, fond transparent |
 
 ### Icônes et image de partage
 
@@ -71,6 +72,12 @@ Ces fichiers suivent les conventions de nommage de Next : les balises `<link>` s
 Les pages intérieures gardent une image de partage **générée à la volée** (`lib/og.tsx`), avec leur propre titre : une carte qui annonce « Formule Prestige, 120 € » convertit mieux qu'un logo générique. Seul l'accueil utilise la carte de marque fournie.
 
 Le manifeste est écrit en TypeScript dans `app/manifest.ts` : nom, description, couleurs et icônes s'y modifient d'un seul endroit.
+
+### Remplacer une illustration de véhicule
+
+Les cinq illustrations partagent **le même gabarit de 640×248 pixels**, véhicule détouré sur fond transparent et calé sur la même ligne de sol. C'est ce qui garantit que les cartes gardent la même hauteur et que les voitures paraissent à la même échelle. Une image d'un autre format ferait sauter la grille.
+
+Le chemin est déclaré par catégorie dans `content/offre.ts` (champ `image`), et les dimensions communes dans `vehicleImageSize`.
 
 ### Ajouter une zone avant / après
 
