@@ -12,6 +12,8 @@ import {
   getFormula,
   getOption,
   getVehicle,
+  getTarif,
+  formatTarif,
   options as allOptions,
   vehicleCategories,
   vehicleImageSize,
@@ -407,10 +409,15 @@ export function Funnel() {
                 intro="Les trois formules sont cumulatives : chacune reprend la précédente."
                 headingRef={headingRef}
               />
+              {getVehicle(selection.vehicle!).quoteNotice && (
+                <p className="border-noir/45 mx-auto mb-6 max-w-2xl rounded-[var(--radius-card)] border p-4 text-sm leading-relaxed">
+                  {getVehicle(selection.vehicle!).quoteNotice}
+                </p>
+              )}
               <div
                 role="radiogroup"
                 aria-label="Formule de nettoyage"
-                className="grid gap-4 lg:grid-cols-3"
+                className="grid items-stretch gap-4 lg:grid-cols-3"
               >
                 {formulas.map((f) => {
                   const checked = selection.formula === f.id;
@@ -433,7 +440,7 @@ export function Funnel() {
                         className="sr-only"
                       />
                       {f.badge && (
-                        <span className="bg-jaune text-noir absolute -top-3 left-5 rounded-full px-3 py-1 text-xs font-semibold">
+                        <span className="bg-jaune text-noir absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap">
                           {f.badge}
                         </span>
                       )}
@@ -441,13 +448,17 @@ export function Funnel() {
 
                       <h3 className="display text-2xl">{f.name}</h3>
                       <p className="text-noir/60 mt-1 min-h-[2.75rem] text-sm">{f.tagline}</p>
-                      <p className="display mt-2 text-4xl">{formatPrice(f.price)}</p>
-                      <p className="text-noir/55 mt-1 text-sm">Durée estimée : {f.duration}</p>
+                      <p className="display mt-2 text-4xl">
+                        {formatTarif(f.id, selection.vehicle!)}
+                      </p>
+                      <p className="text-noir/60 mt-1 text-sm">
+                        Durée estimée : {getTarif(f.id, selection.vehicle!).duration}
+                      </p>
 
                       <ul className="border-noir/10 mx-auto mt-4 flex w-fit flex-col gap-2 border-t pt-4 text-left text-sm">
                         {f.inclusions.map((inc) => (
                           <li key={inc.label} className="flex gap-2">
-                            <Check className="text-jaune mt-1 h-3.5 w-3.5 shrink-0" />
+                            <Check className="text-noir mt-1 h-3.5 w-3.5 shrink-0" />
                             <span>
                               {inc.label}
                               {inc.detail && (
@@ -459,14 +470,15 @@ export function Funnel() {
                       </ul>
 
                       {f.note && (
-                        <p className="text-noir/60 border-noir/10 mt-4 border-t pt-4 text-sm italic">
+                        <p className="text-noir/70 border-noir/10 mt-4 mb-5 border-t pt-4 text-sm italic">
                           {f.note}
                         </p>
                       )}
+                      {!f.note && <span className="mb-5" />}
 
                       <span
                         className={[
-                          "mt-5 flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-semibold transition-colors",
+                          "mt-auto flex min-h-11 items-center justify-center rounded-full px-5 pt-2.5 text-sm font-semibold transition-colors",
                           checked ? "bg-noir text-blanc" : "border-noir border-2",
                         ].join(" ")}
                       >
@@ -555,7 +567,7 @@ export function Funnel() {
                 <ul className="mx-auto mt-3 grid w-fit gap-2 text-left text-sm sm:grid-cols-2">
                   {getFormula(selection.formula).inclusions.map((inc) => (
                     <li key={inc.label} className="flex gap-2">
-                      <Check className="text-jaune mt-1 h-3.5 w-3.5 shrink-0" />
+                      <Check className="text-noir mt-1 h-3.5 w-3.5 shrink-0" />
                       <span>{inc.label}</span>
                     </li>
                   ))}
@@ -567,7 +579,7 @@ export function Funnel() {
                   { t: "Produits professionnels", d: "Un produit par matériau, à la bonne dilution." },
                   {
                     t: "Créneau réservé",
-                    d: `Le véhicule reste à l'atelier ${getFormula(selection.formula).duration}.`,
+                    d: `Le véhicule reste à l'atelier ${getTarif(selection.formula, selection.vehicle).duration}.`,
                   },
                   { t: "Paiement sur place", d: `${site.paymentMethods.join(", ")}.` },
                 ].map((b) => (

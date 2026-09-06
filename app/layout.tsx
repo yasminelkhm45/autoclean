@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     template: "%s | AutoClean Diois",
   },
   description:
-    "Nettoyage intérieur de voiture en atelier à Die (Drôme) : aspiration, shampoing des sièges, vapeur. Formules de 70 à 120 €. Pré-réservez en ligne.",
+    "Nettoyage intérieur de voiture en atelier à Die (Drôme) : aspiration, shampoing des sièges, vapeur. Formules de 60 à 160 €. Pré-réservez en ligne.",
   applicationName: site.name,
   openGraph: {
     type: "website",

@@ -3,6 +3,8 @@ import { Logomark } from "@/components/ui/Logo";
 import {
   computeTotal,
   formatPrice,
+  formatTarif,
+  getTarif,
   formulas,
   options,
   vehicleCategories,
@@ -102,9 +104,9 @@ export default async function ConfirmationPage({
               <div className="flex justify-between gap-4 p-5">
                 <dt className="text-noir/60">Formule</dt>
                 <dd className="text-right font-semibold">
-                  {formula.name} ({formatPrice(formula.price)})
-                  <span className="text-noir/55 block text-sm font-normal">
-                    Durée estimée : {formula.duration}
+                  {formula.name} ({formatTarif(formula.id, vehicle.id as VehicleId)})
+                  <span className="text-noir/60 block text-sm font-normal">
+                    Durée estimée : {getTarif(formula.id, vehicle.id as VehicleId).duration}
                   </span>
                 </dd>
               </div>
@@ -116,12 +118,12 @@ export default async function ConfirmationPage({
                     : "Aucune"}
                 </dd>
               </div>
-              {total !== null && (
-                <div className="bg-noir text-blanc flex items-baseline justify-between gap-4 rounded-b-[var(--radius-card)] p-5">
-                  <dt className="font-semibold">Total estimé</dt>
-                  <dd className="display text-jaune text-2xl">{formatPrice(total)}</dd>
-                </div>
-              )}
+              <div className="bg-noir text-blanc flex items-baseline justify-between gap-4 rounded-b-[var(--radius-card)] p-5">
+                <dt className="font-semibold">Total estimé</dt>
+                <dd className="display text-jaune text-2xl">
+                  {total !== null ? formatPrice(total) : "Sur devis"}
+                </dd>
+              </div>
             </dl>
           </section>
         )}

@@ -15,7 +15,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: `${site.name}, nettoyage automobile intérieur à ${site.address.city}`,
     short_name: site.name,
     description:
-      "Nettoyage intérieur de voiture en atelier à Die, dans le Diois. Formules de 70 à 120 €, pré-réservation en ligne.",
+      "Nettoyage intérieur de voiture en atelier à Die, dans le Diois. Formules de 60 à 160 €, pré-réservation en ligne.",
     lang: "fr-FR",
     start_url: "/",
     scope: "/",

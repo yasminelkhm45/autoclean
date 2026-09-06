@@ -1,24 +1,23 @@
 import { NextResponse } from "next/server";
-import { reservationSchema } from "@/lib/validation";
-import { isRateLimited, clientIp } from "@/lib/rate-limit";
-import { sendEmail } from "@/lib/email";
 import {
   computeTotal,
-  formatPrice,
-  getFormula,
-  getOption,
-  getVehicle,
   type FormulaId,
   type OptionId,
   type VehicleId,
 } from "@/content/offre";
 import { site } from "@/content/site";
+import { sendEmail } from "@/lib/email";
+import {
+  clientEmail,
+  icsAttachment,
+  ownerEmail,
+  type ReservationData,
+} from "@/lib/email-templates";
+import { clientIp, isRateLimited } from "@/lib/rate-limit";
+import { reservationSchema } from "@/lib/validation";
 
-const slotLabels: Record<string, string> = {
-  matin: "le matin",
-  "apres-midi": "l'après-midi",
-  indifferent: "peu importe",
-};
+/** Délai minimum de remplissage : en dessous, c'est un robot. */
+const MIN_FILL_TIME_MS = 4000;
 
 /** Référence courte et lisible au téléphone : AC-JJMM-XXXX. */
 function makeReference(): string {
@@ -28,32 +27,11 @@ function makeReference(): string {
   return `AC-${pad(d.getDate())}${pad(d.getMonth() + 1)}-${suffix}`;
 }
 
-function formatWish(date?: string, slot?: string): string {
-  if (!date && !slot) return "Souhait de créneau : aucun, client flexible";
-  const parts: string[] = [];
-  if (date) {
-    const [y, m, dd] = date.split("-").map(Number);
-    parts.push(
-      y && m && dd
-        ? new Date(y, m - 1, dd).toLocaleDateString("fr-FR", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-          })
-        : date
-    );
-  }
-  if (slot) parts.push(slotLabels[slot] ?? slot);
-  return `Souhait de créneau : ${parts.join(", ")}`;
-}
-
-const MIN_FILL_TIME_MS = 4000; // délai minimum de soumission (anti-bot)
-
 export async function POST(req: Request) {
   const ip = clientIp(req);
   if (isRateLimited(`reservation:${ip}`, 5)) {
     return NextResponse.json(
-      { ok: false, error: "Trop de demandes envoyées. Réessayez dans une heure ou appelez-nous directement." },
+      { ok: false, error: "Trop de demandes envoyées. Réessayez dans une heure." },
       { status: 429 }
     );
   }
@@ -77,72 +55,60 @@ export async function POST(req: Request) {
 
   const data = parsed.data;
 
-  // Honeypot rempli ou soumission trop rapide → on répond « ok » sans rien envoyer.
+  // Piège à robots rempli ou soumission trop rapide : on répond « ok » sans rien envoyer.
   if (data.website || Date.now() - data.startedAt < MIN_FILL_TIME_MS) {
     return NextResponse.json({ ok: true, reference: makeReference() });
   }
 
   const reference = makeReference();
+  const reservation: ReservationData = {
+    reference,
+    vehicle: data.vehicle as VehicleId,
+    formula: data.formula as FormulaId,
+    options: data.options as OptionId[],
+    firstName: data.firstName,
+    lastName: data.lastName,
+    phone: data.phone,
+    email: data.email || undefined,
+    contactPreference: data.contactPreference,
+    preferredDate: data.preferredDate || undefined,
+    preferredSlot: data.preferredSlot || undefined,
+    message: data.message || undefined,
+  };
 
-  const vehicle = getVehicle(data.vehicle as VehicleId);
-  const formula = getFormula(data.formula as FormulaId);
-  const chosenOptions = (data.options as OptionId[]).map(getOption);
-  const total = computeTotal(formula.id, vehicle.id, data.options as OptionId[]);
-
-  const recap = [
-    `Véhicule : ${vehicle.label}`,
-    `Formule : ${formula.name} (${formatPrice(formula.price)})`,
-    chosenOptions.length
-      ? `Options : ${chosenOptions.map((o) => `${o.label} (+${formatPrice(o.price)})`).join(", ")}`
-      : "Options : aucune",
-    `Total estimé : ${formatPrice(total)}`,
-  ].join("\n");
+  // Le total est recalculé côté serveur : il ne vient jamais du client.
+  // `null` signifie « sur devis », cas des utilitaires en formule Prestige.
+  const total = computeTotal(reservation.formula, reservation.vehicle, reservation.options);
 
   try {
+    const atelier = ownerEmail(reservation, total);
     await sendEmail({
       to: process.env.RESERVATION_TO_EMAIL ?? site.email,
-      subject: `[${reference}] Pré-réservation : ${data.firstName} ${data.lastName} (${formula.name}, ${formatPrice(total)})`,
-      text: [
-        `Nouvelle pré-réservation reçue via autoclean-diois.fr (référence ${reference})`,
-        "",
-        recap,
-        "",
-        `Client : ${data.firstName} ${data.lastName}`,
-        `Téléphone : ${data.phone}`,
-        data.email ? `Email : ${data.email}` : "Email : non communiqué",
-        `Préférence de contact : ${data.contactPreference === "appel" ? "Appel téléphonique" : "SMS"}`,
-        formatWish(data.preferredDate, data.preferredSlot),
-        data.message ? `Informations complémentaires :\n${data.message}` : "Informations complémentaires : aucune",
-      ].join("\n"),
+      subject: atelier.subject,
+      text: atelier.text,
+      html: atelier.html,
+      ...(atelier.event && {
+        attachments: [icsAttachment(atelier.event, `rendez-vous-${reference}.ics`)],
+      }),
+      ...(reservation.email && { replyTo: reservation.email }),
     });
 
-    if (data.email) {
+    if (reservation.email) {
+      const client = clientEmail(reservation, total);
       await sendEmail({
-        to: data.email,
-        subject: `Votre pré-réservation chez ${site.name} (${reference})`,
-        text: [
-          `Bonjour ${data.firstName},`,
-          "",
-          `Votre pré-réservation est bien arrivée. Nous vous rappelons ${site.callbackDelay} au ${data.phone} pour confirmer ensemble le créneau et le tarif.`,
-          "",
-          `Votre référence : ${reference}`,
-          "",
-          "Votre récapitulatif :",
-          recap,
-          formatWish(data.preferredDate, data.preferredSlot),
-          "",
-          "Aucun paiement n'est demandé en ligne : vous réglez à l'atelier (carte, espèces ou virement) une fois le véhicule récupéré.",
-          "",
-          `À très vite,`,
-          `${site.name}, ${site.address.street}, ${site.address.postalCode} ${site.address.city}`,
-          `${site.phone} · Instagram ${site.instagramHandle}`,
-        ].join("\n"),
+        to: reservation.email,
+        subject: client.subject,
+        text: client.text,
+        html: client.html,
+        ...(client.event && {
+          attachments: [icsAttachment(client.event, `autoclean-diois-${reference}.ics`)],
+        }),
       });
     }
   } catch (err) {
-    console.error("Échec d'envoi de l'email de pré-réservation :", err);
+    console.error("Échec d'envoi de la pré-réservation :", err);
     return NextResponse.json(
-      { ok: false, error: "L'envoi a échoué de notre côté. Réessayez, ou appelez-nous directement." },
+      { ok: false, error: "L'envoi a échoué de notre côté. Réessayez ou appelez-nous." },
       { status: 502 }
     );
   }

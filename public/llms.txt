@@ -12,10 +12,20 @@ traitement des odeurs (tabac, animaux), plastiques et vitres intérieures. Pas d
 Die et le Diois : Châtillon-en-Diois, Luc-en-Diois, Saillans, Aouste-sur-Sye, Crest, Livron-sur-Drôme
 et la vallée de la Drôme. Le véhicule est déposé à l'atelier de Die.
 
-## Formules et prix (EUR TTC, à partir de)
-- Essentielle : 70 € (≈ 2 h) : aspiration complète, plastiques, vitres intérieures, seuils de portes.
-- Confort : 90 € (≈ 3 h) : Essentielle + shampoing sièges tissu, moquettes et tapis, traitement des taches. Formule recommandée.
-- Prestige : 120 € (≈ 4 h) : Confort + nettoyage vapeur, finitions au pinceau, traitement anti-odeurs.
+## Formules et prix (EUR TTC)
+Le tarif dépend de la formule ET de la catégorie de véhicule.
+
+| Formule    | Citadine | Berline/Break | SUV   | Monospace | Utilitaire   |
+|------------|----------|---------------|-------|-----------|--------------|
+| Essentielle| 60 €     | 70 €          | 80 €  | 100 €     | dès 80 €     |
+| Confort    | 80 €     | 90 €          | 100 € | 130 €     | dès 110 €    |
+| Prestige   | 110 €    | 120 €         | 130 € | 160 €     | sur devis    |
+
+- Essentielle : aspiration habitacle, moquettes et coffre en profondeur, shampoing des tapis, nettoyage et désinfection des plastiques, cadres de portes et vitres intérieures. Durée 1 h 30 à 5 h selon le véhicule.
+- Confort (la plus demandée) : Essentielle + protection UV des plastiques, shampoing et désinfection des sièges, rails de sièges, senteur d'habitacle. Durée 2 h 30 à 7 h.
+- Prestige : Confort + shampoing des moquettes, désinfection vapeur habitacle/moquettes/tapis/coffre, boîte à gants, compartiment de roue de secours, zones sous banquette arrière. Durée 4 h à 9 h.
+
+Les utilitaires font l'objet d'un devis personnalisé : le volume, le type de cabine, l'état du véhicule et les équipements arrière changent le temps de travail.
 
 ## Options (EUR TTC)
 Cuir/Alcantara +20 € · Poils d'animaux +10 € · Ciel de toit +30 € · Véhicule très sale +20 € ·
@@ -30,9 +40,9 @@ rappel téléphonique sous 24 h ouvrées pour confirmer le créneau. Paiement à
 
 ## Pages principales
 - https://autoclean-diois.fr/prestations : les trois formules, options et tableau comparatif
-- https://autoclean-diois.fr/prestations/essentielle : formule Essentielle, 70 €, 2 h à 3 h
-- https://autoclean-diois.fr/prestations/confort : formule Confort, 90 €, 3 h à 4 h 30
-- https://autoclean-diois.fr/prestations/prestige : formule Prestige, 120 €, 4 h 30 à 6 h
+- https://autoclean-diois.fr/prestations/essentielle : formule Essentielle, dès 60 €
+- https://autoclean-diois.fr/prestations/confort : formule Confort, dès 80 €
+- https://autoclean-diois.fr/prestations/prestige : formule Prestige, dès 110 €
 - https://autoclean-diois.fr/reservation : pré-réservation en ligne, sans paiement
 - https://autoclean-diois.fr/avant-apres : photos avant/après par zone traitée
 - https://autoclean-diois.fr/zone-intervention : communes couvertes, distances et temps de trajet

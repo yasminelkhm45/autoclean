@@ -15,11 +15,20 @@ export type OptionId =
   | "pression-pneus";
 export type VehicleId = "citadine" | "berline-break" | "suv" | "monospace-familial" | "utilitaire";
 
+/** Tarif et durée d'une formule pour une catégorie de véhicule donnée. */
+export interface Tarif {
+  /** EUR TTC. `null` signifie « sur devis » : aucun total ne peut être calculé. */
+  price: number | null;
+  /** `true` quand le prix est un plancher et non un tarif ferme. */
+  from?: boolean;
+  duration: string;
+}
+
 export interface Formula {
   id: FormulaId;
   name: string;
-  price: number; // EUR TTC, prix « à partir de »
-  duration: string;
+  /** Un tarif par catégorie de véhicule. */
+  tarifs: Record<VehicleId, Tarif>;
   tagline: string;
   /** Phrase de contexte affichée dans le tunnel, quand elle aide à choisir. */
   note?: string;
@@ -58,16 +67,21 @@ export interface VehicleCategory {
   examples: string[];
   /** Illustration dans public/images/vehicules/, même gabarit pour les cinq. */
   image: string;
-  /** Modificateur de prix en EUR appliqué à la formule (0 par défaut). */
-  priceModifier: number;
+  /** Avertissement affiché quand le tarif de la catégorie est indicatif. */
+  quoteNotice?: string;
 }
 
 export const formulas: Formula[] = [
   {
     id: "essentielle",
     name: "Essentielle",
-    price: 70,
-    duration: "2 h à 3 h",
+    tarifs: {
+      citadine: { price: 60, duration: "1 h 30 à 2 h 30" },
+      "berline-break": { price: 70, duration: "2 h à 3 h" },
+      suv: { price: 80, duration: "2 h 30 à 4 h" },
+      "monospace-familial": { price: 100, duration: "3 h 30 à 5 h" },
+      utilitaire: { price: 80, from: true, duration: "Sur devis" },
+    },
     tagline: "L'entretien intérieur efficace",
     highlights: [
       "Aspiration complète, coffre inclus",
@@ -75,16 +89,16 @@ export const formulas: Formula[] = [
       "Vitres intérieures sans traces",
     ],
     inclusions: [
-      { label: "Aspiration de tout l'habitacle" },
-      { label: "Nettoyage en profondeur des moquettes et du coffre" },
+      { label: "Aspiration habitacle" },
+      { label: "Nettoyage en profondeur moquettes et coffre" },
       { label: "Shampoing des tapis" },
       { label: "Nettoyage et désinfection des plastiques" },
       { label: "Cadres de portes et vitres intérieures" },
     ],
     page: {
-      metaTitle: "Formule Essentielle, 70 € : l'entretien",
+      metaTitle: "Formule Essentielle : dès 60 €",
       metaDescription:
-        "Aspiration complète, plastiques désinfectés, vitres intérieures et tapis shampooinés. 2 à 3 heures de travail, 70 € à Die dans la Drôme.",
+        "Aspiration, plastiques désinfectés, vitres intérieures et tapis shampooinés. De 60 à 100 € selon la catégorie du véhicule, à Die dans la Drôme.",
       intro:
         "L'Essentielle est l'entretien de fond d'un habitacle déjà suivi. Elle remet à zéro tout ce qui se voit et se touche au quotidien, sans passer par le shampoing des sièges. C'est la formule qui convient à un véhicule nettoyé une à deux fois par an.",
       forWho: [
@@ -118,27 +132,32 @@ export const formulas: Formula[] = [
   {
     id: "confort",
     name: "Confort",
-    price: 90,
-    duration: "3 h à 4 h 30",
-    tagline: "L'équilibre entre le temps passé et le résultat",
+    tarifs: {
+      citadine: { price: 80, duration: "2 h 30 à 4 h" },
+      "berline-break": { price: 90, duration: "3 h à 4 h 30" },
+      suv: { price: 100, duration: "4 h à 5 h 30" },
+      "monospace-familial": { price: 130, duration: "5 h à 7 h" },
+      utilitaire: { price: 110, from: true, duration: "Sur devis" },
+    },
+    tagline: "L'équilibre parfait pour votre véhicule",
     highlights: [
       "Tout le contenu de l'Essentielle",
       "Sièges shampooinés et désinfectés",
       "Plastiques protégés contre les UV",
     ],
     inclusions: [
-      { label: "Tout le contenu de la formule Essentielle" },
-      { label: "Protection des plastiques", detail: "Anti-UV et anti-blanchissement" },
+      { label: "Tous les éléments de la formule Essentielle" },
+      { label: "Protection des plastiques", detail: "Protection UV et anti-blanchissement" },
       { label: "Shampoing et désinfection des sièges" },
-      { label: "Nettoyage des rails de sièges" },
-      { label: "Senteur d'habitacle au choix" },
+      { label: "Rails de sièges" },
+      { label: "Senteurs" },
     ],
     badge: "Le plus demandé",
     recommended: true,
     page: {
-      metaTitle: "Formule Confort, 90 € : sièges lavés",
+      metaTitle: "Formule Confort : sièges lavés dès 80 €",
       metaDescription:
-        "Shampoing et désinfection des sièges, protection anti-UV des plastiques, rails et senteur. 3 h à 4 h 30 de travail, 90 € à Die dans la Drôme.",
+        "Shampoing et désinfection des sièges, protection anti-UV des plastiques, rails et senteur. De 80 à 130 € selon le véhicule, à Die dans la Drôme.",
       intro:
         "La Confort est le premier niveau où l'habitacle change vraiment d'aspect, parce qu'on retire la saleté au lieu de la déplacer. C'est notre formule la plus demandée, et celle que nous recommandons dans le doute.",
       forWho: [
@@ -172,30 +191,35 @@ export const formulas: Formula[] = [
   {
     id: "prestige",
     name: "Prestige",
-    price: 120,
-    duration: "4 h 30 à 6 h",
-    tagline: "La rénovation intérieure complète",
-    note: "Le choix des vendeurs et des acheteurs : un habitacle qui se présente comme en concession.",
+    tarifs: {
+      citadine: { price: 110, duration: "4 h à 5 h 30" },
+      "berline-break": { price: 120, duration: "4 h 30 à 6 h" },
+      suv: { price: 130, duration: "5 h 30 à 7 h" },
+      "monospace-familial": { price: 160, duration: "7 h à 9 h" },
+      utilitaire: { price: null, duration: "Sur devis" },
+    },
+    tagline: "La rénovation intérieure premium",
+    note: "Idéal avant une vente ou après l'achat d'un véhicule.",
     highlights: [
       "Tout le contenu du Confort",
       "Désinfection vapeur de l'habitacle",
       "Zones cachées et recoins traités",
     ],
     inclusions: [
-      { label: "Tout le contenu de la formule Confort" },
+      { label: "Tous les éléments de la formule Confort" },
       { label: "Shampoing des moquettes" },
       {
-        label: "Désinfection vapeur : habitacle, moquettes, tapis et coffre",
+        label: "Désinfection vapeur de l'habitacle, moquettes, tapis et coffre",
         detail: "Élimine 99,99 % des bactéries",
       },
       { label: "Nettoyage de la boîte à gants" },
       { label: "Nettoyage approfondi du compartiment de roue de secours" },
-      { label: "Zones difficiles d'accès sous la banquette arrière" },
+      { label: "Nettoyage des zones difficiles d'accès sous banquette arrière" },
     ],
     page: {
-      metaTitle: "Formule Prestige, 120 € : rénovation",
+      metaTitle: "Formule Prestige : rénovation dès 110 €",
       metaDescription:
-        "Désinfection vapeur, moquettes shampooinées, zones cachées et traitement des odeurs. 4 h 30 à 6 h de travail, 120 € à Die dans la Drôme.",
+        "Désinfection vapeur, moquettes shampooinées, zones cachées et traitement des odeurs. De 110 à 160 € selon le véhicule, à Die dans la Drôme.",
       intro:
         "La Prestige est une remise en état, pas un entretien. Elle traite ce que les autres formules laissent de côté : les moquettes en profondeur, les zones inaccessibles, et tout ce qui tient de l'odeur plutôt que de la saleté visible.",
       forWho: [
@@ -296,35 +320,32 @@ export const vehicleCategories: VehicleCategory[] = [
     label: "Citadine",
     examples: ["Peugeot 208", "Renault Clio", "Citroën C3", "VW Polo", "Toyota Yaris"],
     image: "/images/vehicules/citadine.png",
-    priceModifier: 0,
   },
   {
     id: "berline-break",
     label: "Berline / Break",
     examples: ["Peugeot 508", "Audi A4", "BMW Série 3", "VW Golf", "Škoda Octavia"],
     image: "/images/vehicules/berline-break.png",
-    priceModifier: 0,
   },
   {
     id: "suv",
     label: "SUV / 4x4",
     examples: ["Peugeot 3008", "VW Tiguan", "BMW X3", "Audi Q5", "Renault Austral"],
     image: "/images/vehicules/suv.png",
-    priceModifier: 0,
   },
   {
     id: "monospace-familial",
     label: "Monospace & familial",
     examples: ["Peugeot 5008", "Renault Espace", "Citroën Berlingo", "Kangoo 5 places"],
     image: "/images/vehicules/monospace-familial.png",
-    priceModifier: 0,
   },
   {
     id: "utilitaire",
     label: "Utilitaire professionnel",
     examples: ["Fourgons", "Véhicules d'artisan", "Bennes", "Cabines approfondies"],
     image: "/images/vehicules/utilitaire.png",
-    priceModifier: 0,
+    quoteNotice:
+      "Les utilitaires font l'objet d'un devis personnalisé : le volume, le type de cabine, l'état du véhicule et les équipements arrière changent tout. Les tarifs affichés sont indicatifs.",
   },
 ];
 
@@ -348,13 +369,51 @@ export function getVehicle(id: VehicleId): VehicleCategory {
   return v;
 }
 
+/** Tarif d'une formule pour une catégorie de véhicule. */
+export function getTarif(formulaId: FormulaId, vehicleId: VehicleId): Tarif {
+  return getFormula(formulaId).tarifs[vehicleId];
+}
+
+/** Prix plancher d'une formule, toutes catégories confondues. */
+export function minPrice(formulaId: FormulaId): number {
+  const prices = Object.values(getFormula(formulaId).tarifs)
+    .map((t) => t.price)
+    .filter((p): p is number => p !== null);
+  return Math.min(...prices);
+}
+
+/** Prix plafond d'une formule, pour le balisage AggregateOffer. */
+export function maxPrice(formulaId: FormulaId): number {
+  const prices = Object.values(getFormula(formulaId).tarifs)
+    .map((t) => t.price)
+    .filter((p): p is number => p !== null);
+  return Math.max(...prices);
+}
+
+/**
+ * Total estimé. Renvoie `null` quand la formule est sur devis pour cette
+ * catégorie : mieux vaut afficher « sur devis » qu'un chiffre inventé.
+ */
 export function computeTotal(
   formulaId: FormulaId,
   vehicleId: VehicleId,
   optionIds: OptionId[]
-): number {
-  const base = getFormula(formulaId).price + getVehicle(vehicleId).priceModifier;
+): number | null {
+  const base = getTarif(formulaId, vehicleId).price;
+  if (base === null) return null;
   return optionIds.reduce((sum, id) => sum + getOption(id).price, base);
 }
 
+/** `true` si le montant affiché est un plancher et non un tarif ferme. */
+export function isFromPrice(formulaId: FormulaId, vehicleId: VehicleId): boolean {
+  return getTarif(formulaId, vehicleId).from === true;
+}
+
 export const formatPrice = (n: number) => `${n}\u00A0€`;
+
+/** Montant prêt à afficher, qui gère « à partir de » et « sur devis ». */
+export function formatTarif(formulaId: FormulaId, vehicleId: VehicleId): string {
+  const t = getTarif(formulaId, vehicleId);
+  if (t.price === null) return "Sur devis";
+  return t.from ? `À partir de ${formatPrice(t.price)}` : formatPrice(t.price);
+}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { site } from "@/content/site";
-import { formulas, formatPrice } from "@/content/offre";
+import { formulas, formatPrice, minPrice, maxPrice } from "@/content/offre";
 import { zones } from "@/content/zones";
 import type { FaqItem } from "@/content/faq";
 
@@ -76,21 +76,19 @@ export function autoWashJsonLd() {
     })),
     areaServed: zones.map((z) => ({ "@type": "City", name: z.name })),
     sameAs: [site.instagram, site.googleBusinessUrl],
+    // Une fourchette plutôt qu'un prix unique : le tarif suit la catégorie
+    // de véhicule, et annoncer un chiffre ferme serait inexact.
     makesOffer: formulas.map((f) => ({
-      "@type": "Offer",
+      "@type": "AggregateOffer",
       "@id": `${site.url}/prestations#${f.id}`,
       priceCurrency: "EUR",
-      price: f.price,
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        price: f.price,
-        priceCurrency: "EUR",
-        valueAddedTaxIncluded: true,
-      },
+      lowPrice: minPrice(f.id),
+      highPrice: maxPrice(f.id),
+      offerCount: 5,
       itemOffered: {
         "@type": "Service",
         name: `Nettoyage intérieur, formule ${f.name}`,
-        description: `${f.tagline} À partir de ${formatPrice(f.price)}, durée ${f.duration}.`,
+        description: `${f.tagline} À partir de ${formatPrice(minPrice(f.id))} selon la catégorie de véhicule.`,
         serviceType: "Nettoyage automobile intérieur",
         areaServed: "Diois, Drôme",
         provider: { "@id": `${site.url}/#atelier` },
@@ -149,13 +147,14 @@ export function serviceJsonLd({
   name,
   description,
   url,
-  price,
+  priceRange,
   areaServed,
 }: {
   name: string;
   description: string;
   url: string;
-  price?: number;
+  /** [plancher, plafond] : le tarif dépend de la catégorie de véhicule. */
+  priceRange?: [number, number];
   areaServed: string[];
 }) {
   return {
@@ -180,11 +179,13 @@ export function serviceJsonLd({
       },
     },
     areaServed: areaServed.map((n) => ({ "@type": "City", name: n })),
-    ...(price !== undefined && {
+    ...(priceRange && {
       offers: {
-        "@type": "Offer",
-        price,
+        "@type": "AggregateOffer",
+        lowPrice: priceRange[0],
+        highPrice: priceRange[1],
         priceCurrency: "EUR",
+        offerCount: 5,
         availability: "https://schema.org/InStock",
         url: `${site.url}/reservation`,
       },

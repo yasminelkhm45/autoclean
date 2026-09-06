@@ -1,5 +1,5 @@
 import { brandOg, ogSize, ogContentType } from "@/lib/og";
-import { formulas, formatPrice } from "@/content/offre";
+import { formulas, formatPrice, minPrice } from "@/content/offre";
 
 export const size = ogSize;
 export const contentType = ogContentType;
@@ -12,5 +12,5 @@ export function generateStaticParams() {
 export default async function OgImage({ params }: { params: Promise<{ formule: string }> }) {
   const { formule } = await params;
   const f = formulas.find((x) => x.id === formule);
-  return brandOg(f ? `Formule ${f.name}, ${formatPrice(f.price)}` : "Nos formules");
+  return brandOg(f ? `Formule ${f.name}, dès ${formatPrice(minPrice(f.id))}` : "Nos formules");
 }

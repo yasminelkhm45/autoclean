@@ -10,13 +10,15 @@ import {
   vehicleCategories,
   vehicleImageSize,
   formatPrice,
+  formatTarif,
+  minPrice,
 } from "@/content/offre";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Tarifs du nettoyage intérieur voiture",
   description:
-    "Trois formules de nettoyage intérieur à Die : Essentielle 70 €, Confort 90 €, Prestige 120 €. Options cuir, poils d'animaux, ciel de toit. Tarifs affichés.",
+    "Trois formules de nettoyage intérieur à Die, de 60 à 160 € selon la taille du véhicule. Options cuir, poils d'animaux, ciel de toit. Tarifs affichés.",
   path: "/prestations",
 });
 
@@ -90,15 +92,18 @@ export default function PrestationsPage() {
                     {f.tagline}
                   </p>
                   <p className="mt-5 flex flex-wrap items-baseline justify-center gap-2">
-                    <span className="display text-5xl">{formatPrice(f.price)}</span>
                     <span className={`text-sm ${f.recommended ? "text-gris" : "text-noir/60"}`}>
-                      à partir de · {f.duration}
+                      à partir de
                     </span>
+                    <span className="display text-5xl">{formatPrice(minPrice(f.id))}</span>
+                  </p>
+                  <p className={`mt-1 text-sm ${f.recommended ? "text-gris" : "text-noir/60"}`}>
+                    Prix pour une citadine. Le tarif suit la taille du véhicule.
                   </p>
                   <ul className="mx-auto mt-6 flex w-fit flex-col gap-2.5 text-left text-sm sm:text-base">
                     {f.inclusions.map((inc) => (
                       <li key={inc.label} className="flex gap-2.5">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" className="text-jaune mt-1 h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" className="text-noir mt-1 h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                           <path d="m4 13 5 5L20 7" />
                         </svg>
                         <span>
@@ -157,7 +162,9 @@ export default function PrestationsPage() {
                 {formulas.map((f) => (
                   <th key={f.id} scope="col" className="px-4 py-3 text-center">
                     <span className="display block text-lg">{f.name}</span>
-                    <span className="text-noir/60 font-normal">{formatPrice(f.price)}</span>
+                    <span className="text-noir/60 font-normal">
+                      dès {formatPrice(minPrice(f.id))}
+                    </span>
                   </th>
                 ))}
               </tr>
@@ -189,14 +196,14 @@ export default function PrestationsPage() {
               >
                 <h3 className="display flex items-baseline justify-center gap-3 text-xl">
                   {f.name}
-                  <span className="text-base">{formatPrice(f.price)}</span>
+                  <span className="text-base">dès {formatPrice(minPrice(f.id))}</span>
                 </h3>
                 <ul className="mt-4 flex flex-col gap-2 text-sm">
                   {comparisonRows
                     .filter((r) => r.values[fi])
                     .map((r) => (
                       <li key={r.label} className="flex gap-2.5">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" className="text-jaune mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" className="text-noir mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                           <path d="m4 13 5 5L20 7" />
                         </svg>
                         {r.label}

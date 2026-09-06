@@ -71,3 +71,11 @@ Aucune de ces hypothèses ne bloque la structure du site : tout se corrige dans 
 ## Illustrations de véhicules
 
 32. **Les cinq illustrations sont des images générées**, pas des photos de véhicules réels. Les couleurs reprennent celles de votre ancien site (bleu pour la citadine, rouge pour la berline, jaune pour le SUV, orange pour le monospace, vert pour l'utilitaire). Elles servent de repère visuel : le texte sous chaque carte reste ce qui fait foi, et les images portent un texte alternatif vide, puisqu'elles n'ajoutent aucune information au libellé.
+
+## Tarifs par catégorie de véhicule
+
+33. **La grille tarifaire dépend désormais du véhicule** (`content/offre.ts`, champ `tarifs`) : de 60 € pour une Essentielle sur citadine à 160 € pour une Prestige sur monospace. Les utilitaires sont sur devis, avec un plancher indicatif pour l'Essentielle et la Confort et aucun montant affiché pour la Prestige. Toutes les mentions de prix du site, des articles, du `llms.txt` et des métadonnées ont été alignées sur la fourchette 60 à 160 €.
+
+34. **Logo des emails** : les clients de messagerie ne rendent pas le SVG. Un `email-logo.png` a été généré à partir de vos vecteurs, servi en 4x pour rester net sur écran Retina. Si vous changez le logo, régénérez ce PNG.
+
+35. **Calendrier joint aux emails** : l'événement est marqué `TENTATIVE` tant que le rendez-vous n'a pas été confirmé au téléphone, et intitulé comme un créneau souhaité. C'est volontaire : ajouter un rendez-vous confirmé à l'agenda du client avant votre appel créerait un malentendu si le créneau ne convient finalement pas.

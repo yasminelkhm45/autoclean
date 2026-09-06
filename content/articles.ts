@@ -114,7 +114,7 @@ export const articles: Article[] = [
       { type: "h2", text: "Nos tarifs à Die" },
       {
         type: "p",
-        text: "Nos trois formules suivent exactement les trois niveaux décrits plus haut : Essentielle à 70 €, Confort à 90 € et Prestige à 120 €, options à la carte. Le tarif annoncé est celui que vous payez : il est confirmé par téléphone avant le rendez-vous, jamais découvert à l'arrivée.",
+        text: "Nos trois formules suivent exactement les trois niveaux décrits plus haut, et le tarif dépend de la taille du véhicule : l'Essentielle va de 60 € pour une citadine à 100 € pour un monospace, la Prestige de 110 à 160 €. Les utilitaires font l'objet d'un devis. Le tarif annoncé est celui que vous payez : il est confirmé par téléphone avant le rendez-vous, jamais découvert à l'arrivée.",
       },
       {
         type: "cta",

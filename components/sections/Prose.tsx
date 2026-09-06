@@ -67,7 +67,7 @@ export function Prose({ blocks }: { blocks: Block[] }) {
               <ul key={i} className="mx-auto flex w-fit flex-col gap-2.5 text-left">
                 {b.items.map((it) => (
                   <li key={it} className="text-noir/80 flex gap-3 leading-relaxed">
-                    <span aria-hidden="true" className="bg-jaune mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" />
+                    <span aria-hidden="true" className="bg-noir mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" />
                     <span>{inline(it)}</span>
                   </li>
                 ))}

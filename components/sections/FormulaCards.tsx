@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formulas, formatPrice } from "@/content/offre";
+import { formulas, formatPrice, minPrice } from "@/content/offre";
 
 export function FormulaCards() {
   return (
@@ -23,15 +23,15 @@ export function FormulaCards() {
             {f.tagline}
           </p>
           <p className="mt-5 flex flex-wrap items-baseline justify-center gap-2">
-            <span className="display text-4xl">{formatPrice(f.price)}</span>
             <span className={`text-sm ${f.recommended ? "text-gris" : "text-noir/60"}`}>
-              à partir de · {f.duration}
+              à partir de
             </span>
+            <span className="display text-4xl">{formatPrice(minPrice(f.id))}</span>
           </p>
           <ul className="mx-auto mt-5 flex w-fit flex-col gap-2.5 text-left text-sm">
             {f.highlights.map((h) => (
               <li key={h} className="flex gap-2.5">
-                <svg viewBox="0 0 24 24" aria-hidden="true" className="text-jaune mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className={`mt-0.5 h-4 w-4 shrink-0 ${f.recommended ? "text-jaune" : "text-noir"}`} fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m4 13 5 5L20 7" />
                 </svg>
                 {h}

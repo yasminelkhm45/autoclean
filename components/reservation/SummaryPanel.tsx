@@ -3,7 +3,9 @@
 import {
   computeTotal,
   formatPrice,
+  formatTarif,
   getFormula,
+  getTarif,
   getOption,
   getVehicle,
 } from "@/content/offre";
@@ -36,6 +38,7 @@ export function SummaryPanel({
   compact?: boolean;
 }) {
   const { vehicle, formula, options: chosen } = selection;
+  const surDevis = vehicle && formula && getTarif(formula, vehicle).price === null;
   const total = vehicle && formula ? computeTotal(formula, vehicle, chosen) : null;
 
   return (
@@ -62,16 +65,20 @@ export function SummaryPanel({
               {formula ? (
                 <>
                   {getFormula(formula).name}
-                  <span className="text-noir/55 ml-1.5 font-normal">
-                    {formatPrice(getFormula(formula).price)}
-                  </span>
+                  {vehicle && (
+                    <span className="text-noir/60 ml-1.5 font-normal">
+                      {formatTarif(formula, vehicle)}
+                    </span>
+                  )}
                 </>
               ) : (
                 "À choisir"
               )}
             </dd>
-            {formula && (
-              <p className="text-noir/55 mt-1">Durée estimée : {getFormula(formula).duration}</p>
+            {formula && vehicle && (
+              <p className="text-noir/60 mt-1">
+                Durée estimée : {getTarif(formula, vehicle).duration}
+              </p>
             )}
           </div>
           {formula && <EditButton onClick={() => onEdit(2)} label="la formule" />}
@@ -105,7 +112,7 @@ export function SummaryPanel({
       <div className="bg-noir text-blanc flex items-baseline justify-between gap-3 rounded-b-[var(--radius-card)] px-5 py-4">
         <span className="font-semibold">Total estimé</span>
         <span className="display text-jaune text-2xl" aria-live="polite">
-          {total !== null ? formatPrice(total) : "…"}
+          {surDevis ? "Sur devis" : total !== null ? formatPrice(total) : "…"}
         </span>
       </div>
 

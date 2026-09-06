@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/sections/Breadcrumbs";
 import { ButtonLink } from "@/components/ui/Button";
-import { formulas, formatPrice } from "@/content/offre";
+import { formulas, formatPrice, minPrice } from "@/content/offre";
 import { site } from "@/content/site";
 import { zones, getZone } from "@/content/zones";
 import { JsonLd, pageMetadata, serviceJsonLd } from "@/lib/seo";
@@ -24,8 +24,8 @@ export async function generateMetadata({
     z.distanceKm === 0
       ? `Nettoyage intérieur de voiture à ${z.name} (${z.postalCode}) : notre atelier est dans la commune.`
       : `Nettoyage intérieur de voiture pour ${z.name} (${z.postalCode}), à ${z.distanceKm} km de notre atelier de Die, ${z.travelTime} de trajet.`;
-  const suite = " Formules de 70 à 120 €, pré-réservation en ligne.";
-  const description = (base + suite).length <= 158 ? base + suite : `${base} Formules de 70 à 120 €.`;
+  const suite = " Formules de 60 à 160 €, pré-réservation en ligne.";
+  const description = (base + suite).length <= 158 ? base + suite : `${base} Formules de 60 à 160 €.`;
 
   return pageMetadata({
     title: court
@@ -122,8 +122,9 @@ export default async function CommunePage({
                   className="border-blanc/20 hover:border-jaune block h-full rounded-[var(--radius-card)] border p-5 text-center transition-colors"
                 >
                   <p className="display text-xl">{f.name}</p>
-                  <p className="display text-jaune mt-2 text-3xl">{formatPrice(f.price)}</p>
-                  <p className="text-gris mt-2 text-sm">{f.duration}</p>
+                  <p className="display text-jaune mt-2 text-3xl">
+                    dès {formatPrice(minPrice(f.id))}
+                  </p>
                   <p className="text-gris mt-3 text-sm leading-relaxed">{f.tagline}</p>
                 </Link>
               </li>

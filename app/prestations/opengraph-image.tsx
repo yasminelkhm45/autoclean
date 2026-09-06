@@ -5,5 +5,5 @@ export const contentType = ogContentType;
 export const alt = "Prestations et tarifs AutoClean Diois";
 
 export default function OgImage() {
-  return brandOg("Formules de 70 à 120 €");
+  return brandOg("Formules de 60 à 160 €");
 }

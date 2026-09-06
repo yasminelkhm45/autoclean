@@ -13,7 +13,7 @@ import { pageMetadata, JsonLd, autoWashJsonLd } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Nettoyage automobile intérieur à Die | AutoClean Diois",
   description:
-    "Atelier de nettoyage intérieur de voiture à Die, dans le Diois : shampoing des sièges, vapeur, finitions. Formules de 70 à 120 €. Pré-réservation en ligne.",
+    "Atelier de nettoyage intérieur de voiture à Die, dans le Diois : shampoing des sièges, vapeur, finitions. Formules de 60 à 160 €. Pré-réservation en ligne.",
   path: "/",
 });
 
