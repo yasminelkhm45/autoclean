@@ -193,4 +193,4 @@ Lancez `npm audit` avant chaque mise en production. Une alerte `postcss` subsist
 3. Vérifier le domaine `autoclean-diois.fr` et pointer les DNS.
 4. Après mise en ligne : soumettre `sitemap.xml` dans la Search Console et valider les données structurées.
 
-⚠️ Avant mise en ligne, traiter **NOTES-A-CONFIRMER.md**.
+⚠️ Avant mise en ligne, dérouler **LIVRAISON.md** (checklist des éléments à fournir) puis traiter **NOTES-A-CONFIRMER.md** (hypothèses de rédaction à valider).

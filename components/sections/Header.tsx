@@ -57,7 +57,7 @@ export function Header() {
                vers le bas rétablissent l'équilibre optique dans la barre. */
             className="translate-y-[2px] text-xl sm:text-2xl"
           >
-            <Logo />
+            <Logo withMark={false} />
           </Link>
 
           <nav aria-label="Navigation principale" className="hidden items-center gap-6 lg:flex">
@@ -118,7 +118,7 @@ export function Header() {
               className="translate-y-[2px] text-xl sm:text-2xl"
               onClick={() => setOpen(false)}
             >
-              <Logo tone="blanc" />
+              <Logo tone="blanc" withMark={false} />
             </Link>
             <button
               ref={closeRef}
