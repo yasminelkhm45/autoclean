@@ -36,6 +36,8 @@ export interface Formula {
   inclusions: { label: string; detail?: string }[];
   /** Étiquette courte affichée sur la carte. Une seule formule doit en porter une. */
   badge?: string;
+  /** Texte alternatif du visuel, décrivant réellement la photo. */
+  imageAlt: string;
   /** Contenu de la page dédiée /prestations/[id]. */
   page: {
     metaTitle: string;
@@ -130,6 +132,8 @@ export const formulas: Formula[] = [
       ],
     },
     image: "formules/essentielle.jpg",
+    imageAlt:
+      "Tableau de bord et aérateurs nets d'une voiture entretenue, vus depuis la place du conducteur",
   },
   {
     id: "confort",
@@ -189,6 +193,8 @@ export const formulas: Formula[] = [
       ],
     },
     image: "formules/confort.jpg",
+    imageAlt:
+      "Siège de voiture shampooiné à la brosse, mousse visible sur la sellerie, main gantée",
   },
   {
     id: "prestige",
@@ -252,6 +258,8 @@ export const formulas: Formula[] = [
       ],
     },
     image: "formules/prestige.jpg",
+    imageAlt:
+      "Nettoyeur vapeur en action sur la moquette d'un habitacle, vapeur visible",
   },
 ];
 

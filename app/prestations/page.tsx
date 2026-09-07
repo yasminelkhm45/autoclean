@@ -133,7 +133,7 @@ export default function PrestationsPage() {
                 </div>
                 <BrandImage
                   src={f.image}
-                  alt={`Illustration de la formule ${f.name}`}
+                  alt={f.imageAlt}
                   width={1200}
                   height={800}
                   sizes="(min-width: 1024px) 45vw, 100vw"

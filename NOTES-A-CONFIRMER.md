@@ -99,3 +99,11 @@ Aucune de ces hypothèses ne bloque la structure du site : tout se corrige dans 
 ## Émojis
 
 42. **Les pictogrammes vectoriels des options ont été remplacés par des émojis**, comme demandé pour test. Ils s'affichent avec le jeu du système : Apple sur iPhone et Mac, Google sur Android, Segoe sur Windows. Le rendu n'est donc pas identique partout, contrairement aux anciens pictos. Les pictos vectoriels restent disponibles dans `components/ui/OptionIcon.tsx` et sont toujours utilisés sur la page Prestations : si vous préférez revenir en arrière, c'est une ligne à changer dans `Funnel.tsx`.
+
+## Visuels des formules
+
+43. **Les trois visuels sont en place** (`public/images/formules/`). Deux points à connaître :
+    - Le visuel **Prestige** a été livré en 740 × 493 pixels, soit moins que les 1200 × 800 du manifeste. Il n'a pas été agrandi, un agrandissement n'ajoutant que du flou. Il reste net à la taille d'affichage courante mais peut paraître légèrement doux sur un grand écran haute densité. Si vous retrouvez la version d'origine en plus grand, elle prendra sa place sans rien changer au code.
+    - Le visuel **Essentielle** montre un habitacle propre en roulant, au coucher du soleil. C'est une image d'ambiance plus qu'une image de prestation : elle illustre bien le résultat, moins le travail. À garder en tête si vous voulez un jour une photo prise à l'atelier.
+
+44. **Métadonnées supprimées** sur les trois fichiers, comme pour les photos avant/après.

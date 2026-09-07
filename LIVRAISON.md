@@ -57,18 +57,8 @@ finissent en indésirables.
 
 ### Trois visuels de formule
 
-C'est le seul endroit du site qui affiche encore un cadre gris à la place d'une
-image. Ils apparaissent sur la page Prestations, à côté du descriptif de chaque
-formule.
-
-| Fichier à déposer | Format | Sujet suggéré |
-|---|---|---|
-| `public/images/formules/essentielle.jpg` | 1200×800 (3:2) | Habitacle aspiré, plastiques nets |
-| `public/images/formules/confort.jpg` | 1200×800 (3:2) | Sièges en cours de shampoing, injecteur-extracteur visible |
-| `public/images/formules/prestige.jpg` | 1200×800 (3:2) | Nettoyeur vapeur au travail, ou finition au pinceau |
-
-Prenez-les en paysage, lumière naturelle, sans plaque d'immatriculation lisible.
-Le nom du fichier compte : le site les cherche exactement à ces chemins.
+**Fait.** Les trois images sont en place dans `public/images/formules/`. Plus
+aucun cadre gris sur le site.
 
 ### Photo de l'atelier (recommandée)
 
