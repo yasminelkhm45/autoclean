@@ -13,10 +13,18 @@ export function FormulaCards() {
               : "border-gris/70 bg-blanc border"
           }`}
         >
-          {f.recommended && (
+          {/* La Confort porte la pastille jaune, la Prestige une pastille sobre :
+              deux repères de même poids annuleraient la hiérarchie. */}
+          {f.recommended ? (
             <span className="bg-jaune text-noir absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-bold tracking-wide whitespace-nowrap uppercase">
               Notre recommandation
             </span>
+          ) : (
+            f.badge && (
+              <span className="bg-noir text-blanc absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-bold tracking-wide whitespace-nowrap uppercase">
+                {f.badge}
+              </span>
+            )
           )}
           <h3 className="display text-2xl sm:text-3xl">{f.name}</h3>
           <p className={`mt-2 text-sm ${f.recommended ? "text-gris" : "text-noir/70"}`}>

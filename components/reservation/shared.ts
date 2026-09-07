@@ -29,7 +29,7 @@ export interface ContactValues {
   phone: string;
   email: string;
   contactPreference: "appel" | "sms" | "";
-  preferredDate: string;
+  preferredPeriod: "semaine" | "week-end" | "indifferent" | "";
   preferredSlot: "matin" | "apres-midi" | "indifferent" | "";
   message: string;
   consent: boolean;
@@ -41,10 +41,16 @@ export const emptyContact: ContactValues = {
   phone: "",
   email: "",
   contactPreference: "",
-  preferredDate: "",
+  preferredPeriod: "",
   preferredSlot: "",
   message: "",
   consent: false,
+};
+
+export const periodLabels: Record<Exclude<ContactValues["preferredPeriod"], "">, string> = {
+  semaine: "En semaine",
+  "week-end": "Le week-end",
+  indifferent: "Peu importe",
 };
 
 export const slotLabels: Record<Exclude<ContactValues["preferredSlot"], "">, string> = {

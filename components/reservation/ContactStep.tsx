@@ -1,7 +1,7 @@
 "use client";
 
 import type { RefObject } from "react";
-import { slotLabels, todayIso, type ContactValues } from "./shared";
+import { periodLabels, slotLabels, type ContactValues } from "./shared";
 
 export type ContactErrors = Partial<Record<keyof ContactValues, string>>;
 
@@ -63,7 +63,7 @@ function ChoiceGroup<T extends string>({
   name: string;
   value: T | "";
   onChange: (v: T) => void;
-  choices: { value: T; label: string }[];
+  choices: { value: T; label: string; emoji?: string }[];
   error?: string;
   hint?: string;
   columns?: 2 | 3;
@@ -94,6 +94,11 @@ function ChoiceGroup<T extends string>({
                 className="sr-only"
                 aria-describedby={error ? `${name}-error` : undefined}
               />
+              {c.emoji && (
+                <span aria-hidden="true" className="mr-1.5 text-base">
+                  {c.emoji}
+                </span>
+              )}
               {c.label}
             </label>
           );
@@ -209,33 +214,31 @@ export function ContactStep({
         onChange={(v) => setValue("contactPreference", v)}
         error={errors.contactPreference}
         choices={[
-          { value: "appel", label: "Appel" },
-          { value: "sms", label: "SMS" },
+          { value: "appel", label: "Appel", emoji: "📞" },
+          { value: "sms", label: "SMS", emoji: "💬" },
         ]}
       />
 
       <div className="border-noir/12 grid gap-5 rounded-[var(--radius-card)] border p-5 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <h3 className="font-semibold">Quand souhaitez-vous déposer le véhicule ?</h3>
-          <p className="text-noir/55 mt-0.5 text-sm">
-            Indicatif : nous confirmons ensemble par téléphone. Laissez vide si vous
-            êtes flexible.
+          <p className="text-noir/55 mx-auto mt-0.5 max-w-lg text-sm">
+            Indicatif : la date exacte se fixe ensemble au téléphone. Laissez vide
+            si vous êtes flexible.
           </p>
         </div>
-        <Field id="date-souhaitee" label="Date souhaitée" optional error={errors.preferredDate}>
-          <input
-            id="date-souhaitee"
-            name="preferredDate"
-            type="date"
-            min={todayIso()}
-            value={values.preferredDate}
-            onChange={(e) => setValue("preferredDate", e.target.value)}
-            onBlur={() => onBlurField("preferredDate")}
-            aria-invalid={!!errors.preferredDate}
-            aria-describedby={errors.preferredDate ? "date-souhaitee-error" : undefined}
-            className={`${fieldBase} ${border("preferredDate")}`}
-          />
-        </Field>
+        <ChoiceGroup
+          legend="Période"
+          name="preferredPeriod"
+          columns={3}
+          value={values.preferredPeriod}
+          onChange={(v) => setValue("preferredPeriod", v)}
+          choices={[
+            { value: "semaine", label: periodLabels.semaine, emoji: "🗓️" },
+            { value: "week-end", label: periodLabels["week-end"], emoji: "🌤️" },
+            { value: "indifferent", label: periodLabels.indifferent, emoji: "🤷" },
+          ]}
+        />
         <ChoiceGroup
           legend="Moment de la journée"
           name="preferredSlot"
@@ -243,9 +246,9 @@ export function ContactStep({
           value={values.preferredSlot}
           onChange={(v) => setValue("preferredSlot", v)}
           choices={[
-            { value: "matin", label: slotLabels.matin },
-            { value: "apres-midi", label: slotLabels["apres-midi"] },
-            { value: "indifferent", label: slotLabels.indifferent },
+            { value: "matin", label: slotLabels.matin, emoji: "🌅" },
+            { value: "apres-midi", label: slotLabels["apres-midi"], emoji: "🌇" },
+            { value: "indifferent", label: slotLabels.indifferent, emoji: "🤷" },
           ]}
         />
       </div>

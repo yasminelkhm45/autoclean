@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { OptionIcon } from "@/components/ui/OptionIcon";
 import Image from "next/image";
 import { reviews } from "@/content/avis";
 import {
@@ -29,12 +28,10 @@ import { SummaryPanel } from "./SummaryPanel";
 import {
   emptyContact,
   formatPhone,
-  formatDateFr,
   maxReachableStep,
   parseFormula,
   parseOptions,
   parseVehicle,
-  slotLabels,
   STEPS,
   type ContactValues,
   type Selection,
@@ -288,7 +285,7 @@ export function Funnel() {
           phone: contact.phone.trim(),
           email: contact.email.trim(),
           contactPreference: contact.contactPreference,
-          preferredDate: contact.preferredDate,
+          preferredPeriod: contact.preferredPeriod,
           preferredSlot: contact.preferredSlot,
           message: contact.message.trim(),
           consent: contact.consent,
@@ -341,7 +338,7 @@ export function Funnel() {
     <div ref={topRef} className="mx-auto max-w-6xl scroll-mt-24 px-4 pb-32 sm:px-6 lg:pb-16">
       <StepRail current={step} maxReached={maxReached} onGoTo={(s) => go({ step: s })} />
 
-      <div className="mt-8 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="mt-8">
         <div>
           {/* Étape 1 : véhicule */}
           {step === 1 && (
@@ -365,7 +362,7 @@ export function Funnel() {
                       onClick={() => clickVehicle(v.id)}
                       className={[
                         "relative flex w-full cursor-pointer flex-col items-center gap-3 rounded-[var(--radius-card)] border-2 p-5 text-center transition-colors",
-                        "sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]",
+                        "sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)] xl:w-[calc(20%-0.6rem)]",
                         checked ? "border-noir bg-noir/5" : "border-noir/45 hover:border-noir",
                       ].join(" ")}
                     >
@@ -396,7 +393,8 @@ export function Funnel() {
               </div>
               <p className="text-noir/55 mt-5 text-sm">
                 Votre véhicule ne rentre dans aucune case ? Choisissez le plus proche,
-                nous ajusterons au téléphone.
+                et pensez à nous le faire remarquer lors de la confirmation du
+                rendez-vous.
               </p>
             </section>
           )}
@@ -541,7 +539,9 @@ export function Funnel() {
                           </span>
                         )}
                         <span className="text-noir/60 mt-1.5 flex gap-2 text-sm leading-relaxed">
-                          <OptionIcon icon={o.icon} className="text-noir/60 mt-0.5 h-4 w-4 shrink-0" />
+                          <span aria-hidden="true" className="shrink-0 text-base leading-none">
+                            {o.emoji}
+                          </span>
                           {o.description}
                         </span>
                       </span>
@@ -560,10 +560,6 @@ export function Funnel() {
                 intro="Vérifiez, corrigez si besoin : rien n'est encore envoyé."
                 headingRef={headingRef}
               />
-
-              <div className="mb-6 lg:hidden">
-                <SummaryPanel selection={selection} onEdit={(s) => go({ step: s })} />
-              </div>
 
               <div className="border-noir/12 rounded-[var(--radius-card)] border p-5">
                 <h3 className="text-center font-semibold">
@@ -671,6 +667,34 @@ export function Funnel() {
             </section>
           )}
 
+          {/* Récapitulatif sous le contenu : les cartes récupèrent toute la
+              largeur, et le total reste sous les yeux au moment de choisir. */}
+          {step >= 2 && (
+            <div className="mt-10">
+              <SummaryPanel selection={selection} onEdit={(s) => go({ step: s })} />
+            </div>
+          )}
+
+          {step === 5 && (
+            <div className="border-noir/12 mt-4 rounded-[var(--radius-card)] border p-5">
+              <h2 className="text-center font-semibold">Ce qui se passe ensuite</h2>
+              <ol className="mx-auto mt-4 grid max-w-3xl gap-4 text-sm sm:grid-cols-3">
+                {[
+                  "Vous envoyez cette demande.",
+                  `Nous vous rappelons ${site.callbackDelay}.`,
+                  "Le créneau et le tarif sont confirmés ensemble.",
+                ].map((t, i) => (
+                  <li key={t} className="flex flex-col items-center gap-2 text-center">
+                    <span className="bg-noir text-blanc flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
+                      {i + 1}
+                    </span>
+                    <span className="text-noir/70">{t}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
           {/* Navigation de bas de page (grand écran : la barre fixe s'en charge sur mobile) */}
           {step < 5 && (
             <div className="mt-8 hidden items-center justify-between gap-4 lg:flex">
@@ -702,37 +726,6 @@ export function Funnel() {
           )}
         </div>
 
-        {/* Colonne latérale : récapitulatif permanent */}
-        <aside className="hidden lg:sticky lg:top-24 lg:block">
-          <SummaryPanel selection={selection} onEdit={(s) => go({ step: s })} />
-
-          {step === 5 && (
-            <div className="border-noir/12 mt-4 rounded-[var(--radius-card)] border p-5">
-              <h2 className="text-center font-semibold">Ce qui se passe ensuite</h2>
-              <ol className="mt-3 flex flex-col gap-3 text-sm">
-                {[
-                  "Vous envoyez cette demande.",
-                  `Nous vous rappelons ${site.callbackDelay}.`,
-                  "Le créneau et le tarif sont confirmés ensemble.",
-                ].map((t, i) => (
-                  <li key={t} className="flex gap-3">
-                    <span className="bg-noir text-blanc flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
-                      {i + 1}
-                    </span>
-                    <span className="text-noir/70">{t}</span>
-                  </li>
-                ))}
-              </ol>
-              {(contact.preferredDate || contact.preferredSlot) && (
-                <p className="text-noir/60 border-noir/10 mt-4 border-t pt-4 text-sm">
-                  Souhait indiqué :{" "}
-                  {contact.preferredDate ? formatDateFr(contact.preferredDate) : "date libre"}
-                  {contact.preferredSlot && `, ${slotLabels[contact.preferredSlot].toLowerCase()}`}.
-                </p>
-              )}
-            </div>
-          )}
-        </aside>
       </div>
 
       {/* Barre fixe mobile : le total reste sous les yeux du début à la fin */}

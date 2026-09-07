@@ -15,7 +15,11 @@ export function BeforeAfter({
   slug: string;
   sizes?: string;
   priority?: boolean;
-  /** Affiche la phrase décrivant le travail réalisé sur cette zone. */
+  /**
+   * Affiche la phrase décrivant le travail réalisé sur cette zone.
+   * Désactivé sur la page Avant / Après pour garder une lecture épurée :
+   * le texte continue de servir de description alternative aux images.
+   */
   withCaption?: boolean;
 }) {
   const zone = getZoneBySlug(slug);

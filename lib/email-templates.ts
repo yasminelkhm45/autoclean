@@ -37,7 +37,7 @@ export interface ReservationData {
   phone: string;
   email?: string;
   contactPreference: "appel" | "sms";
-  preferredDate?: string;
+  preferredPeriod?: string;
   preferredSlot?: string;
   message?: string;
 }
@@ -46,6 +46,12 @@ const slotLabels: Record<string, string> = {
   matin: "le matin",
   "apres-midi": "l'après-midi",
   indifferent: "peu importe le moment",
+};
+
+const periodLabels: Record<string, string> = {
+  semaine: "en semaine",
+  "week-end": "le week-end",
+  indifferent: "peu importe le jour",
 };
 
 export function formatDateFr(iso: string): string {
@@ -60,9 +66,9 @@ export function formatDateFr(iso: string): string {
 }
 
 export function wishLabel(d: ReservationData): string {
-  if (!d.preferredDate && !d.preferredSlot) return "Aucun, client flexible";
+  if (!d.preferredPeriod && !d.preferredSlot) return "Aucune préférence, client flexible";
   const parts: string[] = [];
-  if (d.preferredDate) parts.push(formatDateFr(d.preferredDate));
+  if (d.preferredPeriod) parts.push(periodLabels[d.preferredPeriod] ?? d.preferredPeriod);
   if (d.preferredSlot) parts.push(slotLabels[d.preferredSlot] ?? d.preferredSlot);
   return parts.join(", ");
 }
@@ -97,32 +103,52 @@ function recapRows(d: ReservationData) {
   ];
 }
 
-/** Événement d'agenda, seulement si le client a exprimé une date. */
+/**
+ * Événement d'agenda.
+ *
+ * Le formulaire ne demande plus de date précise mais une préférence (semaine
+ * ou week-end) : il n'y a donc plus de créneau à inscrire dans l'agenda du
+ * client, et lui en envoyer un serait trompeur.
+ *
+ * Côté atelier, l'événement devient une tâche de rappel : le lendemain à 9 h,
+ * avec toutes les informations du client dans la description. C'est ce dont
+ * vous avez besoin, puisque c'est l'appel qui fixe le rendez-vous.
+ */
 export function reservationEvent(
   d: ReservationData,
   audience: "client" | "atelier"
 ): CalendarEvent | null {
-  const start = slotToDate(d.preferredDate, d.preferredSlot);
-  if (!start) return null;
+  if (audience === "client") return null;
+
+  const start = nextWorkingMorning();
   const { vehicle, formula, tarif } = lignes(d);
-  const hours = durationToHours(tarif.duration);
-  const titre =
-    audience === "client"
-      ? `Nettoyage ${formula.name} chez ${site.name} (à confirmer)`
-      : `${d.firstName} ${d.lastName}, ${formula.name}, ${vehicle.label} (à confirmer)`;
-  const description =
-    audience === "client"
-      ? `Créneau souhaité, à confirmer par téléphone. Référence ${d.reference}. Formule ${formula.name}, ${vehicle.label}. Atelier : ${site.address.street}, ${site.address.postalCode} ${site.address.city}. Téléphone : ${site.phone}.`
-      : `Pré-réservation ${d.reference}. Client : ${d.firstName} ${d.lastName}, ${d.phone}. Formule ${formula.name}, ${vehicle.label}. Créneau à confirmer par téléphone.`;
   return {
     start,
-    hours,
-    title: titre,
-    description,
-    location: `${site.name}, ${site.address.street}, ${site.address.postalCode} ${site.address.city}`,
+    hours: 0.5,
+    title: `Rappeler ${d.firstName} ${d.lastName} (${d.phone})`,
+    description: [
+      `Pré-réservation ${d.reference}.`,
+      `${formula.name}, ${vehicle.label}, ${formatTarif(d.formula, d.vehicle)}.`,
+      `Durée estimée : ${tarif.duration}.`,
+      `Préférence de contact : ${d.contactPreference === "appel" ? "appel" : "SMS"}.`,
+      `Créneau souhaité : ${wishLabel(d)}.`,
+      d.message ? `Message : ${d.message}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n"),
+    location: `${site.name}, ${site.address.postalCode} ${site.address.city}`,
     confirmed: false,
     uid: `${d.reference}-${audience}@autoclean-diois.fr`,
   };
+}
+
+/** Lendemain 9 h, en sautant le dimanche. */
+function nextWorkingMorning(): Date {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  if (d.getDay() === 0) d.setDate(d.getDate() + 1);
+  d.setHours(9, 0, 0, 0);
+  return d;
 }
 
 export function icsAttachment(event: CalendarEvent, filename: string) {
@@ -161,7 +187,7 @@ export function ownerEmail(d: ReservationData, total: number | null) {
     event
       ? noteBox(
           "Agenda",
-          `Le fichier joint ajoute ce créneau à votre agenda en <strong>provisoire</strong>. Il passera en confirmé une fois le rendez-vous calé au téléphone.`
+          `Le fichier joint place un rappel dans votre agenda pour demain matin, avec toutes les informations de ce client sous la main.`
         )
       : "",
   ].join("");
@@ -177,7 +203,7 @@ export function ownerEmail(d: ReservationData, total: number | null) {
       href: `tel:${d.phone.replace(/\s/g, "")}`,
     },
     secondary: event
-      ? { label: "Ajouter le créneau à Google Agenda", href: googleCalendarUrl(event) }
+      ? { label: "Ajouter le rappel à Google Agenda", href: googleCalendarUrl(event) }
       : undefined,
   });
 
@@ -227,7 +253,7 @@ export function clientEmail(d: ReservationData, total: number | null) {
     event
       ? noteBox(
           "Votre créneau souhaité",
-          `${escapeHtml(wishLabel(d))}. Le fichier joint l'ajoute à votre agenda en <strong>provisoire</strong> : il ne vaut pas confirmation tant que nous ne nous sommes pas parlé.`
+          `${escapeHtml(wishLabel(d))}. Nous fixons la date exacte ensemble lors de l'appel, puis vous recevez la confirmation.`
         )
       : noteBox(
           "Aucune date imposée",
@@ -270,7 +296,7 @@ export function clientEmail(d: ReservationData, total: number | null) {
     "",
     `Aucun paiement en ligne : le règlement se fait à l'atelier (${site.paymentMethods.join(", ").toLowerCase()}).`,
     "",
-    `${site.name}, ${site.address.street}, ${site.address.postalCode} ${site.address.city}`,
+    `${site.name}, ${site.address.postalCode} ${site.address.city}`,
     site.phone,
   ].join("\n");
 

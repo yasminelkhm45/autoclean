@@ -58,6 +58,8 @@ export interface Option {
   badge?: string;
   /** Nom d'icône rendu par components/ui/OptionIcon.tsx */
   icon: "leather" | "pet" | "roof" | "deep" | "glass" | "washer" | "tire";
+  /** Émoji affiché devant la description dans le tunnel. */
+  emoji: string;
 }
 
 export interface VehicleCategory {
@@ -199,6 +201,7 @@ export const formulas: Formula[] = [
       utilitaire: { price: null, duration: "Sur devis" },
     },
     tagline: "La rénovation intérieure premium",
+    badge: "Pour les passionnés du détail",
     note: "Idéal avant une vente ou après l'achat d'un véhicule.",
     highlights: [
       "Tout le contenu du Confort",
@@ -261,6 +264,7 @@ export const options: Option[] = [
       "Soin nourrissant puis protection hydrophobe. À refaire environ tous les 6 mois pour que le cuir reste souple.",
     badge: "Le plus demandé",
     icon: "leather",
+    emoji: "🧴",
   },
   {
     id: "poils-animaux",
@@ -270,6 +274,7 @@ export const options: Option[] = [
       "Extraction des poils incrustés dans les textiles, là où l'aspiration seule ne suffit pas.",
     badge: "Nécessaire si vous transportez un animal",
     icon: "pet",
+    emoji: "🐾",
   },
   {
     id: "ciel-de-toit",
@@ -278,6 +283,7 @@ export const options: Option[] = [
     description:
       "Saletés, traces de cigarette et auréoles éliminées sans décoller le tissu du plafond.",
     icon: "roof",
+    emoji: "🧽",
   },
   {
     id: "vehicule-tres-sale",
@@ -286,14 +292,16 @@ export const options: Option[] = [
     description:
       "Supplément de temps pour une forte remise en état : sable, boue, paille, chantier.",
     icon: "deep",
+    emoji: "🪣",
   },
   {
     id: "ceramique-vitres",
     label: "Protection céramique des vitres",
     price: 30,
     description:
-      "Traitement hydrophobe : l'eau perle, la visibilité gagne sous la pluie. Tient 6 à 12 mois.",
+      "Application d'un traitement hydrophobe : l'eau perle, et une légère protection facilite le nettoyage des moustiques et des autres contaminants routiers. Durée d'action de 6 à 12 mois.",
     icon: "glass",
+    emoji: "💧",
   },
   {
     id: "lave-glace",
@@ -301,6 +309,7 @@ export const options: Option[] = [
     price: 10,
     description: "Remise à niveau avec un produit adapté à la saison.",
     icon: "washer",
+    emoji: "💦",
   },
   {
     id: "pression-pneus",
@@ -308,6 +317,7 @@ export const options: Option[] = [
     price: 5,
     description: "Contrôle et ajustement des quatre pneus aux valeurs constructeur.",
     icon: "tire",
+    emoji: "🛞",
   },
 ];
 
@@ -318,31 +328,31 @@ export const vehicleCategories: VehicleCategory[] = [
   {
     id: "citadine",
     label: "Citadine",
-    examples: ["Peugeot 208", "Renault Clio", "Citroën C3", "VW Polo", "Toyota Yaris"],
+    examples: ["Peugeot 206, 207, 208", "Renault Clio", "Citroën C3", "VW Polo", "Audi A1", "Toyota Yaris"],
     image: "/images/vehicules/citadine.png",
   },
   {
     id: "berline-break",
     label: "Berline / Break",
-    examples: ["Peugeot 508", "Audi A4", "BMW Série 3", "VW Golf", "Škoda Octavia"],
+    examples: ["Peugeot 508", "Audi A4", "BMW Série 3", "Mercedes Classe C", "Renault Mégane", "VW Golf", "Škoda Octavia"],
     image: "/images/vehicules/berline-break.png",
   },
   {
     id: "suv",
     label: "SUV / 4x4",
-    examples: ["Peugeot 3008", "VW Tiguan", "BMW X3", "Audi Q5", "Renault Austral"],
+    examples: ["Peugeot 2008, 3008", "VW Tiguan", "BMW X3", "Audi Q5", "Hyundai Tucson", "Renault Austral"],
     image: "/images/vehicules/suv.png",
   },
   {
     id: "monospace-familial",
     label: "Monospace & familial",
-    examples: ["Peugeot 5008", "Renault Espace", "Citroën Berlingo", "Kangoo 5 places"],
+    examples: ["Peugeot 5008", "Renault Scenic, Espace", "Citroën Berlingo", "Renault Kangoo 5 places", "Ford Tourneo", "VW Caravelle"],
     image: "/images/vehicules/monospace-familial.png",
   },
   {
     id: "utilitaire",
     label: "Utilitaire professionnel",
-    examples: ["Fourgons", "Véhicules d'artisan", "Bennes", "Cabines approfondies"],
+    examples: ["Fourgons", "Véhicules d'artisan", "Bennes", "Utilitaires de chantier", "Cabines approfondies"],
     image: "/images/vehicules/utilitaire.png",
     quoteNotice:
       "Les utilitaires font l'objet d'un devis personnalisé : le volume, le type de cabine, l'état du véhicule et les équipements arrière changent tout. Les tarifs affichés sont indicatifs.",

@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Mentions légales",
   description:
-    "Mentions légales du site autoclean-diois.fr : identité de l'éditeur, coordonnées de l'atelier de Die, hébergeur du site et propriété intellectuelle.",
+    "Mentions légales du site autoclean-diois.fr : identité de l'éditeur, coordonnées de l'atelier, hébergeur du site et propriété intellectuelle.",
   path: "/mentions-legales",
 });
 
@@ -19,8 +19,7 @@ export default function MentionsLegalesPage() {
           <section>
             <h2 className="text-center text-xl font-semibold">Éditeur du site</h2>
             <p className="text-noir/75 mt-2">
-              {site.legalName}, {site.address.street}, {site.address.postalCode}{" "}
-              {site.address.city}.
+              {site.legalName}, {site.address.postalCode} {site.address.city}.
               <br />
               Téléphone : {site.phone}. Email : {site.email}.
               <br />

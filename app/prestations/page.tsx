@@ -98,7 +98,7 @@ export default function PrestationsPage() {
                     <span className="display text-5xl">{formatPrice(minPrice(f.id))}</span>
                   </p>
                   <p className={`mt-1 text-sm ${f.recommended ? "text-gris" : "text-noir/60"}`}>
-                    Prix pour une citadine. Le tarif suit la taille du véhicule.
+                    Prix pour une citadine. Le tarif est évolutif suivant la taille du véhicule.
                   </p>
                   <ul className="mx-auto mt-6 flex w-fit flex-col gap-2.5 text-left text-sm sm:text-base">
                     {f.inclusions.map((inc) => (

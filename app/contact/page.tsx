@@ -5,9 +5,9 @@ import { site } from "@/content/site";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Contact et accès à l'atelier de Die",
+  title: "Contact et accès à notre atelier",
   description:
-    "Une question sur nos prestations ? Appelez-nous, écrivez-nous ou passez à l'atelier à Die (26150). Horaires, adresse et plan d'accès.",
+    "Une question sur nos prestations ? Appelez-nous, écrivez-nous ou passez à l'atelier à Solaure-en-Diois (26150). Horaires, adresse et plan d'accès.",
   path: "/contact",
 });
 
@@ -58,7 +58,7 @@ export default function ContactPage() {
             <div>
               <h2 className="display text-center text-[length:var(--text-display-sm)]">L'atelier</h2>
               <address className="mt-4 text-center not-italic leading-relaxed">
-                {site.address.street}
+                Situé à {site.cityShort}
                 <br />
                 {site.address.postalCode} {site.address.city}
               </address>
@@ -70,7 +70,7 @@ export default function ContactPage() {
               <div className="mt-5">
                 <MapEmbed
                   query={`${site.name}, ${site.address.postalCode} ${site.address.city}`}
-                  label="Carte Google Maps de l'atelier AutoClean Diois à Die"
+                  label="Carte Google Maps de l'atelier AutoClean Diois à Solaure-en-Diois"
                 />
               </div>
             </div>

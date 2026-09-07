@@ -33,7 +33,7 @@ const nextSteps = [
   },
   {
     title: "Le rendez-vous est fixé",
-    text: `Vous déposez le véhicule à Die et réglez sur place : ${site.paymentMethods.join(", ").toLowerCase()}.`,
+    text: `Vous déposez le véhicule à Solaure et réglez sur place : ${site.paymentMethods.join(", ").toLowerCase()}.`,
   },
 ];
 

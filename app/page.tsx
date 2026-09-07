@@ -13,22 +13,22 @@ import { pageMetadata, JsonLd, autoWashJsonLd } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Nettoyage automobile intérieur à Die | AutoClean Diois",
   description:
-    "Atelier de nettoyage intérieur de voiture à Die, dans le Diois : shampoing des sièges, vapeur, finitions. Formules de 60 à 160 €. Pré-réservation en ligne.",
+    "Atelier de nettoyage intérieur de voiture à Solaure, à 7 km de Die : shampoing des sièges, vapeur, finitions. Formules de 60 à 160 €. Pré-réservation.",
   path: "/",
 });
 
 const steps = [
   {
     title: "Vous pré-réservez en ligne",
-    text: "Cinq écrans, deux minutes : véhicule, formule, options. Sans paiement et sans engagement.",
+    text: "Cinq choix, deux minutes : véhicule, formule, options. Sans paiement et sans engagement.",
   },
   {
     title: "Nous vous rappelons",
-    text: `Nous vous recontactons ${site.callbackDelay} pour confirmer le prix et caler le créneau qui vous arrange.`,
+    text: `Nous vous recontactons ${site.callbackDelay} pour confirmer le prix et définir un créneau qui vous arrange.`,
   },
   {
     title: "Vous déposez le véhicule",
-    text: "À l'atelier, à Die. Le temps de la prestation, votre voiture est au sec, entre nos mains.",
+    text: "À l'atelier, à Solaure. Le temps de la prestation, votre voiture est en sécurité, et cela nous permet de travailler dans les meilleures conditions.",
   },
   {
     title: "Vous le récupérez comme neuf",
@@ -39,7 +39,7 @@ const steps = [
 const pillars = [
   {
     title: "Des produits professionnels",
-    text: "Un produit dédié par matériau (tissu, cuir, plastique, vitre), appliqué à la bonne dilution. C'est ce qui nettoie en profondeur sans lustrer artificiellement ni encrasser les surfaces.",
+    text: "Un produit dédié par matériau (tissu, cuir, plastique, vitre). Cela permet d'éviter d'abîmer votre véhicule et d'obtenir un résultat optimal.",
   },
   {
     title: "Le détail, jusqu'au bout",
@@ -61,7 +61,7 @@ export default function HomePage() {
         <Logomark className="text-jaune/10 pointer-events-none absolute -top-32 -right-32 h-[34rem] w-[34rem]" />
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pt-12 pb-14 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pt-20 lg:pb-20">
           <div>
-            <p className="eyebrow text-jaune">Atelier à Die, Drôme (26)</p>
+            <p className="eyebrow text-jaune">Atelier à Solaure, Drôme (26)</p>
             <h1 className="display display-hero mt-4 text-[length:var(--text-display-hero)]">
               Nettoyage intérieur de voiture à Die
             </h1>
@@ -81,7 +81,7 @@ export default function HomePage() {
           </div>
           <Image
             src="/images/hero/vehicule-atelier-autoclean-diois.jpg"
-            alt="Utilitaire AutoClean Diois floqué aux couleurs de l'atelier de nettoyage automobile de Die"
+            alt="Utilitaire AutoClean Diois floqué aux couleurs de l'atelier de nettoyage automobile de Solaure, près de Die"
             width={1920}
             height={1080}
             sizes="(min-width: 1024px) 46vw, 100vw"

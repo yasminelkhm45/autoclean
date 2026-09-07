@@ -79,3 +79,23 @@ Aucune de ces hypothèses ne bloque la structure du site : tout se corrige dans 
 34. **Logo des emails** : les clients de messagerie ne rendent pas le SVG. Un `email-logo.png` a été généré à partir de vos vecteurs, servi en 4x pour rester net sur écran Retina. Si vous changez le logo, régénérez ce PNG.
 
 35. **Calendrier joint aux emails** : l'événement est marqué `TENTATIVE` tant que le rendez-vous n'a pas été confirmé au téléphone, et intitulé comme un créneau souhaité. C'est volontaire : ajouter un rendez-vous confirmé à l'agenda du client avant votre appel créerait un malentendu si le créneau ne convient finalement pas.
+
+## Déménagement de l'atelier à Solaure-en-Diois
+
+36. **L'adresse de référence est désormais Solaure-en-Diois (26150)**, à 7 km de Die. Le champ `address.street` de `content/site.ts` est **vide** : il manque la rue et le numéro exacts de l'atelier. Tant qu'il l'est, l'adresse postale n'apparaît pas dans les données structurées lues par Google, ce qui pénalise le référencement local. C'est le point le plus urgent.
+
+37. **Point GPS** : celui de la mairie de Solaure-en-Diois (44,7133 / 5,4307), comme demandé. À affiner sur l'atelier lui-même dès que possible : c'est ce point qui positionne l'épingle sur la carte.
+
+38. **Distances des sept communes recalculées depuis Solaure** et non plus depuis Die. Le haut Diois se rapproche (Châtillon passe de 14 à 12 km, Luc de 20 à 14 km), la vallée s'éloigne d'environ 7 km (Crest passe de 38 à 45 km). Ces valeurs sont des estimations à vérifier une par une sur Google Maps : elles s'affichent noir sur blanc et dans les descriptions Google.
+
+39. **« Die » reste le mot-clé des titres et des URL** (`/zone-intervention/die`, « Nettoyage intérieur de voiture à Die »), parce que c'est le terme que les gens tapent. Les phrases qui situaient physiquement l'atelier disent maintenant Solaure. Cette distinction entre zone desservie et adresse est légitime, mais elle suppose que Die reste effectivement desservi, ce qui est le cas à 10 minutes.
+
+## Créneau souhaité et agenda
+
+40. **Le champ date a été remplacé par un choix semaine / week-end**, comme demandé. Conséquence directe : le fichier calendrier envoyé au client n'a plus de créneau à inscrire, il a donc été supprimé. Envoyer un rendez-vous sans date, ou à une date inventée, aurait été trompeur.
+
+41. **L'agenda de l'atelier reçoit désormais une tâche de rappel** plutôt qu'un rendez-vous : « Rappeler [client] », le lendemain à 9 h, avec le téléphone, la formule, le tarif, la préférence de créneau et le message dans la description. C'est ce dont vous avez besoin, puisque c'est l'appel qui fixe le rendez-vous. Si vous voulez retrouver un fichier agenda côté client, il faudra remettre un champ date dans le formulaire.
+
+## Émojis
+
+42. **Les pictogrammes vectoriels des options ont été remplacés par des émojis**, comme demandé pour test. Ils s'affichent avec le jeu du système : Apple sur iPhone et Mac, Google sur Android, Segoe sur Windows. Le rendu n'est donc pas identique partout, contrairement aux anciens pictos. Les pictos vectoriels restent disponibles dans `components/ui/OptionIcon.tsx` et sont toujours utilisés sur la page Prestations : si vous préférez revenir en arrière, c'est une ligne à changer dans `Funnel.tsx`.

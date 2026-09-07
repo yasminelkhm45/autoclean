@@ -12,10 +12,10 @@ import { site } from "@/content/site";
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${site.name}, nettoyage automobile intérieur à ${site.address.city}`,
+    name: `${site.name}, nettoyage automobile intérieur à ${site.mainTown}`,
     short_name: site.name,
     description:
-      "Nettoyage intérieur de voiture en atelier à Die, dans le Diois. Formules de 60 à 160 €, pré-réservation en ligne.",
+      "Nettoyage intérieur de voiture en atelier à Solaure, près de Die. Formules de 60 à 160 €, pré-réservation en ligne.",
     lang: "fr-FR",
     start_url: "/",
     scope: "/",

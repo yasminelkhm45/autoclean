@@ -71,7 +71,7 @@ export async function POST(req: Request) {
     phone: data.phone,
     email: data.email || undefined,
     contactPreference: data.contactPreference,
-    preferredDate: data.preferredDate || undefined,
+    preferredPeriod: data.preferredPeriod || undefined,
     preferredSlot: data.preferredSlot || undefined,
     message: data.message || undefined,
   };

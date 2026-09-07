@@ -5,7 +5,8 @@
  * changeraient que le nom de la ville seraient des pages satellites, mal vues
  * par Google et sans intérêt pour le lecteur.
  *
- * Distances et temps de trajet : indicatifs, à confirmer (voir NOTES-A-CONFIRMER.md).
+ * Distances et temps de trajet : indicatifs, mesurés depuis l'atelier de
+ * Solaure-en-Diois. À vérifier commune par commune (voir NOTES-A-CONFIRMER.md).
  */
 export interface Zone {
   name: string;
@@ -28,72 +29,87 @@ export interface Zone {
 
 export const zones: Zone[] = [
   {
-    name: "Die",
-    slug: "die",
+    name: "Solaure-en-Diois",
+    slug: "solaure-en-diois",
     postalCode: "26150",
     travelTime: "Atelier sur place",
     distanceKm: 0,
     route: "Atelier situé dans la commune",
     intro:
-      "L'atelier est à Die : c'est ici que tout se passe, du dépôt du véhicule au contrôle final sous éclairage. Les Diois n'ont donc aucun trajet à prévoir.",
+      "L'atelier est à Solaure-en-Diois, à sept kilomètres de Die en remontant la vallée. C'est ici que tout se passe, du dépôt du véhicule au contrôle final sous éclairage.",
     context:
-      "À Die, une bonne partie des véhicules que nous recevons vit dehors toute l'année. Le stationnement en extérieur, les allers-retours au marché et les chemins de vigne laissent le même trio de traces : poussière calcaire incrustée dans les moquettes, plastiques ternis par le soleil, et pollen au printemps.",
+      "Solaure est une commune de montagne : les véhicules du secteur vivent avec les chemins, la poussière calcaire de l'été et la boue de l'hiver. Le plancher et les seuils encaissent l'essentiel, bien avant les sièges.",
     practical:
-      "Beaucoup de clients déposent le véhicule le matin et repartent à pied : le centre-ville et les commerces sont accessibles rapidement. Vous n'avez pas besoin d'un deuxième véhicule pour faire nettoyer le premier.",
-    nearby: ["Ponet-et-Saint-Auban", "Romeyer", "Molières-Glandaz", "Barsac"],
+      "Aucun trajet à prévoir. Déposez le véhicule au créneau convenu, nous vous prévenons dès qu'il est prêt.",
+    nearby: ["Aix-en-Diois", "Molières-Glandaz", "Laval-d'Aix", "Montmaur-en-Diois"],
+  },
+  {
+    name: "Die",
+    slug: "die",
+    postalCode: "26150",
+    travelTime: "environ 10 minutes",
+    distanceKm: 7,
+    route: "D93 en direction de Luc-en-Diois",
+    intro:
+      "Die est à dix minutes de l'atelier, sept kilomètres en remontant la D93. C'est la ville d'où viennent le plus de véhicules, et le trajet se fait sans détour.",
+    context:
+      "À Die, une bonne partie des véhicules vit dehors toute l'année. Le stationnement en extérieur, les allers-retours au marché et les chemins de vigne laissent le même trio de traces : poussière calcaire incrustée dans les moquettes, plastiques ternis par le soleil, et pollen au printemps.",
+    practical:
+      "Sept kilomètres, c'est un aller-retour qui tient dans une pause. Beaucoup de clients déposent le véhicule le matin et repartent avec un proche, ou profitent de la journée à Die pendant la prestation.",
+    nearby: ["Ponet-et-Saint-Auban", "Romeyer", "Chamaloc", "Barsac"],
   },
   {
     name: "Châtillon-en-Diois",
     slug: "chatillon-en-diois",
     postalCode: "26410",
     travelTime: "environ 15 minutes",
-    distanceKm: 14,
-    route: "D539 puis D93",
+    distanceKm: 12,
+    route: "D93 puis D539",
     intro:
       "Châtillon-en-Diois est à un quart d'heure de l'atelier par la D539. C'est la commune du haut Diois d'où nous voyons arriver le plus de véhicules.",
     context:
       "Les véhicules qui descendent du cirque d'Archiane ou des cols arrivent souvent avec de la terre et du gravier tassés dans les tapis, et de la boue séchée sur les seuils et les bas de portes. C'est un encrassement mécanique, pas graisseux : il part bien à l'injection-extraction, à condition de traiter aussi les seuils, que l'aspirateur oublie.",
     practical:
-      "Le trajet aller-retour tient dans une matinée. Si vous préférez ne faire qu'un déplacement, déposez le véhicule à l'ouverture et récupérez-le en fin de journée : c'est le rythme le plus confortable pour les formules Confort et Prestige.",
+      "Le trajet aller-retour tient dans une matinée, en passant par Die. Si vous préférez ne faire qu'un déplacement, déposez le véhicule à l'ouverture et récupérez-le en fin de journée : c'est le rythme le plus confortable pour les formules Confort et Prestige.",
     nearby: ["Menglon", "Saint-Roman", "Treschenu-Creyers", "Boulc"],
   },
   {
     name: "Luc-en-Diois",
     slug: "luc-en-diois",
     postalCode: "26310",
-    travelTime: "environ 20 minutes",
-    distanceKm: 20,
-    route: "D93 en direction de Die",
+    travelTime: "environ 15 minutes",
+    distanceKm: 14,
+    route: "D93 en direction du sud",
     intro:
       "Luc-en-Diois se trouve à une vingtaine de minutes de l'atelier par la D93, l'axe qui remonte la vallée de la Drôme. Le trajet est direct, sans détour par les cols.",
     context:
       "Sur ce secteur, ce sont surtout des véhicules qui font beaucoup de kilomètres quotidiens : trajets domicile-travail vers Die ou Crest, siège conducteur marqué, volant lustré, et cette poussière fine qui s'installe dans les aérateurs et ressort à chaque démarrage.",
     practical:
-      "Si vous descendez travailler vers Die, le dépôt du matin ne vous coûte aucun trajet supplémentaire. Dites-le-nous au téléphone : nous calons le créneau sur vos horaires plutôt que l'inverse.",
+      "Si vous montez vers Die pour travailler, l'atelier est sur votre route : le dépôt du matin ne coûte aucun détour. Dites-le-nous au téléphone : nous calons le créneau sur vos horaires plutôt que l'inverse.",
     nearby: ["Poyols", "Beaurières", "Recoubeau-Jansac", "Lesches-en-Diois"],
   },
   {
     name: "Saillans",
     slug: "saillans",
     postalCode: "26340",
-    travelTime: "environ 25 minutes",
-    distanceKm: 25,
-    route: "D93 en remontant la vallée",
+    travelTime: "environ 30 minutes",
+    distanceKm: 32,
+    route: "D93 par Die puis la vallée",
     intro:
       "Saillans est à environ 25 minutes de l'atelier, en remontant la D93 le long de la Drôme. C'est la porte d'entrée du Diois depuis la vallée.",
     context:
       "Ici, la rivière fait la différence : serviettes humides, sable et poussière de galets, sacs de baignade posés à même les sièges tout l'été. L'humidité répétée dans les tissus finit par produire une odeur de renfermé que les désodorisants masquent quelques jours seulement. C'est précisément ce que l'extraction et la vapeur traitent à la source.",
     practical:
-      "Beaucoup de clients de Saillans combinent le dépôt avec une journée à Die. Prévenez-nous si votre créneau est serré : sur la formule Essentielle, deux à trois heures suffisent.",
+      "Beaucoup de clients de Saillans combinent le dépôt avec une journée à Die, à sept kilomètres de l'atelier. Prévenez-nous si votre créneau est serré : sur la formule Essentielle, deux à trois heures suffisent.",
     nearby: ["Vercheny", "Aurel", "Espenel", "Sainte-Croix"],
   },
   {
     name: "Aouste-sur-Sye",
     slug: "aouste-sur-sye",
     postalCode: "26400",
-    travelTime: "environ 35 minutes",
-    distanceKm: 35,
-    route: "D93 via Saillans",
+    travelTime: "environ 40 minutes",
+    distanceKm: 42,
+    route: "D93 par Die et Saillans",
     intro:
       "Aouste-sur-Sye est à un peu plus d'une demi-heure de l'atelier par la D93. Le trajet se fait d'une traite, sans portion de montagne.",
     context:
@@ -106,9 +122,9 @@ export const zones: Zone[] = [
     name: "Crest",
     slug: "crest",
     postalCode: "26400",
-    travelTime: "environ 40 minutes",
-    distanceKm: 38,
-    route: "D93, axe Crest vers Die",
+    travelTime: "environ 45 minutes",
+    distanceKm: 45,
+    route: "D93, axe Die vers Crest",
     intro:
       "Crest est à une quarantaine de minutes de l'atelier par la D93. C'est la ville la plus importante de la vallée de la Drôme et le secteur d'où viennent le plus de véhicules professionnels.",
     context:
@@ -121,8 +137,8 @@ export const zones: Zone[] = [
     name: "Livron-sur-Drôme",
     slug: "livron-sur-drome",
     postalCode: "26250",
-    travelTime: "environ 50 minutes",
-    distanceKm: 52,
+    travelTime: "environ 55 minutes",
+    distanceKm: 59,
     route: "D93 puis vallée de la Drôme",
     intro:
       "Livron-sur-Drôme marque la limite de notre zone habituelle, à une cinquantaine de minutes de l'atelier. Le déplacement se justifie surtout pour les prestations complètes.",

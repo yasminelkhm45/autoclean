@@ -17,10 +17,10 @@ export function Footer() {
             <Logo tone="blanc" />
           </Link>
           <p className="text-gris mt-4 max-w-xs text-sm leading-relaxed">
-            Nettoyage automobile intérieur en atelier, à Die, au cœur du Diois.
+            Nettoyage automobile intérieur en atelier, à Solaure, à sept kilomètres de Die.
           </p>
           <address className="text-gris mt-6 text-sm not-italic leading-relaxed">
-            {site.address.street}
+            Situé à {site.cityShort}
             <br />
             {site.address.postalCode} {site.address.city}
             <br />

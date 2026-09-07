@@ -9,7 +9,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Zone d'intervention : Die et le Diois",
   description:
-    "Atelier de nettoyage automobile à Die (26150). Clients de Châtillon-en-Diois, Saillans, Crest et de toute la vallée de la Drôme : temps de trajet indicatifs.",
+    "Atelier de nettoyage automobile à Solaure-en-Diois, à 7 km de Die. Clients de Châtillon, Luc, Saillans et Crest : distances et temps de trajet.",
   path: "/zone-intervention",
 });
 
@@ -25,17 +25,18 @@ export default function ZoneInterventionPage() {
         </h1>
         <div className="text-noir/75 mx-auto mt-6 max-w-2xl space-y-4 text-lg leading-relaxed">
           <p>
-            Notre atelier se trouve à Die ({site.address.postalCode}), au cœur de la
-            vallée de la Drôme. Le travail se fait exclusivement en atelier&nbsp;: c'est ce
-            qui nous permet d'utiliser l'injecteur-extracteur, la vapeur et un éclairage
-            de contrôle. Un matériel qui ne se transporte pas.
+            Notre atelier se trouve à {site.address.city} ({site.address.postalCode}),
+            à sept kilomètres de Die en remontant la vallée de la Drôme. Le travail se
+            fait exclusivement en atelier&nbsp;: c'est ce qui nous permet d'utiliser
+            l'injecteur-extracteur, la vapeur et un éclairage de contrôle. Un matériel
+            qui ne se transporte pas.
           </p>
           <p>
-            Nos clients viennent de Die bien sûr, mais aussi de tout le Diois et de la
-            vallée jusqu'à Crest et Livron. Le principe est simple&nbsp;: vous déposez le
-            véhicule le matin ou en début d'après-midi, et vous profitez de Die le temps
-            de la prestation, ou vous combinez le dépôt avec vos courses et
-            rendez-vous sur place.
+            Nos clients viennent de Die en premier lieu, à dix minutes, mais aussi de
+            tout le Diois et de la vallée jusqu'à Crest et Livron. Le principe est
+            simple&nbsp;: vous déposez le véhicule le matin ou en début d'après-midi, et
+            vous profitez de la journée à Die pendant la prestation, ou vous combinez le
+            dépôt avec vos courses et rendez-vous.
           </p>
         </div>
       </div>
@@ -48,7 +49,7 @@ export default function ZoneInterventionPage() {
             </h2>
             <table className="mt-6 hidden w-full text-left sm:table">
               <caption className="sr-only">
-                Communes couvertes, distance et temps de trajet jusqu'à l'atelier de Die
+                Communes couvertes, distance et temps de trajet jusqu'à l'atelier
               </caption>
               <thead>
                 <tr className="border-noir border-b-2">
@@ -109,7 +110,7 @@ export default function ZoneInterventionPage() {
             <address className="mt-4 text-center not-italic leading-relaxed">
               <strong>{site.name}</strong>
               <br />
-              {site.address.street}
+              Situé à {site.cityShort}
               <br />
               {site.address.postalCode} {site.address.city}
             </address>
@@ -121,7 +122,7 @@ export default function ZoneInterventionPage() {
             <div className="mt-6">
               <MapEmbed
                 query={`${site.name}, ${site.address.postalCode} ${site.address.city}`}
-                label="Carte Google Maps de l'atelier AutoClean Diois à Die"
+                label="Carte Google Maps de l'atelier AutoClean Diois à Solaure-en-Diois"
               />
             </div>
           </div>

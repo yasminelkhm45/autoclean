@@ -116,7 +116,7 @@ export function emailLayout(o: LayoutOptions): string {
     <td style="background:${NOIR};border-radius:0 0 20px 20px;padding:26px 32px;">
       <p style="margin:0 0 6px;font-size:14px;font-weight:700;color:${BLANC};">${escapeHtml(site.name)}</p>
       <p style="margin:0 0 14px;font-size:13px;line-height:1.6;color:#C0C4C8;">
-        ${escapeHtml(site.address.street)}, ${escapeHtml(site.address.postalCode)} ${escapeHtml(site.address.city)}<br />
+        ${escapeHtml(site.address.postalCode)} ${escapeHtml(site.address.city)}<br />
         <a href="${site.phoneHref}" style="color:${JAUNE};text-decoration:none;">${escapeHtml(site.phone)}</a>
         &nbsp;&middot;&nbsp;
         <a href="${site.url}" style="color:${JAUNE};text-decoration:none;">autoclean-diois.fr</a>

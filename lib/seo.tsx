@@ -57,7 +57,6 @@ export function autoWashJsonLd() {
     image: `${site.url}/images/og/default.jpg`,
     address: {
       "@type": "PostalAddress",
-      streetAddress: site.address.street,
       postalCode: site.address.postalCode,
       addressLocality: site.address.city,
       addressRegion: site.address.region,
@@ -172,8 +171,7 @@ export function serviceJsonLd({
       telephone: site.phone,
       address: {
         "@type": "PostalAddress",
-        streetAddress: site.address.street,
-        postalCode: site.address.postalCode,
+          postalCode: site.address.postalCode,
         addressLocality: site.address.city,
         addressCountry: site.address.country,
       },

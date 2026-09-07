@@ -8,7 +8,7 @@ import { pageMetadata, JsonLd, imageObjectJsonLd } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Avant / après : nos résultats en photos",
   description:
-    "Sièges, moquettes, volant, plastiques : comparez l'avant et l'après de nos nettoyages intérieurs réalisés en atelier à Die. Faites glisser le curseur.",
+    "Sièges, moquettes, volant, plastiques : comparez l'avant et l'après de nos nettoyages intérieurs réalisés en atelier dans le Diois. Faites glisser le curseur.",
   path: "/avant-apres",
 });
 
@@ -59,7 +59,6 @@ export default function AvantApresPage() {
                 slug={premiere.slug}
                 sizes="(min-width: 1024px) 56rem, 100vw"
                 priority
-                withCaption
               />
             </div>
           )}
@@ -70,7 +69,6 @@ export default function AvantApresPage() {
                 key={z.slug}
                 slug={z.slug}
                 sizes="(min-width: 1024px) 45vw, 100vw"
-                withCaption
               />
             ))}
           </div>

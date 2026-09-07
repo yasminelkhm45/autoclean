@@ -23,7 +23,7 @@ export async function generateMetadata({
   const base =
     z.distanceKm === 0
       ? `Nettoyage intérieur de voiture à ${z.name} (${z.postalCode}) : notre atelier est dans la commune.`
-      : `Nettoyage intérieur de voiture pour ${z.name} (${z.postalCode}), à ${z.distanceKm} km de notre atelier de Die, ${z.travelTime} de trajet.`;
+      : `Nettoyage intérieur de voiture pour ${z.name} (${z.postalCode}), à ${z.distanceKm} km de notre atelier de Solaure, ${z.travelTime} de trajet.`;
   const suite = " Formules de 60 à 160 €, pré-réservation en ligne.";
   const description = (base + suite).length <= 158 ? base + suite : `${base} Formules de 60 à 160 €.`;
 
@@ -51,7 +51,7 @@ export default async function CommunePage({
       <JsonLd
         data={serviceJsonLd({
           name: `Nettoyage intérieur de voiture à ${zone.name}`,
-          description: `Nettoyage automobile intérieur pour les habitants de ${zone.name} et des environs, réalisé à l'atelier de Die.`,
+          description: `Nettoyage automobile intérieur pour les habitants de ${zone.name} et des environs, réalisé à l'atelier de Solaure-en-Diois.`,
           url: `${site.url}/zone-intervention/${zone.slug}`,
           areaServed: [zone.name, ...zone.nearby],
         })}
@@ -98,7 +98,7 @@ export default async function CommunePage({
         </h2>
         <p className="text-noir/80 mx-auto mt-4 max-w-2xl text-center leading-relaxed">{zone.practical}</p>
         <p className="text-noir/80 mx-auto mt-4 max-w-2xl text-center leading-relaxed">
-          Le travail se fait exclusivement à l'atelier, à {site.address.city} :
+          Le travail se fait exclusivement à l'atelier, à {site.cityShort} :
           l'injecteur-extracteur, la vapeur et l'éclairage de contrôle ne se
           transportent pas. Vous déposez le véhicule au créneau convenu et nous
           vous prévenons dès qu'il est prêt.
